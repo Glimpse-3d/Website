@@ -1,0 +1,38 @@
+{
+  "title": "EDP",
+  "name": "EDP Headquarters",
+  "designer": "Aires Mateus",
+  "location": "Lisbon | Portugal",
+  "modelSrc": "model3.gltf",
+  "environmentImage": "model3.hdr",
+  "cameraOrbit": "0deg 90deg 200m",
+  "min-camera-orbit": "-720deg 70deg 200m",
+  "max-camera-orbit": "720deg 90deg 200m",
+  "min-field-of-view": "30deg",
+  "max-field-of-view": "30deg",
+  "disable-zoom": true,
+  "disable-pan": true,
+  "backgroundTopColor": "rgb(73, 106, 119)",
+  "galleryImages": [
+    {
+      "src": "1.jpg",
+      "caption": "Technical Drawings"
+    },
+    {
+      "src": "2.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "3.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "4.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "5.jpg",
+      "caption": "Photography"
+    }
+  ]
+}

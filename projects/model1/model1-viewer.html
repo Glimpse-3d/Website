@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLIMPSE</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="model1-styles.css">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <div class="background-overlay"></div>
+
+    <h1 class="title">BEDROOM</h1>
+
+    <a href="../../index.html">
+        <img src="../../main page/LOGO.png" alt="Back" class="back-logo">
+      </a>
+
+    <model-viewer id="viewer"
+                  src="model1.gltf"
+                  vr
+                  ar
+                  ar-modes="webxr scene-viewer quick-look"
+                  camera-controls
+                  camera-orbit="-70deg 85deg 10m"
+                  min-camera-orbit="-720deg 70deg 1m"
+                  max-camera-orbit="720deg 90deg 10m"
+                  min-field-of-view="30deg"
+                  max-field-of-view="30deg"
+                  shadow-intensity="1"
+                  disable-pan
+                  environment-image="model1.hdr">
+                  
+    
+        <button class="Hotspot" slot="hotspot-video" data-position="-0.8631973015013474m 0.10499999975923413m -0.562306319831595m" data-normal="0m 1m 0m" data-visibility-attribute="visible">
+            <img src="../ruler.png" alt="Hotspot Medidas" width="24" height="24">
+        </button>  
+
+        <button class="Hotspot" slot="hotspot-medidas" data-position="-1.2952264837528773m 0.09999999955442007m 2.212820295052438m" data-normal="0m 1m 0m" data-visibility-attribute="visible">
+            <img src="../ruler.png" alt="Hotspot Medidas" width="24" height="24">
+        </button>
+        
+        <button slot="ar-button" class="ar-button" id="ar-trigger">
+            <img src="../augmented_reality_logo.png">
+        </button>
+        
+        <!-- Button to generate QR code -->
+        <div id="ar-qr-code" class="ar-qr-button" onclick="generateQRCode()">
+            <img id="ar-logo" src="../augmented_reality_logo2.png" alt="AR QR Code">
+        </div>
+
+        <!-- QR code container (hidden initially) -->
+        <div id="qr-code-container" style="display: none;">
+            <div id="qr-code"></div>
+        </div>
+
+
+
+
+        <button slot="hotspot-dot+X-Y+Z" class="dot" data-position="1 -1 1" data-normal="1 0 0"></button>
+        <button slot="hotspot-dim+X-Y" class="dim" data-position="1 -1 0" data-normal="1 0 0"></button>
+        <button slot="hotspot-dot+X-Y-Z" class="dot" data-position="1 -1 -1" data-normal="1 0 0"></button>
+        <button slot="hotspot-dim+X-Z" class="dim" data-position="1 0 -1" data-normal="1 0 0"></button>
+        <button slot="hotspot-dot+X+Y-Z" class="dot" data-position="1 1 -1" data-normal="0 1 0"></button>
+        <button slot="hotspot-dim+Y-Z" class="dim" data-position="0 -1 -1" data-normal="0 1 0"></button>
+        <button slot="hotspot-dot-X+Y-Z" class="dot" data-position="-1 1 -1" data-normal="0 1 0"></button>
+        <button slot="hotspot-dim-X-Z" class="dim" data-position="-1 0 -1" data-normal="-1 0 0"></button>
+        <button slot="hotspot-dot-X-Y-Z" class="dot" data-position="-1 -1 -1" data-normal="-1 0 0"></button>
+        <button slot="hotspot-dim-X-Y" class="dim" data-position="-1 -1 0" data-normal="-1 0 0"></button>
+        <button slot="hotspot-dot-X-Y+Z" class="dot" data-position="-1 -1 1" data-normal="-1 0 0"></button>
+        <svg id="dimLines" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="dimensionLineContainer">
+            <line class="dimensionLine"></line>
+            <line class="dimensionLine"></line>
+            <line class="dimensionLine"></line>
+            <line class="dimensionLine"></line>
+            <line class="dimensionLine"></line>
+        </svg>
+
+    </model-viewer>
+
+
+    <!-- More Info Button -->
+    <button class="wrap">
+        <div class="border-button"> 
+            <div class="arrow-text-wrapper">
+                <div class="arrow-text">Find out more</div> 
+            </div>
+            <div class="arrow">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </button>
+
+
+    <!-- Description Section -->
+    <div class="bottom-left">
+        <div class="bottom-left-container">
+            <h1>BEDROOM</h1>
+            <p class="designer">PAULO LOPES</p> <!-- Added a class for more specific styling -->
+            <p class="location">LISBON | PORTUGAL</p> <!-- Changed to valid <p> tag with a class -->
+            <p class="project-description">Designed in 1955, is a timeless Norwegian masterpiece.<br>Its name, "Krysset", meaning the cross, reflects its distinctive cross-legged frame.<br>Known for its elegant craftsmanship, the chair features a stretched leather backrest and premium materials like oak and walnut, combining style and comfort in a mid-century design icon.</p>
+        </div> 
+    </div>
+
+    <!-- Image Gallery -->
+    <div class="gallery">
+        <div class="gallery-items">
+            <div class="gallery-item"><img src="./IMG/1.jpg" alt="Image 1"></div>
+            <div class="gallery-item"><img src="./IMG/2.jpg" alt="Image 2"></div>
+            <div class="gallery-item"><img src="./IMG/3.jpg" alt="Image 2"></div>
+        </div>
+        <div class="gallery-text">Click to expand</div>
+    </div>
+
+
+    <!-- Modal for Expanded Image or Video -->
+    <div class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01" style="display: none;">
+        <video class="modal-content" id="video01" autoplay muted playsinline>
+            <source id="videoSource" src="" type="video/mp4">
+            Your browser does not support videos.
+        </video>
+    </div>
+
+<button onclick="toggleEnvolvente()">Mostrar/Esconder Envolvente</button>
+
+<script>
+  let envolventeVisible = true;
+
+  async function toggleEnvolvente() {
+    const modelViewer = document.querySelector('#viewer');
+
+    // Espera o modelo carregar
+    await modelViewer.updateComplete;
+
+    const envolvente = modelViewer.model?.getObjectByName('Envolvente');
+
+    if (envolvente) {
+      envolventeVisible = !envolventeVisible;
+      envolvente.visible = envolventeVisible;
+    } else {
+      console.warn("Objeto 'Envolvente' não encontrado no modelo.");
+    }
+  }
+</script>
+
+    <!-- External Script -->
+    <script src="script.js"></script>
+
+</body>
+</html>

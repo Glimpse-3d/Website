@@ -1,0 +1,991 @@
+@import url('https://fonts.googleapis.com/css2?family=Vina+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Source+Sans+Pro:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;900&display=swap');
+
+/*------------------------------ LAYOUT -----------------------------------------------------------------------*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: #f4f3f2; /* Fundo inicial */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden; /* Impede rolagem */
+
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+
+
+/*------------------------------ BACKGROUND -------------------------------------------------------------------*/
+.background-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateY(0); /* Posição inicial */
+  transition: transform 1s ease-in-out; /* Transição suave */
+}
+.background-overlay.up {
+  transform: translateY(-100%); /* Desloca o fundo para cima */
+}
+
+
+
+/*------------------------------ JANELA DO MODELO (model-viewer) ----------------------------------------------*/
+model-viewer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;    /* 100% da largura da janela */
+  height: 100vh;   /* 100% da altura da janela */
+  object-fit: contain; /* Garante que o modelo se ajusta ao tamanho da tela sem distorção */
+  contain: layout style;
+  z-index: 1;
+}
+
+
+
+/*------------------------------ TÍTULO ADAPTATIVO -----------------------------------------------------------------------*/
+.title {
+    position: absolute; /* Change to absolute to allow 100% width/height */
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    width: 100%; /* Make it span the full width of its parent */
+    height: 100%; /* Make it span the full height of its parent */
+    display: flex; /* Use flexbox for easy centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    overflow: hidden; /* Hide any overflowing parts of the text */
+    font-size: 17vw;
+    font-family: 'Anton', sans-serif;
+    text-transform: uppercase;
+    background: linear-gradient(#f4f3f2 0%, transparent 65%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 0;
+    transform: translateY(45%); /* Initial state for animation */
+    animation: fadeInBottom 1s ease-out forwards;
+    text-align: center; /* Ensure text is centered if it wraps */
+}
+
+@keyframes fadeInBottom {
+    100% {
+        opacity: 1;
+        /* Adjust transform to work with new positioning. 
+           -8% translateY might move it too much off center.
+           You might want to remove scaleY(1.8) if it distorts too much with wrapping.
+           Let's aim for slight adjustment from the center. */
+        transform: translateY(-5%) scaleY(1.8); /* Start closer to actual position, or adjust */
+    }
+}
+
+
+
+/*------------------------------ LOGO - VOLTA MAIN PAGE -------------------------------------------------------*/
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 20;
+    width: 70px; /* Adjust logo size */
+    height: auto;
+    z-index: 100;
+}
+
+
+/*------------------------------ BOTÃO REALIDADE AUMENTADA --------------------------------------------------------*/
+.ar-button {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 200; /* Ensure the button stays on top */
+  opacity: 1; /* Always visible */
+  transition: opacity 0.3s ease;
+}
+.ar-button img {
+  width: 40px;
+  height: auto;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.ar-qr-button {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 100; /* Ensure the button stays on top */
+  opacity: 1; /* Always visible */
+  transition: opacity 0.3s ease;
+}
+.ar-qr-button img {
+  width: 40px;
+  height: auto;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+#ar-logo.fade-out {
+  opacity: 0; /* Fade out */
+  border-color: rgba(0, 0, 0, 0.5); /* Change border color to dark when fading out */
+}
+
+@media (max-width: 1024px) {
+  .ar-qr-button {
+    display: none;
+  }
+}
+
+
+
+/*------------------------------ QR CODE CONTAINER STYLES --------------------------------------------------------*/
+#qr-intro-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+  z-index: 15;
+  flex-direction: column;
+}
+#qr-intro-overlay.show {
+  display: flex;
+}
+.qr-intro-blur {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(8px);
+}
+.qr-intro-message {
+  position: relative;
+  color: white;
+  font-size: 3vw;
+  font-family: 'Anton', sans-serif;
+  text-transform: uppercase;
+  z-index: 1001;
+  animation: fadeInOut 3s forwards;
+}
+@keyframes fadeInOut {
+  0%,100%{opacity:0;}
+  20%,80%{opacity:1;}
+}
+
+
+#qr-code-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 50%;
+  height: 60%;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+  flex-direction: row;
+  align-items: stretch;
+  backdrop-filter: blur(30px);
+  background: rgba(0, 0, 0, 0);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.534);
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none; /* Prevent interaction when hidden */
+  transform-origin: center;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  overflow: hidden;
+  display: none; /* Start hidden */
+}
+
+/* When visible */
+#qr-code-container.visible {
+  display: flex;      /* Show flex layout */
+  opacity: 1;         /* Fade in */
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto; /* Enable interaction */
+}
+
+.qr-preview-content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 1.5rem;
+}
+
+/* Colunas */
+.qr-column {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+}
+
+.qr-column.left {
+    width: 40%; /* Keep this, but ensure its content fills it */
+    height: 100%;
+    display: flex;
+    justify-content: center; /* This might be making the video look small if it's not filling its own container */
+    align-items: center; /* This might be making the video look small if it's not filling its own container */
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+/* Make #ar-preview-container fill the whole column more effectively */
+#ar-preview-container {
+    width: 50%; /* Make it fill its parent .qr-column.left */
+    height: 100%; /* Make it fill its parent .qr-column.left */
+    display: flex; /* Use flexbox to center video/image if needed */
+    justify-content: center;
+    align-items: center;
+}
+
+#ar-preview-container video,
+#ar-preview-container img { /* Apply styles to both video and img */
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This is good for maintaining aspect ratio and filling space, cropping if necessary */
+    object-position: center;
+    border-radius: 10px;
+    pointer-events: none; /* Impede interação com o vídeo */
+}
+
+/* Coluna direita: textos e QR */
+.qr-column.right {
+    width: 60%; /* Changed from 60% to 50% to balance with left column */
+    height: 100%;
+    display: flex; /* Added display flex */
+    flex-direction: column; /* Added flex direction column */
+    justify-content: center; /* Center content vertically */
+    padding-left: 1rem;
+}
+
+.qr-column.right .intro {
+  font-family: 'Quicksand', sans-serif;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 30px;
+  color: white;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.qr-column.right .instructions {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1em;
+  margin: 0 0 1.5rem 1rem;
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#qr-code {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  border: 1px solid white;  
+  padding: 8px;              
+  box-sizing: content-box;
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+.white-icon {
+  filter: invert(1) brightness(2);
+  transition: filter 1s ease;
+}
+
+
+
+
+/*--------------------------- SETA ---------------------------------------------------------------------------------*/
+/* CLICKABLE CIRCLE AREA BEHIND THE ARROW */
+.arrow-hitbox {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 29; /* behind the arrow, but still clickable */
+  background: rgba(255, 0, 0, 0); /* or rgba(0,0,0,0.05) for a slight visible circle */
+}
+
+/* Ensure arrow is still visible and clickable */
+.arrow {
+  position: relative;
+  bottom: 0px;
+  top: 25%;
+  left: -7%;
+  width: 1.3rem;
+  height: 1.3rem;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 30;
+  transition: all 0.3s ease;
+  pointer-events: none; /* Let .arrow-hitbox handle clicks */
+}
+
+.wrap {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: auto;
+  border: none;
+  background: transparent;
+  padding: 0;
+  outline: none;
+  opacity: 0; /* Start as invisible */
+  animation: fadeIn 2s forwards 2s; /* 4s delay before starting the fade-in */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+/* Container for the button border */
+.border-button {
+  display: inline-block;
+  padding: 0px 10px; /* Initial padding for the rectangle */
+  background-color: transparent;
+  border: 1px solid #000;
+  border-radius: 50px; /* Initial rounded corners */
+  cursor: pointer;
+  position: relative;
+  animation: shrinkButton 1s forwards 6s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px; /* Fixed height for the border */
+  width: 120px;  /* Width will shrink */
+  white-space: nowrap; /* Prevent text wrapping */
+  margin: 0 auto; /* Center the button horizontally */
+}
+
+/* Style for the text */
+.arrow-text-wrapper {
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: textAppear 6s ease-out forwards, textDisappear 1s forwards 6s;
+}
+
+.arrow-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+  font-family: 'Quicksand', sans-serif;
+  margin-bottom: 0;
+  opacity: 1;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.arrow span {
+  position: absolute;
+  width: 1rem; /* Longer line */
+  height: 0.1rem;
+  background-color: #000;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+  transition: all 0.2s ease;
+}
+
+.arrow span:first-of-type {
+  left: 0;
+  transform: rotate(-45deg);
+}
+
+.arrow span:last-of-type {
+  right: 0;
+  transform: rotate(45deg);
+}
+
+/* Animations for text disappearance, button shrinking, and arrow appearance */
+@keyframes textAppear {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+@keyframes textDisappear {
+  0% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+/* Fix for shrinking the button smoothly */
+@keyframes shrinkButton {
+  0% {
+    width: 100px;  /* Initial width (adjust as needed) */
+    height: 40px;  /* Fixed height */
+
+    border-radius: 25px; /* Initial rounded corners */
+  }
+
+  100% {
+    width: 40px;   /* Final size of the circle */
+    height: 40px;  /* Fixed height to keep it consistent */
+    padding: 0;    /* Remove padding */
+    border-radius: 50%; /* Ensure it becomes circular */
+  }
+}
+
+/* Make the arrow appear after text disappears */
+.wrap .arrow-text-wrapper {
+  animation-delay: 5s; /* Wait for text to disappear */
+}
+
+.wrap .arrow {
+  animation: arrowAppear 2s forwards;
+  animation-delay: 6s; /* Wait for text to disappear */
+}
+
+/* Arrow animation */
+@keyframes arrowAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.arrow.active span:first-of-type {
+  transform: rotate(45deg);
+}
+
+.arrow.active span:last-of-type {
+  transform: rotate(-45deg);
+}
+
+.arrow:hover {
+  transform: scale(2);
+}
+
+
+
+/*------------------------------ DESCRIÇÃO --------------------------------------------------------------------------*/
+.bottom-left-container {
+  position: absolute;
+  left: 30px;
+  width: 50%; /* ajusta conforme necessário */
+  background-color: rgba(255, 0, 0, 0); /* transparente */
+  font-family: 'Quicksand', sans-serif;
+  animation: slideUpDesc 1.5s ease-out forwards; /* animação de subir */
+  z-index: 5;
+}
+
+/* Slide up animation */
+@keyframes slideUpDesc {
+  0% { bottom: -100%; } /* começa fora da tela */
+  100% { bottom: 20px; } /* posição visível final - altera para subir ou descer */
+}
+
+/* Slide down animation */
+@keyframes slideDownDesc {
+  0% { bottom: 20px; } /* começa na posição visível */
+  100% { bottom: -100%; } /* sai da tela */
+}
+
+/* Quando fechado, aplica slideDown */
+.bottom-left-container.closed {
+  animation: slideDownDesc 1.5s ease-out forwards;
+}
+
+/* Texto */
+.bottom-left h1 {
+  margin: 0;
+  font-size: 50px;
+  font-family: "Anton", sans-serif;
+  font-weight: 900;
+  color: rgb(0, 0, 0);
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.designer {
+  margin: 0;
+  font-size: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.location {
+  margin: 0;
+  font-size: 18px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+/*------------------ GALERIA ----------------------------------------------------------------------------------- */
+/* --- Base Gallery Styles --- */
+.gallery {
+  position: absolute;
+  right: 20px;
+  width: 21%;
+  max-height: 60%; /* Maximum height as per the viewport */
+  background: #f4f3f2; /* Solid light gray background */
+  overflow-y: auto;
+  border-radius: 12px; /* Slightly larger border-radius for a softer feel */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  animation: slideUp 1.2s ease-out forwards; /* Slightly faster slide up with a smooth ease-out */
+  z-index: 10;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Scrollbar styles for Webkit browsers (Chrome, Safari) */
+.gallery::-webkit-scrollbar {
+  width: 8px;
+}
+
+.gallery::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03); /* Very subtle track */
+  border-radius: 10px;
+}
+
+.gallery::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15); /* Slightly darker, more visible thumb */
+  border-radius: 10px;
+  border: 2px solid transparent; /* No border for a cleaner look */
+}
+
+/* --- Gallery Animations --- */
+@keyframes slideUp {
+  0% {
+    bottom: -100%; /* Start off-screen */
+  }
+  100% {
+    bottom: 20px; /* End at the desired position */
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    bottom: 20px; /* Start at the open position */
+  }
+  100% {
+    bottom: -100%; /* Move off-screen */
+  }
+}
+
+/* Reverse animation for closing the gallery */
+.gallery.closed {
+  animation: slideDown 1.0s ease-in forwards; /* Faster slide down with ease-in */
+}
+
+/* --- Gallery Items Wrapper --- */
+.gallery-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; /* Distribute items more evenly */
+  padding: 15px; /* Add some internal padding */
+  gap: 12px; /* Slightly more space between items */
+}
+
+/* --- Individual Gallery Item --- */
+.gallery-item {
+  flex: 1 1 140px; /* Adjusted base for better fitting, allows more items per row */
+  max-width: 100%; /* Cap individual item width */
+  overflow: hidden;
+  border-radius: 10px; /* Slightly larger border-radius for items */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and shadow */
+  max-height: 300px; /* Slightly reduced max height for balance */
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards; /* Faster fade-in and scale-up */
+}
+
+/* Staggered animation for each gallery item - NOW WITH 2s DIFFERENCE */
+.gallery-item:nth-child(1) { animation-delay: 1s; } /* Start immediately */
+.gallery-item:nth-child(2) { animation-delay: 1.2s; }
+.gallery-item:nth-child(3) { animation-delay: 1.4s; }
+.gallery-item:nth-child(4) { animation-delay: 1.6s; }
+.gallery-item:nth-child(5) { animation-delay: 1.8s; }
+.gallery-item:nth-child(6) { animation-delay: 2s; }
+.gallery-item:nth-child(7) { animation-delay: 2.2s; }
+.gallery-item:nth-child(8) { animation-delay: 2.4s; }
+.gallery-item:nth-child(9) { animation-delay: 2.6s; }
+.gallery-item:nth-child(10) { animation-delay: 2.8s; }
+.gallery-item:nth-child(11) { animation-delay: 3s; }
+.gallery-item:nth-child(12) { animation-delay: 3.2s; }
+
+
+/* --- Image/Video Styles --- */
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition for transform and filter */
+  border-radius: 8px; /* Slightly smaller border-radius for the media inside */
+}
+
+/* --- Animation for Fading and Scaling --- */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98); /* Start slightly smaller and lower */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --- Hover Effects --- */
+.gallery-item:hover {
+  transform: translateY(-3px) scale(1.02); /* Slight lift and subtle scale */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* More prominent shadow on hover */
+}
+
+.gallery-item img:hover,
+.gallery-item video:hover {
+  transform: scale(1.06); /* Slightly more pronounced scale on media hover */
+  filter: brightness(1.05); /* Subtle brightness increase */
+}
+
+/* --- Gallery Text (Call to Action) --- */
+.gallery-text {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  background: rgb(230, 230, 230); /* Solid light gray background */
+  padding: 15px;
+  text-align: center;
+  font-size: 1.1em; /* Use relative units for better scalability */
+  font-family: 'Quicksand', sans-serif;
+  color: rgba(0, 0, 0, 0.65); /* Darker text for better readability */
+  border-top: 1px solid rgba(0, 0, 0, 0.07); /* Subtle top border */
+  border-bottom-left-radius: 12px; /* Match gallery border-radius */
+  border-bottom-right-radius: 12px; /* Match gallery border-radius */
+  box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow upwards */
+  pointer-events: none; /* Allows clicks to pass through if it's purely informational */
+  font-weight: 500; /* Slightly bolder text */
+  opacity: 0; /* Start invisible */
+  animation: fadeInText 0.5s ease-out 1.9s forwards; /* Fade in over 0.5s, starts after 2.2s */
+}
+
+/* Keyframes for the text fade-in animation */
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    transform: translateY(10px); /* Optional: slight slide up effect */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+  .gallery {
+    width: 28%; /* Wider on slightly smaller screens */
+    right: 15px;
+  }
+  .gallery-item {
+    flex: 1 1 120px;
+    max-width: 160px;
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    right: 10px;
+    width: 90%; /* Much wider on tablets/larger phones */
+    max-height: 80%;
+    left: 50%;
+    transform: translateX(-50%); /* Center the gallery */
+    bottom: 10px !important; /* Ensure it stays at the bottom */
+  }
+  .gallery.closed {
+    animation: slideDown 1.0s ease-in forwards;
+    transform: translateX(-50%) translateY(100%); /* Adjust transform for closing */
+  }
+  .gallery-items {
+    justify-content: center; /* Center items on smaller screens */
+    padding: 10px;
+  }
+  .gallery-item {
+    flex: 1 1 100px; /* Smaller base for items */
+    max-width: 150px;
+  }
+  .gallery-text {
+    font-size: 1em;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery {
+    right: 5px;
+    left: 5px;
+    width: auto; /* Let content dictate width within padding */
+    max-height: 85%;
+    bottom: 5px !important;
+    transform: none; /* Remove transform for centering if width is auto */
+  }
+  .gallery.closed {
+    transform: translateY(100%); /* Adjust transform for closing */
+  }
+  .gallery-items {
+    gap: 8px; /* Slightly less gap on very small screens */
+  }
+  .gallery-item {
+    flex: 1 1 100%; /* Stack items vertically on very small phones */
+    max-width: 90%; /* Max width relative to gallery */
+    margin: 0 auto; /* Center individual items */
+  }
+}
+
+
+
+/*-------------------------- EXPANDIR IMAGENS --------------------------------------------------------------------------------*/
+.modal {
+  display: flex; /* Garante que os itens internos (o container do modal) sejam centralizados */
+  position: fixed;
+  inset: 0; /* Cobre toda a viewport */
+  z-index: 300;
+  background-color: rgba(0, 0, 0, 0.9);
+
+  flex-direction: column; /* Organiza os itens em coluna, embora só haja um (o container) */
+  justify-content: center; /* Centraliza o .modal-container verticalmente */
+  align-items: center; /* Centraliza o .modal-container horizontalmente */
+}
+
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+  width: auto; /* Deixa o tamanho da largura ser definido pela imagem */
+  height: auto; /* Deixa a altura ser definida pela imagem */
+  max-width: 55%; /* Limite máximo de largura */
+  max-height: 65%; /* Limite máximo de altura */
+  padding: 0;
+  border-radius: 12px;
+  position: relative;
+  box-sizing: border-box;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.534);
+}
+
+.modal-media {
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* ou cover dependendo do que preferir */
+  border-radius: 12px;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#modal-caption {
+  max-width: 90%;
+  margin: 15px auto 0 auto;
+  word-wrap: break-word;
+  text-align: center;
+  white-space: pre-wrap;
+  color: #fff;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 20px;
+}
+
+.modal .close {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 300;
+}
+
+
+
+/*-------------------------- HOTSPOTS --------------------------------------------------------------------------------*/
+.hotspot {
+  background: transparent;
+  border-radius: 50%;
+  border: 2px solid #ffffff8f;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: opacity 0.3s ease-out; /* Mantenha a transição para um efeito suave */
+  opacity: 0; 
+  pointer-events: none;
+}
+
+.hotspots-visible .hotspot {
+  opacity: 0.8;
+  pointer-events: auto;
+}
+
+.hotspot:hover {
+  opacity: 1;
+  transform: scale(1.2); 
+  z-index: 2;
+}
+
+.hotspot-icon {
+ width: 70%;
+ height: 70%;
+ object-fit: fill;
+ display: block;
+ pointer-events: none;
+}
+
+
+/*-------------------------- TROCAR MATERIAIS ----------------------------------------------------------------------*/
+#material-change-container {
+    position: fixed;
+    bottom: 20%;
+    left: 35px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column; /* This is correct for vertical stacking */
+    gap: 15px; /* Space between the texture group and material name */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+#material-change-container.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+#material-name {
+    font-size: 20px;
+    margin-top: 10px;
+    font-family: 'Quicksand', sans-serif;
+    color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    align-self: flex-start; /* Ensures it's left-aligned within the column flex container */
+}
+
+/* Styles for dynamically split material name (if implemented in JS) */
+.material-name .material-type {
+    font-weight: bold;
+    color: #000;
+    margin-right: 5px;
+}
+
+.material-name .material-subtype {
+    color: #777;
+}
+
+.texture-group {
+    display: flex;
+    flex-direction: row; /* Arranges circles horizontally */
+    gap: 15px; /* Space between individual texture circles */
+    justify-content: flex-start; /* Aligns circles to the left */
+    align-self: flex-start; /* Ensures it's left-aligned within the column flex container */
+}
+
+.change-texture {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(124, 124, 124, 0.5);
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: transform 0.3s ease-out, border-color 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+.change-texture:hover {
+    transform: scale(1.2);
+    border-color: rgba(124, 124, 124, 0.8);
+}
+
+.change-texture.selected {
+    transform: scale(1.2);
+    border: 1px solid #000000;
+}
+
+.texture-preview {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}

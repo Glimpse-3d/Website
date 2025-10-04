@@ -1,0 +1,581 @@
+@import url('https://fonts.googleapis.com/css2?family=Vina+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Source+Sans+Pro:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap');
+
+/* Add this to your existing CSS */
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: rgb(230, 230, 230) 20%; /* O fundo final após a animação */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Hide scrollbar for Chrome, Safari, and Edge */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+
+/*------------------------------ BACKGROUND ---------------------------------------------------------------------------------------------------*/
+.background-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgb(230, 230, 230) 10%, rgb(13, 43, 4)); /* Fundo inicial azul e branco */
+  transform: translateY(0); /* Começa com o fundo na posição normal */
+  transition: transform 1s ease-in-out; /* Transição suave quando o fundo se mover */
+}
+
+.background-overlay.up {
+  transform: translateY(-100%); /* Quando a classe 'up' for adicionada, o fundo sobe */
+}
+
+/*------------------------------ JANELA MODELO ---------------------------------------------------------------------------------------------------*/
+model-viewer {
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+
+/*------------------------------ TÍTULO ------------------------------------------------------------------------------*/
+.title {
+  position: fixed;
+  font-size: 17EM;
+  font-family: 'Anton', sans-serif;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: linear-gradient(rgb(230, 230, 230) 20%, transparent 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: 5;
+}
+
+@keyframes fadeInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-8%) scaleY(1.2);
+  }
+}
+
+/*------------------------------ LOGO - VOLTA MAIN PAGE --------------------------------------------------------- */
+.back-button {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    z-index: 20;
+    width: 70px; /* Adjust logo size */
+    height: auto;
+}
+
+
+/*------------------------------ BOTÃO REALIDADE AUMENTADA --------------------------------------------------------*/
+.ar-button {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 20;
+}
+.ar-button img {
+    width: 50px;
+    height: auto;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+
+/*------------------------------ DESCRIÇÃO --------------------------------------------------------------------------*/
+.bottom-left {
+  position: fixed;
+  bottom: 30%;
+  left: 30px;
+  z-index: 20;
+  text-align: left;
+  display: none; /* Keep it hidden initially */
+  opacity: 0; /* Make it initially invisible */
+  animation: fadeInUp 1.5s ease-out forwards; /* Apply fade-in and slide-up animation */
+  animation-delay: 1s; /* Add a 1-second delay */
+}
+
+.bottom-left h1 {
+  margin: 0;
+  font-size: 100px;
+  font-family: 'Anton', sans-serif; /* Bold, strong font for title */
+  color: rgb(0, 0, 0);
+  line-height: 1;
+}
+
+.bottom-left p {
+  margin: 0;
+  font-size: 20px;
+  font-family: 'Quicksand', sans-serif;
+  color: rgb(0, 0, 0.5);
+}
+
+.bottom-left p1 {
+  margin: 0;
+  font-size: 20px;
+  font-family: 'Quicksand', sans-serif;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px); /* Start from below */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* End at the normal position */
+  }
+}
+
+
+/*------------------------------ SETA ---------------------------------------------------------------------------------*/
+.wrap {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  outline: none;
+  opacity: 0; /* Start as invisible */
+  animation: fadeIn 2s forwards 2s; /* 4s delay before starting the fade-in */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+/* Container for the button border */
+.border-button {
+  display: inline-block;
+  padding: 0px 10px; /* Initial padding for the rectangle */
+  background-color: transparent;
+  border: 2px solid #000;
+  border-radius: 50px; /* Initial rounded corners */
+  cursor: pointer;
+  position: relative;
+  animation: shrinkButton 1s forwards 6s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px; /* Fixed height for the border */
+  width: 110px;  /* Width will shrink */
+  white-space: nowrap; /* Prevent text wrapping */
+  margin: 0 auto; /* Center the button horizontally */
+}
+
+/* Style for the text */
+.arrow-text-wrapper {
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: textAppear 6s ease-out forwards, textDisappear 1s forwards 6s;
+}
+
+.arrow-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+  font-family: 'Quicksand', sans-serif;
+  margin-bottom: 0;
+  opacity: 1;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Arrow styles (invisible initially) */
+.arrow {
+  bottom: 0px;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline-block;
+  position: absolute;
+  opacity: 0;  /* Initially invisible */
+  z-index: 30;
+  transition: all 0.3s ease;
+  transform: translate(-50%, -50%); /* Ensure both axes are centered */
+}
+
+.arrow span {
+  position: fixed;
+  width: 0.84rem;
+  height: 0.2rem;
+  background-color: #000;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.arrow span:first-of-type {
+  left: 0;
+  transform: rotate(-45deg);
+}
+
+.arrow span:last-of-type {
+  right: 0;
+  transform: rotate(45deg);
+}
+
+/* Animations for text disappearance, button shrinking, and arrow appearance */
+@keyframes textAppear {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+@keyframes textDisappear {
+  0% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Fix for shrinking the button smoothly */
+@keyframes shrinkButton {
+  0% {
+    width: 100px;  /* Initial width (adjust as needed) */
+    height: 40px;  /* Fixed height */
+
+    border-radius: 25px; /* Initial rounded corners */
+  }
+
+  100% {
+    width: 40px;   /* Final size of the circle */
+    height: 40px;  /* Fixed height to keep it consistent */
+    padding: 0;    /* Remove padding */
+    border-radius: 50%; /* Ensure it becomes circular */
+  }
+}
+
+/* Make the arrow appear after text disappears */
+.wrap .arrow-text-wrapper {
+  animation-delay: 5s; /* Wait for text to disappear */
+}
+
+.wrap .arrow {
+  animation: arrowAppear 2s forwards;
+  animation-delay: 6s; /* Wait for text to disappear */
+}
+
+/* Arrow animation */
+@keyframes arrowAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.arrow.active span:first-of-type {
+  transform: rotate(45deg);
+}
+
+.arrow.active span:last-of-type {
+  transform: rotate(-45deg);
+}
+
+.arrow:hover {
+  transform: scale(5);
+}
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+/*------------------ GALERIA ----------------------------------------------------------------------------------- */
+.gallery {
+  position: fixed;
+  right: 30px;
+  width: 430px;
+  max-height: 90%; /* Maximum height as per the viewport */
+  background: rgba(230, 230, 230, 0) 10%;
+  padding: 10px;
+  overflow-y: auto;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content at the top */
+  animation: slideUp 1.5s ease-out forwards; /* Slower slide up */
+  z-index: 20;
+
+  /* Hide scrollbar for Chrome, Safari, and Edge */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Keyframes for sliding the gallery from the bottom */
+@keyframes slideUp {
+  0% {
+    bottom: -100%; /* Start off-screen */
+  }
+  100% {
+    bottom: 30px; /* End at the desired position */
+  }
+}
+
+/* Reverse animation for closing the gallery */
+@keyframes slideDown {
+  0% {
+    bottom: 30px; /* Start at the open position */
+  }
+  100% {
+    bottom: -100%; /* Move off-screen */
+  }
+}
+
+/* Gallery items wrapper */
+.gallery-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px; /* Space between items */
+}
+
+/* Individual gallery item */
+.gallery-item {
+  flex: 1 1 150px; /* Allow images to grow and shrink with a minimum width */
+  overflow: hidden;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  max-height: 500px; /* Max height for individual items */
+  opacity: 0; /* Make items initially invisible */
+  animation: fadeInUp 1s ease-out forwards; /* Slower fade-in and scale-up animation */
+  animation-delay: 0.1s; /* Stagger the item appearance */
+}
+
+/* Staggered animation for each gallery item */
+.gallery-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.gallery-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.gallery-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.gallery-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.gallery-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.gallery-item:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.gallery-item:nth-child(7) {
+  animation-delay: 0.7s;
+}
+
+/* Image styles */
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  max-height: 100%; /* Prevent images from exceeding the container height */
+  object-fit: cover; /* Ensure images cover their containers */
+  display: block;
+  transition: transform 0.3s ease;
+  border-radius: 8px; /* Keep rounded corners consistent */
+}
+
+/* Animação para o fade-in do texto */
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    transform: translateY(10px); /* Deslocamento para baixo */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* Volta à posição normal */
+  }
+}
+
+/* Animation for fading and scaling */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effects */
+.gallery-item:hover {
+  transform: scale(1.05);
+}
+
+.gallery-item img:hover {
+  transform: scale(1.1);
+}
+.gallery-item video:hover {
+  transform: scale(1.1);
+}
+
+/* Style for the gallery items */
+.gallery-item {
+  position: relative;
+  flex: 1 1 150px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+  max-height: 500px;
+}
+
+/* Style for the gallery images and videos */
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* When gallery is closed, apply slideDown animation */
+.gallery.closed {
+  animation: slideDown 1.5s ease-out forwards; /* Reverse the slide up animation */
+}
+
+/* Texto na parte inferior da galeria */
+.gallery-text {
+  text-align: center;
+  font-size: 16px;
+  font-family: 'Quicksand', sans-serif;
+  color: #000000; /* Cor discreta */
+  opacity: 0; /* Inicialmente invisível */
+  animation: fadeInText 1.5s ease-out forwards;
+  animation-delay: 1.5s; /* Aparece depois dos itens */
+}
+
+/* Animação para fade-in */
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    transform: translateY(10px); /* Leve deslocamento para baixo */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*-------------------------- EXPANDIR IMAGENS ----------------------------------------------------------------------*/
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 30;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  overflow: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  max-width: 50%;
+  max-height: 70%;
+  margin: auto;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20; /* Ensure the image is on top of the blurred background */
+  border-radius: 15px; /* Add rounded corners */
+}
+
+#video01 {
+  display: none; /* Hide video initially */
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: #ffffff79;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  z-index: 30; /* Ensure the close button is on top */
+}
+
+.close:hover {
+  color: #ffffff;
+}
+
+.gallery-item:hover {
+  cursor: pointer;
+}
+
+.thumbnail-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure the video covers the container */
+  border-radius: 15px; /* Add rounded corners */
+}

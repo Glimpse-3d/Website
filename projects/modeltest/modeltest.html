@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLIMPSE</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="modeltest.css">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <div class="background-overlay"></div>
+
+    <a href="../../index.html" class="back-button">
+        <img src="../../main page/LOGO.png" alt="Back" style="width: 70px; height: auto;">
+    </a>
+
+    <model-viewer id="viewer"
+                  src="modeltest.gltf"
+                  vr
+                  ar
+                  ar-modes="webxr scene-viewer quick-look"
+                  camera-controls
+                  camera-orbit="50deg 90deg 25m"
+                  min-camera-orbit="-720deg 70deg 25m"
+                  max-camera-orbit="720deg 90deg 25m"
+                  min-field-of-view="30deg"
+                  max-field-of-view="30deg"
+                  disable-zoom
+                  disable-pan
+                  shadow-intensity="1"
+                  environment-image="modeltest.hdr">
+    </model-viewer>
+
+    <!-- External Script -->
+    <script src="script.js"></script>
+
+</body>
+</html>

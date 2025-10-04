@@ -1,0 +1,105 @@
+{
+  "title": "KRYSSET CHAIR",
+  "name": "KRYSSET LOUNGE CHAIR",
+  "designer": "Fredrik A. Kayser",
+  "location": "Norway",
+  "modelSrc": "model9.gltf",
+  "environmentImage": "model9.hdr",
+  "cameraOrbit": "50deg 90deg 2.5m",
+  "min-camera-orbit": "-720deg 70deg 2.5m",
+  "max-camera-orbit": "720deg 90deg 2.5m",
+  "min-field-of-view": "30deg",
+  "max-field-of-view": "30deg",
+  "disable-zoom": true,
+  "disable-pan": true,
+  "backgroundTopColor": "#441414",
+  "previewImage": "/IMG/preview.mov",
+  "galleryImages": [
+    {
+      "src": "1.jpg",
+      "caption": "Technical Drawings"
+    },
+    {
+      "src": "2.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "3.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "4.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "5.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "6.jpg",
+      "caption": "Augmented Reality Experience"
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "LEATHER",
+      "position": "-0.004249849203865105m 0.456632574067078m -0.14829320018056277m",
+      "image": "../../brush.png",
+      "action": "ChangeMaterials",
+      "materialGroup": "leather",  
+      "initialName": "BROWN" 
+    },
+    {
+      "id": "WOOD",
+      "position": "0.30282700061798096m 0.2715398269714427m 0.12694151083179242m",
+      "image": "../../brush.png",
+      "action": "ChangeMaterials",
+      "materialGroup": "wood",   
+      "initialName": "OILED OAK" 
+    }
+  ],
+  "materials": { 
+    "wood": { 
+      "materialIndex": 0,  
+      "initialName": "Wood | Woiled Oak", 
+      "textures": [
+        {
+          "name": "Wood | Woiled Oak",
+          "thumbnail": "textures/oiled_oak_thumbnail.png",
+          "textureFile": "textures/BAKED_WOOD.png"
+        },
+        {
+          "name": "Wood | Oiled Wallnut",
+          "thumbnail": "textures/oiled_wallnut_thumbnail.png",
+          "textureFile": "textures/BAKED_WOOD2.png"
+        },
+        {
+          "name": "Wood | Black Lacquered Oak",
+          "thumbnail": "textures/oak_black_thumbnail.jpg",
+          "textureFile": "textures/BAKED_WOOD3.png"
+        }
+      ]
+    },
+    "leather": { 
+      "materialIndex": 1, 
+      "initialName": "Leather | Brown",
+      "textures": [
+        {
+          "name": "Leather | Brown",
+          "thumbnail": "textures/brown_thumbnail.jpg",
+          "textureFile": "textures/color _leather.png" 
+        },
+        {
+          "name": "Leather | Natural",
+          "thumbnail": "textures/natural_thumbnail.jpg",
+          "textureFile": "textures/color_leather2.png"
+        },
+        {
+          "name": "Leather | Black",
+          "thumbnail": "textures/black_thumbnail.jpg",
+          "textureFile": "textures/color_leather3.png"
+        }
+      ]
+    }
+  }
+}

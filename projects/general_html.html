@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLIMPSE</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="general_css.css">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <div class="background-overlay"></div>
+
+    <h1 class="title" id="model-title"></h1>
+
+    <a href="../../index.html" class="back-button">
+        <img id="back-logo" src="../../mainpage/LOGO.png" alt="Back" style="width: 70px; height: auto;" />
+    </a>
+
+<model-viewer
+  id="model-viewer" 
+  vr
+  ar
+  autoplay
+  ar-modes="webxr scene-viewer quick-look"
+  camera-controls
+  shadow-intensity="1">
+
+  <button slot="ar-button" class="ar-button" id="ar-trigger">
+      <img src="./augmented_reality_logo.png">
+  </button>
+
+</model-viewer>
+
+<!-- Button to generate QR code, fora do model-viewer -->
+<div id="ar-qr-code" class="ar-qr-button" onclick="generateQRCode(this)" data-media-type="image">
+  <img id="ar-logo" src="./augmented_reality_logo.png" alt="AR QR Code">
+</div>
+
+<!-- Mensagem de Destaque ao Iniciar -->
+<div id="qr-intro-overlay">
+<div id="qr-blur-background" class="qr-intro-blur"></div>
+  <div class="qr-intro-message">See it come to life with Augmented Reality</div>
+</div>
+
+
+<div id="qr-code-container">
+  <div class="qr-preview-content">
+
+    <!-- Coluna esquerda: local para imagem/vídeo -->
+    <div class="qr-column left" id="ar-preview-container">
+    </div>
+    <!-- Coluna direita: QR code e instruções fixas -->
+    <div class="qr-column right">
+      <p class="intro">Look how easy it is...</p>
+      <div class="instructions">
+        <p class="instruction">Open your smartphone’s camera app</p>
+        <p class="instruction">Point it at the QR code</p>
+        <p class="instruction">And try it in your place</p>
+      </div>
+      <div id="qr-code"></div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- MORE INFO -->
+<button class="wrap" id="toggle-hotspots-button">
+  <div class="border-button">
+    <div class="arrow-text-wrapper">
+      <div class="arrow-text">Find out more</div>
+    </div>
+    
+    <!-- NEW HITBOX WRAPPER ADDED HERE -->
+    <div class="arrow-hitbox">
+      <div class="arrow">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    
+  </div>
+</button>
+
+
+<!-- DESCRIÇÃO DO PROJECTO -->
+<div class="bottom-left">
+<div class="bottom-left-container">
+    <div class="info-line">  <h1 id="project-name">Loading...</h1>
+    <div class="details-right"> <p class="designer" id="project-designer"></p>
+        <p class="location" id="project-location"></p>
+    </div>
+    </div>
+    <p class="project-description" id="project-description"></p>
+</div>
+</div>
+
+
+<!-- IMAGENS GALERIA-->
+<div class="gallery">
+  <div class="gallery-items">
+</div>
+
+
+<!-- MODAL PARA AUMENTAR IMAGENS/VIDEOS -->
+<div class="modal" style="display: none;">
+  <div class="modal-container">
+    <img class="modal-media" id="img01" style="display: none;">
+    <video class="modal-media" id="video01" autoplay muted playsinline style="display: none;">
+      <source id="videoSource" src="" type="video/mp4">
+      Your browser does not support videos.
+    </video>
+  </div>
+  <div id="modal-caption"></div>
+</div>
+
+
+<!-- ALTERAR TEXTURAS -->
+<div id="material-change-container">
+
+    <div class="texture-group">
+        <!-- texture buttons go here -->
+    </div>
+
+    <p id="material-name"></p>
+
+</div>
+
+<script src="./general_js.js"></script>
+</body>
+</html>

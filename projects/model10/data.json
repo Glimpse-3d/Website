@@ -1,0 +1,66 @@
+{
+  "title": " ",
+  "name": "JOSEPH'S KITCHEN",
+  "designer": "Paulo Lopes",
+  "location": "Porto | Portugal",
+  "modelSrc": "model10.gltf",
+  "environmentImage": "model10.hdr",
+  "cameraOrbit": "180deg 90deg 9m",
+  "min-camera-orbit": "-720deg 0deg 0m",
+  "max-camera-orbit": "720deg 90deg 10m",
+  "field-of-view": "40deg",   
+  "min-field-of-view": "10deg", 
+  "max-field-of-view": "70deg",
+  "disable-zoom": false,
+  "disable-pan": true,
+  "backgroundTopColor": "#948d82",
+  "previewImage": "preview.jpg",
+"hotspots": [
+  {
+    "id": "CORES_COZINHA",
+    "position": "-0.028532164965655804m 1.6m 1.0606703753079942m",
+    "image": "../../palette.png",
+    "action": "ChangeMaterials",
+    "materialGroup": "cozinha",
+    "initialName": "default"
+  },
+  {
+    "id": "LAYOUT_COZINHA",
+    "position": "0.5564003363255828m 1.6m 1.0606703751570472m",
+    "image": "../../layout.png",
+    "action": "ChangeLayout",
+    "layoutGroup": "cozinha",
+    "initialLayout": "original"
+  },
+  {
+    "id": "VISTA_1",
+    "position": "-0.2699084129902172m 1.6m -1.3329705481164953m",
+    "image": "../../eye.png",
+    "action": "ChangeView",
+    "cameraOrbit": "160deg 70deg 3.1m",
+    "cameraTargetPosition": "-1.5m .7m 1m",
+    "fieldOfView": "70deg"
+  },
+  {
+    "id": "VISTA_2",
+    "position": "-1.7200583397546865m 1m -0.0664026762376782mm",
+    
+    "image": "../../eye.png",
+    "action": "ChangeView",
+    "cameraOrbit": "260deg 87deg 3m",
+    "cameraTargetPosition": "1m 1m 1m",
+    "fieldOfView": "60deg"
+  },
+  {
+    "id": "VISTA_3",
+    "position": "1.8m 1.6m 0.4212463981052026m",
+    "image": "../../eye.png",
+    "action": "ChangeView",
+    "cameraOrbit": "80deg 85deg 0.5m",
+    "cameraTargetPosition": "1m 1.4m 0.5m",
+    "fieldOfView": "50deg"
+  }]
+}
+
+
+

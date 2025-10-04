@@ -1,0 +1,51 @@
+{
+  "title": "CAETANO PALHA",
+  "name": "CAETANO PALHA 27",
+  "designer": "Renovation of Residential Building",
+  "location": "Portugal | Lisbon",
+  "modelSrc": "model11.gltf",
+  "environmentImage": "model11.hdr",
+  "cameraOrbit": "0deg 90deg 70m",
+  "min-camera-orbit": "-720deg 0deg 0m",
+  "max-camera-orbit": "720deg 90deg 70m",
+  "min-field-of-view": "30deg",
+  "max-field-of-view": "30deg",
+  "disable-zoom": false,
+  "disable-pan": false,
+  "backgroundTopColor": "#61916c",
+  "previewImage": "preview.jpg",
+  "galleryImages": [
+    {
+      "src": "1.jpeg",
+      "caption": "Facade"
+    },
+    {
+      "src": "2.jpeg",
+      "caption": "Facade"
+    },
+    {
+      "src": "3.jpeg",
+      "caption": "Facade"
+    },
+    {
+      "src": "4.jpeg",
+      "caption": "Rear Facade"
+    },
+    {
+      "src": "5.jpeg",
+      "caption": "Backyard"
+    }
+  ],
+  "hotspots": [
+  {
+    "id": "VISTA_1",
+    "position": "1.5m 4m -9.5m",
+    "image": "../../eye.png",
+    "action": "ChangeView",
+    "cameraOrbit": "180deg 150deg 10m",
+    "cameraTargetPosition": "0m 4.8m 0m",
+    "fieldOfView": "10"
+  }
+  ]
+}
+    

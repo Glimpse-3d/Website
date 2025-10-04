@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLIMPSE</title>
+    <link rel="stylesheet" href="model5-styles.css">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+</head>
+
+<body>
+
+<div class="background-overlay"></div>
+
+<h1 class="title">WOODNEST CABIN</h1>
+
+<a href="../../index.html" class="back-button">
+  <img src="../../main page/LOGO.png" alt="Back" style="width: 70px; height: auto;">
+</a>
+
+<model-viewer id="viewer"
+    src="model5.gltf"
+    auto-rotate
+    vr
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    camera-controls
+    camera-orbit="-50deg 90deg 30m"
+    min-camera-orbit="-720deg 70deg 10m"
+    max-camera-orbit="720deg 90deg 30m"
+    min-field-of-view="30deg"
+    max-field-of-view="30deg"
+    shadow-intensity="1"
+    environment-image="model5.hdr">
+
+    <button slot="ar-button" class="ar-button">
+        <img src="../augmented reality logo.gif">
+    </button>
+
+</model-viewer>
+
+
+  <!-- SETA MAIS INFORMAÇÕES -->
+  <button class="wrap">
+    <div class="border-button"> <!-- Container for the border -->
+      <div class="arrow-text-wrapper">
+        <div class="arrow-text">Find out more</div> <!-- Text above the arrow -->
+      </div>
+      <div class="arrow">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </button>
+  
+
+  
+<!-- GALERIA IMAGENS -->
+<div class="gallery">
+  <div class="gallery-items">
+    <div class="gallery-item"><img src="./IMG/1.jpg" alt="Image 1"></div>
+    <div class="gallery-item"><img src="./IMG/2.jpg" alt="Image 2"></div>
+  </div>
+  <div class="gallery-text">Click to expand</div>
+</div>
+
+
+<!-- Modal para exibir imagem ou vídeo ampliado -->
+<div class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="img01" style="display: none;">
+  <video class="modal-content" id="video01" autoplay muted playsinline>
+    <source id="videoSource" src="" type="video/mp4">
+    Seu navegador não suporta vídeos.
+</div>
+
+
+
+
+<!-- DESCRIÇÃO -->
+    <div class="bottom-left">
+      <h1>WOODNEST<br>CABIN</h1>
+      <p>HELEN & HARD</p>
+      <p1>ODDA | NORWAY</p1>
+</div>
+
+
+<script src="script.js"></script>
+</body>
+</html>

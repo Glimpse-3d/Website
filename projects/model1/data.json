@@ -1,0 +1,21 @@
+{
+  "title": "BEDROOM",
+  "name": "BEDROOM",
+  "designer": "PAULO LOPES",
+  "location": "LISBOA | PORTUGAL",
+  "modelSrc": "model1.gltf",
+  "environmentImage": "model1.hdr",
+  "cameraOrbit": "-70deg 90deg 10m",
+  "min-camera-orbit": "-720deg 70deg 10m",
+  "max-camera-orbit": "720deg 90deg 10m",
+  "min-field-of-view": "30deg",
+  "max-field-of-view": "30deg",
+  "disable-zoom": true,
+  "disable-pan": true,
+  "backgroundTopColor": "rgb(167, 111, 47)",
+  "galleryImages": [
+    "3.jpg",
+    "1.jpeg",
+    "2.jpeg"
+  ]
+}

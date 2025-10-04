@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLIMPSE</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./modelqrcode-styles.css">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <div class="background-overlay"></div>
+
+    <a href="../../index.html" class="back-button">
+        <img src="../../main page/LOGO.png" alt="Back" style="width: 70px; height: auto;">
+    </a>
+
+    <model-viewer id="viewer"
+                  src="modelqrcode.gltf"
+                  vr
+                  ar
+                  ar-modes="webxr scene-viewer quick-look"
+                  camera-controls
+                  camera-orbit="50deg 90deg 2.5m"
+                  min-camera-orbit="-720deg 70deg 2.5m"
+                  max-camera-orbit="720deg 90deg 2.5m"
+                  min-field-of-view="30deg"
+                  max-field-of-view="30deg"
+                  disable-zoom
+                  disable-pan
+                  shadow-intensity="1"
+                  environment-image="modelqrcode.hdr">
+
+        <button class="Hotspot" slot="hotspot-4" data-position="-0.004249849203865105m 0.456632574067078m -0.14829320018056277m" data-normal="0.022575492156866918m 0.3057391219630411m 0.951847643509792m" data-visibility-attribute="visible">
+            <img src="../../projects/brush.png" alt="Hotspot 4" width="24" height="24">
+        </button>
+        
+        <button class="Hotspot" slot="hotspot-3" data-position="0.30282700061798096m 0.2715398269714427m 0.12694151083179242m" data-normal="1m 0m 0m" data-visibility-attribute="visible">
+            <img src="../../projects/brush.png" alt="Hotspot 3" width="24" height="24">
+        </button>
+        
+        <button class="Hotspot" slot="hotspot-medidas" data-position="-0.2900633836283635m 0.0006853519483555615m 0.289167329928877m" data-normal="-0.12351058170322744m 0.05764141909504175m 0.9906677561180843m" data-visibility-attribute="visible">
+            <img src="../ruler.png" alt="Hotspot Medidas" width="24" height="24">
+        </button>
+        
+        <button slot="ar-button" class="ar-button" id="ar-trigger">
+            <img src="../augmented_reality_logo.png">
+        </button>
+    
+
+        <button slot="hotspot-dot+X-Y+Z" class="dot" data-position="1 -1 1" data-normal="1 0 0"></button>
+        <button slot="hotspot-dim+X-Y" class="dim" data-position="1 -1 0" data-normal="1 0 0"></button>
+        <button slot="hotspot-dot+X-Y-Z" class="dot" data-position="1 -1 -1" data-normal="1 0 0"></button>
+        <button slot="hotspot-dim+X-Z" class="dim" data-position="1 0 -1" data-normal="1 0 0"></button>
+        <button slot="hotspot-dot+X+Y-Z" class="dot" data-position="1 1 -1" data-normal="0 1 0"></button>
+        <button slot="hotspot-dim+Y-Z" class="dim" data-position="0 -1 -1" data-normal="0 1 0"></button>
+        <button slot="hotspot-dot-X+Y-Z" class="dot" data-position="-1 1 -1" data-normal="0 1 0"></button>
+        <button slot="hotspot-dim-X-Z" class="dim" data-position="-1 0 -1" data-normal="-1 0 0"></button>
+        <button slot="hotspot-dot-X-Y-Z" class="dot" data-position="-1 -1 -1" data-normal="-1 0 0"></button>
+        <button slot="hotspot-dim-X-Y" class="dim" data-position="-1 -1 0" data-normal="-1 0 0"></button>
+        <button slot="hotspot-dot-X-Y+Z" class="dot" data-position="-1 -1 1" data-normal="-1 0 0"></button>
+        <svg id="dimLines" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="dimensionLineContainer">
+            <line class="dimensionLine"></line>
+            <line class="dimensionLine"></line>
+            <line class="dimensionLine"></line>
+            <line class="dimensionLine"></line>
+            <line class="dimensionLine"></line>
+        </svg>
+
+    </model-viewer>
+
+  <!-- ALTERAR TEXTURAS -->
+    <div id="material-change-container" class="material-change-container">
+        <div id="material-titles">
+            <p id="material-name"></p>
+        </div>
+        <div class="texture-group" id="wood-textures">
+            <button class="change-texture" data-material="0" data-texture="./textures/BAKED_WOOD.png" data-material-name="WOOD | OILED OAK"><img src="./textures/oiled_oak_thumbnail.png" class="texture-preview"></button>
+            <button class="change-texture" data-material="0" data-texture="./textures/BAKED_WOOD2.png" data-material-name="WOOD | OILED WALLNUT"><img src="./textures/oiled_wallnut_thumbnail.png" class="texture-preview"></button>
+        </div>
+        
+        <div class="texture-group" id="leather-textures">
+            <button class="change-texture" data-material="1" data-texture="./textures/color _leather.png" data-material-name="LEATHER | BROWN"><img src="./textures/brown_thumbnail.jpg" class="texture-preview"></button>
+            <button class="change-texture" data-material="1" data-texture="./textures/color_leather2.png" data-material-name="LEATHER | NATURAL"><img src="./textures/natural_thumbnail.jpg" class="texture-preview"></button>
+            <button class="change-texture" data-material="1" data-texture="./textures/color_leather3.png" data-material-name="LEATHER | BLACK"><img src="./textures/black_thumbnail.jpg" class="texture-preview"></button>
+        </div>
+    </div>
+
+    <!-- External Script -->
+    <script src="./script.js"></script>
+
+</body>
+</html>
