@@ -3,9 +3,6 @@
 		"generator":"Khronos glTF Blender I/O v4.3.47",
 		"version":"2.0"
 	},
-	"extensionsUsed":[
-		"KHR_materials_unlit"
-	],
 	"scene":0,
 	"scenes":[
 		{
@@ -54,16 +51,13 @@
 		},
 		{
 			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_unlit":{}
-			},
 			"name":"MADEIRA",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0
 				},
 				"metallicFactor":0,
-				"roughnessFactor":0.9
+				"roughnessFactor":0.5
 			}
 		}
 	],

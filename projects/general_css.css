@@ -113,6 +113,7 @@ model-viewer {
 
 
 /*------------------------------ BOTÃO REALIDADE AUMENTADA --------------------------------------------------------*/
+/*------------------------------ BOTÃO REALIDADE AUMENTADA (No slot: #ar-trigger) --------------------------------------------------------*/
 .ar-button {
   position: fixed;
   top: 30px;
@@ -121,8 +122,8 @@ model-viewer {
   border: none;
   padding: 0;
   cursor: pointer;
-  z-index: 200; /* Ensure the button stays on top */
-  opacity: 1; /* Always visible */
+  z-index: 500; /* Prioridade ligeiramente inferior ao QR Code */
+  opacity: 1;
   transition: opacity 0.3s ease;
 }
 .ar-button img {
@@ -131,6 +132,26 @@ model-viewer {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+/*------------------------------ BOTÃO REALIDADE AUMENTADA (No slot: #ar-trigger) --------------------------------------------------------*/
+.ar-button {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 501; /* 👈 AGORA É O Z-INDEX MAIS ALTO */
+  opacity: 1; 
+  transition: opacity 0.3s ease;
+}
+.ar-button img {
+  width: 40px;
+  height: auto;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/*------------------------------ BOTÃO QR CODE (Fora do slot: #ar-qr-code) --------------------------------------------------------*/
 .ar-qr-button {
   position: fixed;
   top: 30px;
@@ -139,24 +160,15 @@ model-viewer {
   border: none;
   padding: 0;
   cursor: pointer;
-  z-index: 100; /* Ensure the button stays on top */
-  opacity: 1; /* Always visible */
+  z-index: 500; /* 👈 AGORA É O Z-INDEX MAIS BAIXO - SEMPRE VISÍVEL, MAS POR TRÁS */
+  opacity: 1; 
   transition: opacity 0.3s ease;
+  display: block; /* Ou display: flex; se for o caso. */
 }
 .ar-qr-button img {
   width: 40px;
   height: auto;
   transition: transform 0.3s ease, opacity 0.3s ease;
-}
-#ar-logo.fade-out {
-  opacity: 0; /* Fade out */
-  border-color: rgba(0, 0, 0, 0.5); /* Change border color to dark when fading out */
-}
-
-@media (max-width: 1024px) {
-  .ar-qr-button {
-    display: none;
-  }
 }
 
 

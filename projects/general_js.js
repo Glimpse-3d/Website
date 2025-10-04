@@ -34,8 +34,7 @@ async function loadProjectData() {
             return null;
         }
 
-        // Assign attributes to model-viewer
-        if (data.modelSrc) modelViewer.setAttribute('src', `./${projectFolder}/${data.modelSrc}`);
+        if (data.modelSrc) {modelViewer.setAttribute('src', `./${projectFolder}/${data.modelSrc}`);
         if (data.environmentImage) modelViewer.setAttribute('environment-image', `./${projectFolder}/${data.environmentImage}`);
         if (data.cameraOrbit) modelViewer.setAttribute('camera-orbit', data.cameraOrbit);
         if (data['min-camera-orbit']) modelViewer.setAttribute('min-camera-orbit', data['min-camera-orbit']);
@@ -45,7 +44,8 @@ async function loadProjectData() {
         if (data['disable-zoom'] !== undefined) modelViewer.disableZoom = data['disable-zoom'];
         if (data['disable-pan'] !== undefined) modelViewer.disablePan = data['disable-pan'];
         if (!modelViewer.hasAttribute('camera-controls')) modelViewer.setAttribute('camera-controls', '');
-
+        }
+        
         // Update project texts
             document.getElementById('model-title').textContent = data.title || 'Untitled Model';
 
@@ -218,6 +218,7 @@ if (data.hotspots && Array.isArray(data.hotspots)) {
                 }
             }
         }
+
         return modelViewer;
     } catch (error) {
         console.error('Error loading project:', error);

@@ -18,7 +18,7 @@
 
     <a href="../../index.html" class="back-button">
         <img id="back-logo" src="../../mainpage/LOGO.png" alt="Back" style="width: 70px; height: auto;" />
-    </a>
+</a>
 
 <model-viewer
   id="model-viewer" 
@@ -33,12 +33,12 @@
       <img src="./augmented_reality_logo.png">
   </button>
 
-</model-viewer>
+  <!-- Button to generate QR code, fora do model-viewer -->
+  <div id="ar-qr-code" class="ar-qr-button" onclick="generateQRCode(this)" data-media-type="image">
+    <img id="ar-logo" src="./augmented_reality_logo.png" alt="AR QR Code">
+  </div>
 
-<!-- Button to generate QR code, fora do model-viewer -->
-<div id="ar-qr-code" class="ar-qr-button" onclick="generateQRCode(this)" data-media-type="image">
-  <img id="ar-logo" src="./augmented_reality_logo.png" alt="AR QR Code">
-</div>
+</model-viewer>
 
 <!-- Mensagem de Destaque ao Iniciar -->
 <div id="qr-intro-overlay">

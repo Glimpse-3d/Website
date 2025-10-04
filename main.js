@@ -1,90 +1,81 @@
 document.addEventListener('DOMContentLoaded', () => {
     const intro = document.getElementById('intro');
     const introVideo = document.getElementById('introVideo');
-    const HAS_SEEN_VIDEO_KEY = 'introVideoPlayed'; 
-    
-    // Verifica o tipo de navegação: 'back_forward' é Voltar/Avançar
-    const navigationType = performance.getEntriesByType("navigation")[0]?.type;
-    const isBackNavigation = navigationType === 'back_forward';
+    const HAS_SEEN_VIDEO_KEY = 'introVideoPlayed';
+    const VIDEO_TIME_KEY = 'introVideoTime';
 
-    // Função que inicializa as funcionalidades restantes do site (páginas e outros)
+    // --- Função para iniciar o resto do site ---
     function startSite() {
-        if (typeof setupPageControl === 'function') setupPageControl();
-        // Coloque aqui outras inicializações pós-vídeo, se houver.
+        if (typeof init === 'function') init();           // Inicia nuvens e loop
+        if (typeof setupPageControl === 'function') setupPageControl(); // Controlo de páginas
+        restoreScroll(); // Se guardaste scroll
     }
 
-    // --- LÓGICA DE INICIALIZAÇÃO ---
-
-    if (isBackNavigation && sessionStorage.getItem(HAS_SEEN_VIDEO_KEY)) {
-        // CASO 'VOLTAR': Pula tudo e inicia as nuvens e as páginas de uma vez.
-        if (intro) {
-            intro.style.display = 'none';
-        }
-        if (typeof init === 'function') init(); // Inicia nuvens e loop de animação
-        startSite(); // Inicia controlo de páginas
-        return; 
-    }
-    
-    // CASO 'NOVO ACESSO' ou 'F5': 
-    
-    // 1. Inicia as NUVENS IMEDIATAMENTE (correm por trás do vídeo/overlay para fluidez)
-    if (typeof init === 'function') init();
-    
-    if (introVideo && intro) {
-        
-        // 2. QUANDO O VÍDEO ACABA
-        introVideo.addEventListener('ended', () => {
-            sessionStorage.setItem(HAS_SEEN_VIDEO_KEY, 'true'); 
-            
-            // Aplica fade out
-            intro.style.transition = 'opacity 1s ease';
-            intro.style.opacity = 0;
-            
-            // Inicia o controlo de páginas APÓS o fade out (1000ms)
-            setTimeout(() => {
-                intro.style.display = 'none';
-                startSite(); // Inicia o controlo de páginas
-            }, 1000); 
-        });
-
-        // 3. QUANDO O VÍDEO É PULADO (CLIQUE)
-        intro.addEventListener('click', () => {
-            sessionStorage.setItem(HAS_SEEN_VIDEO_KEY, 'true'); 
-            introVideo.pause();
-            
-            // Aplica fade out
-            intro.style.transition = 'opacity 1s ease';
-            intro.style.opacity = 0;
-            
-            // Inicia o controlo de páginas APÓS o fade out (1000ms)
-            setTimeout(() => {
-                intro.style.display = 'none';
-                startSite(); // Inicia o controlo de páginas
-            }, 1000);
-        });
+    // --- Restaurar vídeo e scroll caso volte via botão Back ---
+    const savedTime = sessionStorage.getItem(VIDEO_TIME_KEY);
+    if (savedTime) {
+        introVideo.currentTime = parseFloat(savedTime);
+        introVideo.play();
     } else {
-        // Fallback: se não houver vídeo/overlay (deve iniciar tudo de imediato)
-        startSite();
+        introVideo.play(); // Novo acesso: toca desde o início
     }
+
+    // --- Quando o vídeo termina ---
+    introVideo.addEventListener('ended', () => {
+        sessionStorage.setItem(HAS_SEEN_VIDEO_KEY, 'true');
+        fadeOutIntro();
+    });
+
+    // --- Pular vídeo ao clicar ---
+    intro.addEventListener('click', () => {
+        sessionStorage.setItem(HAS_SEEN_VIDEO_KEY, 'true');
+        introVideo.pause();
+        fadeOutIntro();
+    });
+
+    // --- Função para aplicar fade out ---
+    function fadeOutIntro() {
+        intro.style.transition = 'opacity 1s ease';
+        intro.style.opacity = 0;
+        setTimeout(() => {
+            intro.style.display = 'none';
+            startSite();
+        }, 1000);
+    }
+
+    // --- Guardar estado antes de sair ou mudar de página ---
+    window.addEventListener('pagehide', () => {
+        sessionStorage.setItem(VIDEO_TIME_KEY, introVideo.currentTime);
+        sessionStorage.setItem('scrollY', window.scrollY);
+    });
+
+    // --- Pausar vídeo se o utilizador mudar de aba ou abrir outro HTML ---
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) introVideo.pause();
+    });
+
+    // --- Restaurar scroll caso volte ---
+    function restoreScroll() {
+        const scrollY = sessionStorage.getItem('scrollY');
+        if (scrollY) window.scrollTo(0, parseFloat(scrollY));
+    }
+
+    // --- Inicializa nuvens imediatamente, mesmo antes do fade out ---
+    if (typeof init === 'function') init();
 });
 
+// --- Fallback WebGL detector ---
 if (!Detector.webgl) Detector.addGetWebGLMessage();
 
+// --- Nuvens e loop ---
 let mouseX = 0;
 const windowHalfX = window.innerWidth / 2;
+const clouds = { background: null, foreground: null };
 
-const clouds = {
-    background: null,
-    foreground: null
-};
-
-// FUNÇÃO INIT MODIFICADA: APENAS inicializa as nuvens e o loop de animação
 function init() {
-    // cria camadas de nuvens
     clouds.background = initCloudLayer('three-background', 0, 0.015);
     clouds.foreground = initCloudLayer('three-foreground', -500, 0.03);
 
-    // resize
     window.addEventListener('resize', () => {
         ['background', 'foreground'].forEach(layer => {
             const cam = clouds[layer].camera;
@@ -95,9 +86,9 @@ function init() {
         });
     });
 
-    // setupPageControl() FOI REMOVIDO DAQUI para ser chamado apenas em startSite()
     animateLoop();
 }
+
 
 function initCloudLayer(containerId, zOffset, speed) {
     const container = document.getElementById(containerId);
@@ -228,13 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Lista de projetos (imagem + nome + modelo)
   const projectImages = [
-    { src: '/projects/model9/thumbnail.png', title: 'KRYSSET CHAIR', model: 'model9' },
-    { src: '/projects/model5/thumbnail.png', title: 'GF CHAIR', model: 'model5' },
-    { src: '/projects/model4/thumbnail.png', title: 'CANTAREIRA', model: 'model4' },
-    { src: '/projects/model11/thumbnail.png', title: 'CAETANO PALHA', model: 'model11' },
-    { src: '/projects/model3/thumbnail.png', title: 'IN PROGRESS', model: 'model3' },
-    { src: '/projects/model12/thumbnail.png', title: 'IN PROGRESS', model: 'model12' },
-    { src: '/projects/model8/thumbnail.png', title: 'IN PROGRESS', model: 'model8' },
+    { src: '../../projects/model9/thumbnail.png', title: 'KRYSSET CHAIR', model: 'model9' },
+    { src: '../../projects/model5/thumbnail.png', title: 'GF CHAIR', model: 'model5' },
+    { src: '../../projects/model4/thumbnail.png', title: 'CANTAREIRA', model: 'model4' },
+    { src: '../../projects/model11/thumbnail.png', title: 'CAETANO PALHA', model: 'model11' },
+    { src: '../../projects/model3/thumbnail.png', title: 'IN PROGRESS', model: 'model3' },
+    { src: '../../projects/model12/thumbnail.png', title: 'IN PROGRESS', model: 'model12' },
+    { src: '../../projects/model8/thumbnail.png', title: 'IN PROGRESS', model: 'model8' },
   ];
 
   // Limpar e criar a galeria dinamicamente
