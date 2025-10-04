@@ -219,13 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Lista de projetos (imagem + nome + modelo)
   const projectImages = [
-    { src: '../../projects/model9/thumbnail.png', title: 'KRYSSET CHAIR', model: 'model9' },
-    { src: '../../projects/model5/thumbnail.png', title: 'GF CHAIR', model: 'model5' },
-    { src: '../../projects/model4/thumbnail.png', title: 'CANTAREIRA', model: 'model4' },
-    { src: '../../projects/model11/thumbnail.png', title: 'CAETANO PALHA', model: 'model11' },
-    { src: '../../projects/model3/thumbnail.png', title: 'IN PROGRESS', model: 'model3' },
-    { src: '../../projects/model12/thumbnail.png', title: 'IN PROGRESS', model: 'model12' },
-    { src: '../../projects/model8/thumbnail.png', title: 'IN PROGRESS', model: 'model8' },
+    { src: 'projects/model9/thumbnail.png', title: 'KRYSSET CHAIR', model: 'model9' },
+    { src: 'projects/model5/thumbnail.png', title: 'GF CHAIR', model: 'model5' },
+    { src: 'projects/model4/thumbnail.png', title: 'CANTAREIRA', model: 'model4' },
+    { src: 'projects/model11/thumbnail.png', title: 'CAETANO PALHA', model: 'model11' },
+    { src: 'projects/model3/thumbnail.png', title: 'IN PROGRESS', model: 'model3' },
+    { src: 'projects/model12/thumbnail.png', title: 'IN PROGRESS', model: 'model12' },
+    { src: 'projects/model8/thumbnail.png', title: 'IN PROGRESS', model: 'model8' },
   ];
 
   // Limpar e criar a galeria dinamicamente
