@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { src: 'projects/model9/thumbnail.png', title: 'KRYSSET CHAIR', model: 'model9' },
     { src: 'projects/model5/thumbnail.png', title: 'GF CHAIR', model: 'model5' },
     { src: 'projects/model4/thumbnail.png', title: 'CANTAREIRA', model: 'model4' },
-    { src: 'projects/model11/thumbnail.png', title: 'CAETANO PALHA', model: 'model11' },
+    { src: 'projects/model11/thumbnail.png', title: 'IN PROGRESS', model: 'model11' },
     { src: 'projects/model3/thumbnail.png', title: 'IN PROGRESS', model: 'model3' },
     { src: 'projects/model12/thumbnail.png', title: 'IN PROGRESS', model: 'model12' },
     { src: 'projects/model8/thumbnail.png', title: 'IN PROGRESS', model: 'model8' },
@@ -312,14 +312,29 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const servicesPage = document.querySelector('.services-page');
   const btnServices = document.getElementById('btn-services');
+  const serviceItems = document.querySelectorAll('.service-item');
 
-  if (!servicesPage || !btnServices) return;
+  if (!servicesPage || !btnServices || serviceItems.length === 0) return;
 
   btnServices.addEventListener('click', () => {
     // Se já está ativa, não faz nada
     if (servicesPage.classList.contains('active')) return;
 
     servicesPage.classList.add('active');
+
+    // Para cada card, toca o vídeo após a animação da sombra
+    serviceItems.forEach((card, index) => {
+      const video = card.querySelector('video');
+      if (!video) return;
+
+      // Atraso: shadowGlow começa 2s depois e dura 3s, então play após 5s
+      // Pode ajustar conforme o teu CSS
+      const delay = index === 0 ? 2000 : 5500; // card1: 5s, card2: 5.5s
+
+      setTimeout(() => {
+        video.play().catch(err => console.log("Erro ao tocar vídeo:", err));
+      }, delay);
+    });
   });
 
   // Se clicar fora da services-page, fecha
@@ -328,6 +343,12 @@ document.addEventListener('DOMContentLoaded', () => {
         !servicesPage.contains(e.target) &&
         e.target !== btnServices) {
       servicesPage.classList.remove('active');
+
+      // Pausar todos os vídeos quando fechar
+      serviceItems.forEach(card => {
+        const video = card.querySelector('video');
+        if (video) video.pause();
+      });
     }
   });
 });
@@ -338,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const contactsPage = document.querySelector('.contact-page');
   const btnContacts = document.getElementById('btn-contacts');
-  const contactForm = document.querySelector('.contact-form');
+  const contactForm = document.getElementById('contact-form');
   const inputs = document.querySelectorAll('.contact-form .input-container, .contact-form .send-button');
   const contactTitle = document.querySelector('.contact-intro h2');
   const socialMedia = document.querySelector('.social-media-container');
@@ -354,40 +375,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Clique no botão de contacts
   btnContacts.addEventListener('click', () => {
-    // Se já está ativo, não faz nada
     if (contactsPage.classList.contains('active')) return;
 
     contactsPage.classList.add('active');
 
-    // Animação do título
     restartAnimation(contactTitle, `slideUpFade 1s ease-out forwards 0.5s`);
-
-    // Animação do formulário
     restartAnimation(contactForm, `slideUp 1s ease forwards 0s`);
 
-    // Animação dos inputs e botão
     inputs.forEach((item, i) => {
       restartAnimation(item, `fadeInLeft 0.8s ease forwards ${i * 0.3}s`);
     });
 
-    // Mostrar redes sociais
     socialMedia.classList.add('show');
     restartAnimation(socialMedia, `fadeInUp 0.8s ease forwards 1s`);
   });
 
-  // Fecha se clicar fora do contactsPage
+  // Fecha se clicar fora do contactsPage e fora das redes sociais
   document.addEventListener('click', (e) => {
-    if (contactsPage.classList.contains('active') &&
-        !contactsPage.contains(e.target) &&
-        e.target !== btnContacts) {
-
+    if (
+      contactsPage.classList.contains('active') &&
+      !contactsPage.contains(e.target) &&
+      e.target !== btnContacts &&
+      !socialMedia.contains(e.target)
+    ) {
       contactsPage.classList.remove('active');
-
-      // Esconder redes sociais
       restartAnimation(socialMedia, `fadeOutDown 0.5s ease forwards`);
       socialMedia.classList.remove('show');
     }
   });
-});
 
+  // ----------------- ENVIO DO FORMULÁRIO -----------------
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // evita reload da página
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+
+    // Monta o mailto
+    const subject = encodeURIComponent(`${name}`);
+    const body = encodeURIComponent(`${message}`);
+    const mailtoLink = `mailto:info@glimpse3d.com?subject=${subject}&body=${body}`;
+
+    // Abre o cliente de email do utilizador
+    window.open(mailtoLink, '_blank');
+  });
+});
 

@@ -1,0 +1,56 @@
+{
+  "title": "CANTAREIRA",
+  "name": "CANTAREIRA",
+  "designer": "Arq. Eduardo Souto Moura",
+  "location": "Porto | Portugal",
+  "modelSrc": "model12.gltf",
+  "environmentImage": "model12.hdr",
+  "cameraOrbit": "0deg 90deg 60m",
+  "min-camera-orbit": "-720deg 70deg 60m",
+  "max-camera-orbit": "720deg 90deg 60m",
+  "min-field-of-view": "30deg",
+  "max-field-of-view": "30deg",
+  "disable-pan": true,
+  "backgroundTopColor": "#4b6e75",
+  "galleryImages": [
+    {
+      "src": "1.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "2.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "3.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "4.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "5.webp",
+      "caption": "Photography"
+    },
+    {
+      "src": "6.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "7.jpeg",
+      "caption": "Augmented Reality Experience"
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "TRANSPARENCY_TOGGLE",
+      "position": "-0.004249849203865105m 0.456632574067078m -0.14829320018056277m",
+      "image": "../../transparency.png",
+      "action": "ToggleMaterialAlpha",
+      "targetMaterial": "ENVOLVENTE",
+      "alphaValueOn": 0.3,
+      "alphaValueOff": 1.0 
+    }
+  ]
+}

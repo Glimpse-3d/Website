@@ -5,12 +5,12 @@
   "location": "Porto | Portugal",
   "modelSrc": "model4.gltf",
   "environmentImage": "model4.hdr",
-  "cameraOrbit": "0deg 90deg 6 0m",
-  "min-camera-orbit": "-720deg 70deg 0m",
-  "max-camera-orbit": "720deg 90deg 60m",
+  "cameraOrbit": "0deg 90deg .6m",
+  "min-camera-orbit": "-720deg 70deg .6m",
+  "max-camera-orbit": "720deg 90deg .6m",
   "min-field-of-view": "30deg",
   "max-field-of-view": "30deg",
-  "disable-pan": false,
+  "disable-pan": true,
   "backgroundTopColor": "#4b6e75",
   "galleryImages": [
     {

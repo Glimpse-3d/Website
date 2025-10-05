@@ -724,7 +724,7 @@ function showQRCodeInstructions(buttonElement) {
         return;
     }
 
-    const qrCodeUrl = `https://paulolopess.github.io/website/projects/${projectFolder}/${projectFolder}-viewer.html`;
+    const qrCodeUrl = `https://glimpse3d.com/website/projects/${projectFolder}/${projectFolder}-viewer.html`;
 
     const container = document.getElementById("qr-code-container");
     const previewContainer = document.getElementById("ar-preview-container");
@@ -844,3 +844,24 @@ function closeQROverlay() {
 
   // your existing code to hide overlay
 }
+
+
+
+  const introVideo = document.getElementById('introVideo');
+
+  // Quando o vídeo termina
+  introVideo.addEventListener('ended', () => {
+    document.body.classList.add('video-ended');
+  });
+
+  // Fallback: se o vídeo falhar ou for muito curto
+  introVideo.addEventListener('error', () => {
+    document.body.classList.add('video-ended');
+  });
+
+  // Opcional: caso o vídeo não toque (por autoplay bloqueado)
+  setTimeout(() => {
+    if (!document.body.classList.contains('video-ended')) {
+      document.body.classList.add('video-ended');
+    }
+  }, 15000); // 15s de segurança
