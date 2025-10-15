@@ -30,7 +30,7 @@
       "caption": "Photography"
     },
     {
-      "src": "5.webp",
+      "src": "5.jpg",
       "caption": "Photography"
     },
     {
@@ -38,8 +38,12 @@
       "caption": "Photography"
     },
     {
-      "src": "7.jpeg",
-      "caption": "Augmented Reality Experience"
+      "src": "7.jpg",
+      "caption": "Architect Hand Drawing"
+    },
+        {
+      "src": "8.jpg",
+      "caption": "Architect Hand Drawing"
     }
   ],
   "hotspots": [
