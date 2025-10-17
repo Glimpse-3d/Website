@@ -49,7 +49,7 @@
   "hotspots": [
     {
       "id": "TRANSPARENCY_TOGGLE",
-      "position": "-0.004249849203865105m 0.456632574067078m -0.14829320018056277m",
+      "position": "-0.0004249849203865105m 0.0456632574067078m -0.014829320018056277m",
       "image": "../../transparency.png",
       "action": "ToggleMaterialAlpha",
       "targetMaterial": "ENVOLVENTE",

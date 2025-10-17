@@ -1,73 +1,109 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- VIDEO AND STATE CONSTANTS ---
     const intro = document.getElementById('intro');
     const introVideo = document.getElementById('introVideo');
-    const HAS_SEEN_VIDEO_KEY = 'introVideoPlayed';
-    const VIDEO_TIME_KEY = 'introVideoTime';
+    // As chaves de sessionStorage para pular o vídeo e o tempo foram removidas.
+
+    // --- 1. Bloquear scroll enquanto o vídeo está ativo ---
+    document.body.style.overflow = 'hidden';
 
     // --- Função para iniciar o resto do site ---
     function startSite() {
-        if (typeof init === 'function') init();           // Inicia nuvens e loop
+        document.body.style.overflow = 'auto';
+        
+        // Limpa a posição de scroll guardada após restaurar
+        sessionStorage.removeItem('scrollY');
+        
+        // REMOVA A LINHA ABAIXO:
+        // if (typeof init === 'function') init();  // Não é necessário iniciar as nuvens outra vez
+                                                
         if (typeof setupPageControl === 'function') setupPageControl(); // Controlo de páginas
-        restoreScroll(); // Se guardaste scroll
+        
+        restoreScroll();
     }
-
-    // --- Restaurar vídeo e scroll caso volte via botão Back ---
-    const savedTime = sessionStorage.getItem(VIDEO_TIME_KEY);
-    if (savedTime) {
-        introVideo.currentTime = parseFloat(savedTime);
-        introVideo.play();
-    } else {
-        introVideo.play(); // Novo acesso: toca desde o início
-    }
-
-    // --- Quando o vídeo termina ---
-    introVideo.addEventListener('ended', () => {
-        sessionStorage.setItem(HAS_SEEN_VIDEO_KEY, 'true');
-        fadeOutIntro();
-    });
-
-    // --- Pular vídeo ao clicar ---
-    intro.addEventListener('click', () => {
-        sessionStorage.setItem(HAS_SEEN_VIDEO_KEY, 'true');
-        introVideo.pause();
-        fadeOutIntro();
-    });
-
-    // --- Função para aplicar fade out ---
+    
+    // --- Função unificada para aplicar fade out e iniciar o site ---
     function fadeOutIntro() {
+        introVideo.pause(); // Garante que o vídeo para antes do fade
         intro.style.transition = 'opacity 1s ease';
-        intro.style.opacity = 0;
-        setTimeout(() => {
+        intro.style.opacity = '0';
+        
+        // Usa transitionend para timing preciso, com um fallback
+        intro.addEventListener('transitionend', function handler() {
             intro.style.display = 'none';
             startSite();
-        }, 1000);
+            intro.removeEventListener('transitionend', handler);
+        });
+
+        // Fallback para transição
+        setTimeout(() => {
+            if (intro.style.display !== 'none') {
+                intro.style.display = 'none';
+                startSite();
+            }
+        }, 1100); 
     }
 
-    // --- Guardar estado antes de sair ou mudar de página ---
+    // O check "Se já viu o vídeo, salta direto" FOI REMOVIDO AQUI.
+
+    // --- Tocar vídeo (início forçado em toda a carga) ---
+    if (introVideo) {
+        // Não há tempo guardado, o vídeo sempre começa do zero
+        introVideo.currentTime = 0;
+        
+        // Use Promise-based play() para lidar com restrições de autoplay
+        introVideo.play().catch(error => {
+            // Se o autoplay falhar, o vídeo congela e espera pelo clique do utilizador
+            console.warn('Autoplay falhou (política do browser). À espera do clique para iniciar o vídeo.', error);
+        });
+
+        // --- Quando o vídeo termina ---
+        introVideo.addEventListener('ended', () => {
+            // A chave HAS_SEEN_VIDEO_KEY foi removida
+            fadeOutIntro();
+        });
+
+        // --- Pular vídeo / Iniciar vídeo ao clicar ---
+        intro.addEventListener('click', () => {
+            if (!introVideo.paused && !introVideo.ended && introVideo.currentTime > 0.1) {
+                // Caso A: O vídeo está a correr -> O utilizador clica para SALTAR.
+                fadeOutIntro();
+            } else {
+                // Caso B: O vídeo está pausado (por autoplay) -> O utilizador clica para INICIAR.
+                introVideo.play().catch(e => console.error("Início manual falhou:", e));
+            }
+        });
+    }
+
+
+    // --- Guardar apenas a posição de scroll (tempo de vídeo removido) ---
     window.addEventListener('pagehide', () => {
-        sessionStorage.setItem(VIDEO_TIME_KEY, introVideo.currentTime);
         sessionStorage.setItem('scrollY', window.scrollY);
     });
 
-    // --- Pausar vídeo se o utilizador mudar de aba ou abrir outro HTML ---
+    // --- Pausar vídeo se mudar de aba ---
     document.addEventListener('visibilitychange', () => {
-        if (document.hidden) introVideo.pause();
+        if (document.hidden && introVideo && !introVideo.paused) { 
+            introVideo.pause();
+        }
     });
 
-    // --- Restaurar scroll caso volte ---
+    // --- Restaurar scroll ---
     function restoreScroll() {
         const scrollY = sessionStorage.getItem('scrollY');
-        if (scrollY) window.scrollTo(0, parseFloat(scrollY));
+        if (scrollY) {
+            requestAnimationFrame(() => window.scrollTo(0, parseFloat(scrollY)));
+        }
     }
 
-    // --- Inicializa nuvens imediatamente, mesmo antes do fade out ---
+    // --- Inicia nuvens imediatamente ---
     if (typeof init === 'function') init();
 });
 
-// --- Fallback WebGL detector ---
-if (!Detector.webgl) Detector.addGetWebGLMessage();
+// ---------------------------
+//       CLOUD SYSTEM
+// ---------------------------
 
-// --- Nuvens e loop ---
 let mouseX = 0;
 const windowHalfX = window.innerWidth / 2;
 const clouds = { background: null, foreground: null };
@@ -88,7 +124,6 @@ function init() {
 
     animateLoop();
 }
-
 
 function initCloudLayer(containerId, zOffset, speed) {
     const container = document.getElementById(containerId);
@@ -150,12 +185,10 @@ function animateLoop() {
 
     ['background', 'foreground'].forEach(layer => {
         const cloud = clouds[layer];
-        cloud.camera.position.x = 0;
+        if (!cloud) return;
 
         cloud.meshes.forEach(mesh => {
             mesh.position.z += cloud.speed * 5;
-
-            // correção dos saltos
             if (mesh.position.z > cloud.camera.position.z + cloud.blockDepth / 2) {
                 mesh.position.z -= cloud.blockDepth * cloud.meshes.length;
             }

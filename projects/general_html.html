@@ -5,20 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLIMPSE</title>
 
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
+    <link rel="shortcut icon" href="/favicon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Glimpse">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="general_css.css">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- LOADER -->
+  <script>
+    // Mostra loader o mais cedo possível
+    document.addEventListener("DOMContentLoaded", () => {
+      const loader = document.getElementById('loader');
+      loader.style.display = 'flex';
+    });
+
+    // Quando tudo estiver carregado (no fim do modelo)
+    window.addEventListener("load", () => {
+      const loader = document.getElementById('loader');
+      const modelViewer = document.getElementById('model-viewer');
+      if (modelViewer) {
+        modelViewer.addEventListener('load', () => {
+          setTimeout(() => {
+            loader.classList.add('hidden');
+            document.body.classList.add('loaded');
+            modelViewer.classList.add('visible');
+          }, 300);
+        });
+      } else {
+        // Caso o model-viewer falhe (fallback)
+        setTimeout(() => loader.classList.add('hidden'), 1000);
+      }
+    });
+  </script>
 </head>
+
+
+
 <body>
+  <!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">
+    <img src="../../mainpage/LOGO.png" alt="Loading..." />
+  </div>
+</div>
 
-    <div class="background-overlay"></div>
 
-    <h1 class="title" id="model-title"></h1>
+<div class="background-overlay"></div>
+  <h1 class="title" id="model-title"></h1>
 
-    <a href="../../index.html" class="back-button">
-        <img id="back-logo" src="../../mainpage/LOGO.png" alt="Back" style="width: 70px; height: auto;" />
+  <a href="../../index.html" class="back-button">
+      <img id="back-logo" src="../../mainpage/LOGO.png" alt="Back" style="width: 70px; height: auto;" />
 </a>
+
 
 <model-viewer
   id="model-viewer" 
@@ -28,6 +74,29 @@
   ar-modes="webxr scene-viewer quick-look"
   camera-controls
   shadow-intensity="1">
+
+  <!-- Dots -->
+  <button slot="dot-height-top" class="dot" data-action="dimension-dot"></button>
+  <button slot="dot-height-bottom" class="dot" data-action="dimension-dot"></button>
+  <button slot="dot-width-1" class="dot" data-action="dimension-dot"></button>
+  <button slot="dot-width-2" class="dot" data-action="dimension-dot"></button>
+  <button slot="dot-depth-1" class="dot" data-action="dimension-dot"></button>
+  <button slot="dot-depth-2" class="dot" data-action="dimension-dot"></button>
+
+  <!-- Labels -->
+  <button slot="label-height" class="dim" data-action="dimension-label" data-dimension="y"></button>
+  <button slot="label-width" class="dim" data-action="dimension-label" data-dimension="x"></button>
+  <button slot="label-depth" class="dim" data-action="dimension-label" data-dimension="z"></button>
+
+  <!-- Linhas SVG -->
+  <svg id="dimLines" class="dimensionLineContainer" width="100%" height="100%">
+    <line class="dimensionLine"></line>
+    <line class="dimensionLine"></line>
+    <line class="dimensionLine"></line>
+  </svg>
+
+  <!-- Toggle Hotspot -->
+  <button slot="hotspot-toggle-dims" class="hotspot" data-action="ToggleDimensions"></button>
 
   <button slot="ar-button" class="ar-button" id="ar-trigger">
       <img src="./augmented_reality_logo.png">
@@ -39,6 +108,7 @@
   </div>
 
 </model-viewer>
+
 
 <!-- Mensagem de Destaque ao Iniciar -->
 <div id="qr-intro-overlay">

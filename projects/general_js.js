@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } else {
                     console.warn(`[Hotspot - ChangeMaterials] Dados do grupo de material não encontrados para a chave: ${materialGroupKey}`);
                 }
-                break;
+            break;
 
             case 'ChangeView':
                 // --- CONSOLE LOGS ESPECÍFICOS PARA 'ChangeView' ---
@@ -415,12 +415,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } else {
                     console.error("[Hotspot - ChangeView] Erro: Elemento 'modelViewer' não encontrado para alterar a câmera.");
                 }
+            break;
+
+       
+            case 'ToggleDimensions':
+                console.log('[Hotspot - ToggleDimensions] Acionada ação para ligar/desligar medidas.');
+                // Chame a sua função que mostra/esconde as dimensões aqui
+                // Exemplo:
+                // dimensionsVisible = !dimensionsVisible;
+                // setVisibility(dimensionsVisible);
                 break;
 
             default:
-                console.warn(`[Hotspot] Ação de hotspot desconhecida ou não implementada: ${actionType}`);
-                break;
-        }
+            console.warn(`[Hotspot] Ação de hotspot desconhecida ou não implementada: ${actionType}`);
+            break;
+                }
     }
 });
 
@@ -847,7 +856,10 @@ function closeQROverlay() {
 
 
 
-  const introVideo = document.getElementById('introVideo');
+const introVideo = document.getElementById('introVideo');
+
+// VERIFICAÇÃO: Só executa este bloco se o elemento introVideo for encontrado na página
+if (introVideo) {
 
   // Quando o vídeo termina
   introVideo.addEventListener('ended', () => {
@@ -865,3 +877,154 @@ function closeQROverlay() {
       document.body.classList.add('video-ended');
     }
   }, 15000); // 15s de segurança
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const modelViewer = document.querySelector('#model-viewer');
+let dimensionsVisible = false; // Começa escondido
+
+// --- Mostra/esconde elementos ---
+function setDimensionsVisibility(visible) {
+  // Linhas SVG
+  const dimLines = document.querySelectorAll('.dimensionLine');
+  dimLines.forEach(line => line.style.display = visible ? 'block' : 'none');
+
+  // Dots e labels
+  const dimElements = modelViewer.querySelectorAll('[data-action="dimension-dot"], [data-action="dimension-label"]');
+  dimElements.forEach(el => el.style.display = visible ? 'block' : 'none');
+
+  // Toggle hotspot ativo
+  const toggleHotspot = modelViewer.querySelector('[data-action="ToggleDimensions"]');
+  if (toggleHotspot) toggleHotspot.classList.toggle('active', visible);
+}
+
+// --- Desenha linha SVG entre dois hotspots ---
+function drawLine(svgLine, dot1, dot2) {
+  if (dot1 && dot2) {
+    const pos1 = dot1.canvasPosition;
+    const pos2 = dot2.canvasPosition;
+    if (pos1 && pos2) {
+      svgLine.setAttribute('x1', pos1.x);
+      svgLine.setAttribute('y1', pos1.y);
+      svgLine.setAttribute('x2', pos2.x);
+      svgLine.setAttribute('y2', pos2.y);
+    }
+  }
+}
+
+// --- Atualiza posições das linhas ---
+function renderDimensions() {
+  const lines = document.querySelectorAll('.dimensionLine');
+
+  const topDot = modelViewer.queryHotspot('dot-height-top');
+  const bottomDot = modelViewer.queryHotspot('dot-height-bottom');
+  const widthDot1 = modelViewer.queryHotspot('dot-width-1');
+  const widthDot2 = modelViewer.queryHotspot('dot-width-2');
+  const depthDot1 = modelViewer.queryHotspot('dot-depth-1');
+  const depthDot2 = modelViewer.queryHotspot('dot-depth-2');
+
+  // Espera pelos hotspots
+  if (!topDot || !bottomDot || !widthDot1 || !widthDot2 || !depthDot1 || !depthDot2) {
+    requestAnimationFrame(renderDimensions);
+    return;
+  }
+
+  drawLine(lines[0], topDot, bottomDot);   // altura
+  drawLine(lines[1], widthDot1, widthDot2); // largura
+  drawLine(lines[2], depthDot1, depthDot2); // profundidade
+}
+
+// --- Inicialização ---
+modelViewer.addEventListener('load', () => {
+  const center = modelViewer.getBoundingBoxCenter();
+  const size = modelViewer.getDimensions();
+  const x2 = size.x / 2;
+  const y2 = size.y / 2;
+  const z2 = size.z / 2;
+
+  // --- Atualiza hotspots ---
+  modelViewer.updateHotspot({ name: 'dot-height-top', position: `${center.x} ${center.y + y2} ${center.z}` });
+  modelViewer.updateHotspot({ name: 'dot-height-bottom', position: `${center.x} ${center.y - y2} ${center.z}` });
+  modelViewer.updateHotspot({ name: 'label-height', position: `${center.x + x2 * 1.2} ${center.y} ${center.z}` });
+  const labelY = modelViewer.querySelector('[data-action="dimension-label"][data-dimension="y"]');
+  if (labelY) labelY.textContent = `${(size.y * 100).toFixed(0)} cm`;
+
+  modelViewer.updateHotspot({ name: 'dot-width-1', position: `${center.x + x2} ${center.y} ${center.z}` });
+  modelViewer.updateHotspot({ name: 'dot-width-2', position: `${center.x - x2} ${center.y} ${center.z}` });
+  modelViewer.updateHotspot({ name: 'label-width', position: `${center.x} ${center.y + y2 * 1.2} ${center.z}` });
+  const labelX = modelViewer.querySelector('[data-action="dimension-label"][data-dimension="x"]');
+  if (labelX) labelX.textContent = `${(size.x * 100).toFixed(0)} cm`;
+
+  modelViewer.updateHotspot({ name: 'dot-depth-1', position: `${center.x} ${center.y} ${center.z + z2}` });
+  modelViewer.updateHotspot({ name: 'dot-depth-2', position: `${center.x} ${center.y} ${center.z - z2}` });
+  modelViewer.updateHotspot({ name: 'label-depth', position: `${center.x} ${center.y - y2 * 1.2} ${center.z}` });
+  const labelZ = modelViewer.querySelector('[data-action="dimension-label"][data-dimension="z"]');
+  if (labelZ) labelZ.textContent = `${(size.z * 100).toFixed(0)} cm`;
+
+  // --- Evento Toggle ---
+  const toggleHotspot = modelViewer.querySelector('[data-action="ToggleDimensions"]');
+  if (toggleHotspot) {
+    toggleHotspot.addEventListener('click', () => {
+      dimensionsVisible = !dimensionsVisible;
+      setDimensionsVisibility(dimensionsVisible);
+    });
+  }
+
+  // Atualiza linhas sempre que a câmera se move
+  modelViewer.addEventListener('camera-change', renderDimensions);
+  renderDimensions();
+
+  // Inicialmente escondido
+  setDimensionsVisibility(dimensionsVisible);
+});
