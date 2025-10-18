@@ -6,8 +6,7 @@
 	},
 	"extensionsUsed":[
 		"KHR_draco_mesh_compression",
-		"KHR_materials_specular",
-		"KHR_materials_unlit"
+		"KHR_materials_specular"
 	],
 	"extensionsRequired":[
 		"KHR_draco_mesh_compression"
@@ -9598,16 +9597,13 @@
 		},
 		{
 			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_unlit":{}
-			},
 			"name":"betao_escadas exteriores",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":5
 				},
 				"metallicFactor":0,
-				"roughnessFactor":0.9
+				"roughnessFactor":0.5
 			}
 		},
 		{

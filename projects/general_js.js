@@ -719,22 +719,22 @@ function closeQRCode() {
 function showQRCodeInstructions(buttonElement) {
     const projectFolder = getProjectFolderFromURL();
 
-    // CORRIGIDO: O console.log agora reflete o vídeo correto
-    console.log('Pasta do projeto detetada:', projectFolder);
-    console.log('URL completo do vídeo que está a ser tentado carregar:', `/projects/${projectFolder}/IMG/ar_experience.mov`);
+    console.log('📂 Pasta do projeto detetada:', projectFolder);
+    console.log('🎥 Caminho do vídeo:', `/projects/${projectFolder}/IMG/ar_experience.mov`);
 
     if (!projectFolder) {
         console.error("❌ Não foi possível determinar a pasta do projeto.");
         return;
     }
 
-    const mediaType = buttonElement?.dataset?.mediaType;
-    if (!mediaType) {
-        console.error("❌ O botão está sem o atributo 'data-media-type'.");
+    // Garantir que o botão existe
+    if (!buttonElement) {
+        console.error("❌ O botão não foi passado para a função.");
         return;
     }
 
-    const qrCodeUrl = `intent://arvr.google.com/scene-viewer/1.0?file=https://glimpse3d.com/projects/models/${projectFolder}.gltf#Intent;scheme=https;package=com.google.ar.core;end;`;
+    // QR code URL (pode abrir a própria página)
+    const qrCodeUrl = `https://glimpse3d.com/projects/general_html.html?model=${projectFolder}&openAR=true`;
 
     const container = document.getElementById("qr-code-container");
     const previewContainer = document.getElementById("ar-preview-container");
@@ -744,6 +744,7 @@ function showQRCodeInstructions(buttonElement) {
 
     previewContainer.innerHTML = '';
 
+    // Cria o vídeo da experiência
     const video = document.createElement("video");
     video.src = `/projects/${projectFolder}/IMG/ar_experience.mov`;
     video.controls = false;
@@ -759,36 +760,35 @@ function showQRCodeInstructions(buttonElement) {
         setTimeout(() => {
             if (video.readyState >= 3) {
                 video.play().catch(error => {
-                    console.warn("Autoplay was prevented:", error);
+                    console.warn("⚠️ Autoplay bloqueado:", error);
                     showImageFallback(projectFolder, previewContainer);
                 });
             } else {
                 video.addEventListener('loadeddata', () => {
                     video.play().catch(error => {
-                        console.warn("Autoplay prevented after loadeddata:", error);
+                        console.warn("⚠️ Autoplay bloqueado após loadeddata:", error);
                         showImageFallback(projectFolder, previewContainer);
                     });
                 }, { once: true });
+
                 video.addEventListener('error', () => {
-                    console.error("Error loading video, falling back to image.");
+                    console.error("❌ Erro ao carregar o vídeo. Mostrando imagem de fallback.");
                     showImageFallback(projectFolder, previewContainer);
                 }, { once: true });
             }
         }, 300);
     }, 10);
 
-    // Função de fallback CORRIGIDA
     function showImageFallback(folder, container) {
         container.innerHTML = '';
         const img = document.createElement("img");
-        // CORRIGIDO: O caminho agora usa a barra "/" no início
         img.src = `/projects/${folder}/IMG/preview.jpg`;
         img.alt = "Preview AR";
         img.classList.add('qr-preview-media');
         container.appendChild(img);
     }
 
-    // Lógica do QR Code
+    // ----------------- QR Code -----------------
     if (qrCodeInstance) {
         qrCodeInstance.clear();
         qrCodeInstance.makeCode(qrCodeUrl);
@@ -799,8 +799,21 @@ function showQRCodeInstructions(buttonElement) {
             height: 150,
         });
     }
+
     isQRCodeVisible = true;
 }
+
+// ----------------- Disparo automático via URL -----------------
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const openAR = urlParams.get('openAR');
+
+    if (openAR === 'true') {
+        const qrButton = document.querySelector('#ar-trigger');
+        if (qrButton) showQRCodeInstructions(qrButton);
+    }
+});
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const qrButton = document.getElementById("ar-qr-code");
