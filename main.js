@@ -243,6 +243,7 @@ function setupPageControl() {
 
 
 // PÁGINA PROJECTOS --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ----------------- PÁGINA PROJECTOS ----------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
   const projectsPage = document.querySelector('.projects-page');
   const btnProjects = document.getElementById('btn-projects');
@@ -255,11 +256,11 @@ document.addEventListener('DOMContentLoaded', () => {
     { src: 'projects/model9/thumbnail.png', title: 'KRYSSET CHAIR', model: 'model9' },
     { src: 'projects/model5/thumbnail.png', title: 'GF CHAIR', model: 'model5' },
     { src: 'projects/model4/thumbnail.png', title: 'CANTAREIRA', model: 'model4' },
-    { src: 'projects/model11/thumbnail.png', title: 'IN PROGRESS', model: '#' },
-    { src: 'projects/model3/thumbnail.png', title: 'IN PROGRESS', model: '#' },
-    { src: 'projects/model12/thumbnail.png', title: 'IN PROGRESS', model: '#' },
-    { src: 'projects/model8/thumbnail.png', title: 'IN PROGRESS', model: '#' },
-    { src: 'projects/model10/thumbnail.png', title: 'IN PROGRESS', model: '#' },
+    { src: 'projects/model11/thumbnail.png', title: 'IN PROGRESS', model: 'model11' },
+    { src: 'projects/model3/thumbnail.png', title: 'IN PROGRESS', model: 'model3' },
+    { src: 'projects/model12/thumbnail.png', title: 'IN PROGRESS', model: 'model12' },
+    { src: 'projects/model8/thumbnail.png', title: 'IN PROGRESS', model: 'model8' },
+    { src: 'projects/model10/thumbnail.png', title: 'IN PROGRESS', model: 'model10' },
   ];
 
   // Limpar e criar a galeria dinamicamente
@@ -272,6 +273,9 @@ document.addEventListener('DOMContentLoaded', () => {
     img.src = item.src;
     img.alt = item.title;
 
+    // 🔹 Impede que a imagem seja arrastada pelo browser
+    img.addEventListener('dragstart', (e) => e.preventDefault());
+    
     const span = document.createElement('span');
     span.textContent = item.title;
 
@@ -279,8 +283,9 @@ document.addEventListener('DOMContentLoaded', () => {
     div.appendChild(span);
     galleryItemsContainer.appendChild(div);
 
-    // Clique abre o modelo correspondente
+    // Clique abre o modelo correspondente (exceto IN PROGRESS)
     div.addEventListener('click', () => {
+      if (item.title === "IN PROGRESS") return;
       window.location.href = `projects/general_html.html?model=${item.model}`;
     });
   });
@@ -339,6 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
   galleryItemsContainer.addEventListener("touchend", stopDrag);
   galleryItemsContainer.addEventListener("touchmove", (e) => moveDrag(e.touches[0].pageX));
 });
+
 
 
 

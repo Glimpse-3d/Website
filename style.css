@@ -549,24 +549,7 @@ body {
   opacity: 0;
   transform: translateY(60px);
   box-shadow: 0 15px 35px rgba(0,0,0,0.1); /* sombra inicial leve */
-  animation: slideUp 2s ease forwards;
-}
-
-/* Esquerda aparece logo + sombra especial suave */
-.service-item:nth-of-type(1) {
-  animation-delay: 0s;
-  animation: 
-    slideUp 2s ease forwards,
-    /* Mantive o shadowGlow original, mas adicionei infinite alternate para o pulso */
-    shadowGlow 3s ease-in-out 2s infinite alternate; /* Começa 2s depois, dura 3s, repete */
-}
-
-/* Direita aparece 0.5s depois */
-.service-item:nth-of-type(2) {
-  /* Adicionamos a nova animação shadowIntensify aqui */
-  animation: 
-    slideUp 2s ease forwards 0.5s, /* slideUp com o seu delay original */
-    shadowIntensify 1.5s ease-out forwards 8s; /* Começa aos 8s, dura 1.5s, mantém a sombra */
+  animation: slideUp 1s ease forwards;
 }
 
 @keyframes slideUp {
@@ -658,8 +641,8 @@ body {
 .service-text .line:nth-child(1) { animation-delay: 2s; }
 .service-text .line:nth-child(2) { animation-delay: 4s; }
 .service-text .line:nth-child(3) { animation-delay: 6s; }
-.service-text .line:nth-child(4) { animation-delay: 10s; } /* Pode ajustar este e os seguintes se o total de 8s for muito cedo/tarde */
-.service-text .line:nth-child(5) { animation-delay: 12s; }
+.service-text .line:nth-child(4) { animation-delay: 8s; }
+.service-text .line:nth-child(5) { animation-delay: 10s; }
 
 
 
