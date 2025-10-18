@@ -638,16 +638,12 @@ let isQRCodeVisible = false;
 let qrCodeInstance = null;
 
 function getProjectFolderFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const projectFromQuery = urlParams.get('project');
-    if (projectFromQuery) return projectFromQuery;
-
-    const pathSegments = window.location.pathname.split('/');
-    const projectsIndex = pathSegments.indexOf('projects');
-    if (projectsIndex > -1 && pathSegments.length > projectsIndex + 1) {
-        return pathSegments[projectsIndex + 1];
-    }
-    return null;
+    const params = new URLSearchParams(window.location.search);
+    return params.get('model') || (
+        window.location.pathname.split('/').find((seg, i, arr) =>
+            arr[i - 1] === 'projects'
+        ) || null
+    );
 }
 
 function generateQRCode(buttonElement) {
@@ -722,6 +718,11 @@ function closeQRCode() {
 
 function showQRCodeInstructions(buttonElement) {
     const projectFolder = getProjectFolderFromURL();
+
+    // CORRIGIDO: O console.log agora reflete o vídeo correto
+    console.log('Pasta do projeto detetada:', projectFolder);
+    console.log('URL completo do vídeo que está a ser tentado carregar:', `/projects/${projectFolder}/IMG/ar_experience.mov`);
+
     if (!projectFolder) {
         console.error("❌ Não foi possível determinar a pasta do projeto.");
         return;
@@ -733,7 +734,7 @@ function showQRCodeInstructions(buttonElement) {
         return;
     }
 
-    const qrCodeUrl = `https://glimpse3d.com/website/projects/${projectFolder}/${projectFolder}-viewer.html`;
+    const qrCodeUrl = `intent://arvr.google.com/scene-viewer/1.0?file=https://glimpse3d.com/projects/models/${projectFolder}.gltf#Intent;scheme=https;package=com.google.ar.core;end;`;
 
     const container = document.getElementById("qr-code-container");
     const previewContainer = document.getElementById("ar-preview-container");
@@ -741,59 +742,53 @@ function showQRCodeInstructions(buttonElement) {
 
     if (!container || !previewContainer || !qrCodeDiv) return;
 
-    previewContainer.innerHTML = ''; // Clear before inserting new content
+    previewContainer.innerHTML = '';
 
     const video = document.createElement("video");
-    video.src = `./${projectFolder}/IMG/preview.mov`;
+    video.src = `/projects/${projectFolder}/IMG/ar_experience.mov`;
     video.controls = false;
     video.autoplay = false;
     video.loop = true;
     video.muted = true;
     video.classList.add('qr-preview-media');
-
-    // Append the video element immediately
     previewContainer.appendChild(video);
 
-    // After the container is visible, start playing the video with a delay
     container.style.display = 'flex';
     setTimeout(() => {
         container.classList.add('visible');
-
-        // Delay video playback by 1 second after the container becomes visible
         setTimeout(() => {
-            // Check if video is loaded and ready to play
-            if (video.readyState >= 3) { // HAVE_FUTURE_DATA or HAVE_ENOUGH_DATA
+            if (video.readyState >= 3) {
                 video.play().catch(error => {
-                    console.warn("Autoplay was prevented, trying to play manually later:", error);
-                    // Fallback to image if video can't play (e.g., autoplay policy)
+                    console.warn("Autoplay was prevented:", error);
                     showImageFallback(projectFolder, previewContainer);
                 });
             } else {
                 video.addEventListener('loadeddata', () => {
                     video.play().catch(error => {
-                        console.warn("Autoplay prevented after loadeddata, trying to play manually later:", error);
+                        console.warn("Autoplay prevented after loadeddata:", error);
                         showImageFallback(projectFolder, previewContainer);
                     });
-                }, { once: true }); // Use { once: true } to remove the listener after it fires
+                }, { once: true });
                 video.addEventListener('error', () => {
                     console.error("Error loading video, falling back to image.");
                     showImageFallback(projectFolder, previewContainer);
                 }, { once: true });
             }
-        }, 300); // 1000ms = 1 second delay
-    }, 10); // Small delay to allow display:flex to apply before transition
+        }, 300);
+    }, 10);
 
-    // Function to handle image fallback
+    // Função de fallback CORRIGIDA
     function showImageFallback(folder, container) {
-        container.innerHTML = ''; // Clear video if it was appended
+        container.innerHTML = '';
         const img = document.createElement("img");
-        img.src = `./${folder}/IMG/preview.jpg`;
+        // CORRIGIDO: O caminho agora usa a barra "/" no início
+        img.src = `/projects/${folder}/IMG/preview.jpg`;
         img.alt = "Preview AR";
         img.classList.add('qr-preview-media');
         container.appendChild(img);
     }
 
-    // Existing QR code generation logic
+    // Lógica do QR Code
     if (qrCodeInstance) {
         qrCodeInstance.clear();
         qrCodeInstance.makeCode(qrCodeUrl);
@@ -804,7 +799,6 @@ function showQRCodeInstructions(buttonElement) {
             height: 150,
         });
     }
-
     isQRCodeVisible = true;
 }
 

@@ -26,13 +26,5 @@
       "src": "2.jpeg",
       "caption": "Photography"
     }
-  ],
-  "hotspots": [
-    {
-      "slot": "hotspot-toggle-dims",
-      "position": "0.20510947079461264 0.051240020861444135 0.3760339132202808",
-      "normal": "-0.014842376850113331 -0.3083603551529561 0.9511538231113736",
-      "action": "ToggleDimensions"
-    }
   ]
 }
