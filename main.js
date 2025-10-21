@@ -260,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { src: 'projects/model3/thumbnail.png', title: 'IN PROGRESS', model: 'model3' },
     { src: 'projects/model12/thumbnail.png', title: 'IN PROGRESS', model: 'model12' },
     { src: 'projects/model8/thumbnail.png', title: 'IN PROGRESS', model: 'model8' },
-    { src: 'projects/model10/thumbnail.png', title: 'IN PROGRESS', model: 'model10' },
   ];
 
   // Limpar e criar a galeria dinamicamente

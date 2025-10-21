@@ -15,15 +15,23 @@
   "backgroundTopColor": "#a76f2f",
   "galleryImages": [
     {
-      "src": "3.jpg",
+      "src": "1.jpg",
       "caption": "Technical Drawings"
     },
     {
-      "src": "1.jpeg",
+      "src": "2.jpg",
+      "caption": "Render"
+    },
+    {
+      "src": "3.png",
+      "caption": "Render"
+    },
+    {
+      "src": "4.jpg",
       "caption": "Augmented Reality Experience"
     },
     {
-      "src": "2.jpeg",
+      "src": "5.jpeg",
       "caption": "Photography"
     }
   ]
