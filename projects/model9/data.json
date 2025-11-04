@@ -60,6 +60,7 @@
   ],
   "materials": { 
     "wood": { 
+      "type": "texture", 
       "materialIndex": 0,  
       "initialName": "Wood | Woiled Oak", 
       "textures": [
@@ -81,6 +82,7 @@
       ]
     },
     "leather": { 
+      "type": "texture", 
       "materialIndex": 1, 
       "initialName": "Leather | Brown",
       "textures": [

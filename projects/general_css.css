@@ -1023,27 +1023,29 @@ model-viewer.visible {
 }
 
 .texture-group {
-    display: flex;
-    flex-direction: row; /* Arranges circles horizontally */
-    gap: 15px; /* Space between individual texture circles */
-    justify-content: flex-start; /* Aligns circles to the left */
-    align-self: flex-start; /* Ensures it's left-aligned within the column flex container */
+  display: flex;
+  flex-direction: row; /* Arranges circles horizontally */
+  gap: 15px; /* Space between individual texture circles */
+  justify-content: flex-start; /* Aligns circles to the left */
+  align-self: flex-start; /* Ensures it's left-aligned within the column flex container */
+  max-width: 50%;
+  flex-wrap: wrap;
 }
 
 .change-texture {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: 1px solid rgba(124, 124, 124, 0.5);
-    border-radius: 50%;
-    background-color: transparent;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    flex-shrink: 0;
-    transition: transform 0.3s ease-out, border-color 0.3s ease-out, box-shadow 0.3s ease-out;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(124, 124, 124, 0.5);
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: transform 0.3s ease-out, border-color 0.3s ease-out, box-shadow 0.3s ease-out;
 }
 
 .change-texture:hover {

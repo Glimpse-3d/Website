@@ -83,141 +83,167 @@ async function loadProjectData() {
         document.getElementById('project-location').textContent = data.location || '';
         document.getElementById('project-description').innerHTML = data.description || '';
 
-const galleryItemsContainer = document.querySelector('.gallery-items');
-const modal = document.querySelector('.modal');
-const modalImg = document.getElementById('img01');
-const modalCaption = document.getElementById('modal-caption');
-const closeBtn = document.querySelector('.modal .close');
+        const galleryItemsContainer = document.querySelector('.gallery-items');
+        const modal = document.querySelector('.modal');
+        const modalImg = document.getElementById('img01');
+        const modalCaption = document.getElementById('modal-caption');
+        const closeBtn = document.querySelector('.modal .close');
 
-if (galleryItemsContainer && data.galleryImages && Array.isArray(data.galleryImages)) {
-    galleryItemsContainer.innerHTML = '';
+        if (galleryItemsContainer && data.galleryImages && Array.isArray(data.galleryImages)) {
+            galleryItemsContainer.innerHTML = '';
 
-    data.galleryImages.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'gallery-item';
+            data.galleryImages.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'gallery-item';
 
-        const img = document.createElement('img');
-        img.src = `./${projectFolder}/IMG/${item.src}`;
-        img.alt = item.caption || `Image ${index + 1}`;
-        img.style.cursor = 'pointer';
+                const img = document.createElement('img');
+                img.src = `./${projectFolder}/IMG/${item.src}`;
+                img.alt = item.caption || `Image ${index + 1}`;
+                img.style.cursor = 'pointer';
 
-        // Abrir modal ao clicar na imagem
-        img.addEventListener('click', () => {
-            modal.style.display = 'block';
-            modalImg.style.display = 'block';
-            modalImg.src = img.src;
-            modalCaption.textContent = item.caption || '';
-            // Se quiser trabalhar com vídeos, trate aqui para exibir vídeo ao invés de img
-        });
+                // Abrir modal ao clicar na imagem
+                img.addEventListener('click', () => {
+                    modal.style.display = 'block';
+                    modalImg.style.display = 'block';
+                    modalImg.src = img.src;
+                    modalCaption.textContent = item.caption || '';
+                    // Se quiser trabalhar com vídeos, trate aqui para exibir vídeo ao invés de img
+                });
 
-        div.appendChild(img);
-        galleryItemsContainer.appendChild(div);
-    });
-}
+                div.appendChild(img);
+                galleryItemsContainer.appendChild(div);
+            });
+        }
 
-if (closeBtn && modal) { // ✅ Verifica se closeBtn (e modal) existem antes de tentar adicionar o listener
-    closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-        modalImg.style.display = 'none';
-        modalCaption.textContent = '';
-    });
-}
+        if (closeBtn && modal) { // ✅ Verifica se closeBtn (e modal) existem antes de tentar adicionar o listener
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+                modalImg.style.display = 'none';
+                modalCaption.textContent = '';
+            });
+        }
 
         // Remove old hotspots before adding new ones
         const oldHotspots = modelViewer.querySelectorAll('[slot^="hotspot-"]');
         oldHotspots.forEach(h => h.remove());
 
         // Add hotspots based on JSON data
-if (data.hotspots && Array.isArray(data.hotspots)) {
-    data.hotspots.forEach(hotspot => {
-        const hotspotElement = document.createElement('button');
-        hotspotElement.className = 'hotspot';
-        hotspotElement.slot = 'hotspot-' + hotspot.id;
-        hotspotElement.setAttribute('data-position', hotspot.position);
-        if (hotspot.normal) {
-            hotspotElement.setAttribute('data-normal', hotspot.normal);
-        }
-        hotspotElement.title = hotspot.text || '';
+        if (data.hotspots && Array.isArray(data.hotspots)) {
+            data.hotspots.forEach(hotspot => {
+                const hotspotElement = document.createElement('button');
+                hotspotElement.className = 'hotspot';
+                hotspotElement.slot = 'hotspot-' + hotspot.id;
+                hotspotElement.setAttribute('data-position', hotspot.position);
+                if (hotspot.normal) {
+                    hotspotElement.setAttribute('data-normal', hotspot.normal);
+                }
+                hotspotElement.title = hotspot.text || '';
 
-        if (hotspot.action) {
-            hotspotElement.setAttribute('data-action', hotspot.action);
-        }
-        // Store material group for "ChangeMaterials" action
-        if (hotspot.materialGroup) {
-            hotspotElement.setAttribute('data-material-group', hotspot.materialGroup);
-        }
-        // Store initialName for direct use in hotspot action
-        if (hotspot.initialName) {
-            hotspotElement.setAttribute('data-initial-name', hotspot.initialName);
-        }
-        // Store URL for openUrl action
-        if (hotspot.url) {
-            hotspotElement.setAttribute('data-url', hotspot.url);
+                if (hotspot.action) {
+                    hotspotElement.setAttribute('data-action', hotspot.action);
+                }
+                // Store material group for "ChangeMaterials" action
+                if (hotspot.materialGroup) {
+                    hotspotElement.setAttribute('data-material-group', hotspot.materialGroup);
+                }
+                // Store initialName for direct use in hotspot action
+                if (hotspot.initialName) {
+                    hotspotElement.setAttribute('data-initial-name', hotspot.initialName);
+                }
+                // Store URL for openUrl action
+                if (hotspot.url) {
+                    hotspotElement.setAttribute('data-url', hotspot.url);
+                }
+
+                // --- ADD THESE LINES FOR ChangeView ACTION ---
+                if (hotspot.cameraOrbit) {
+                    hotspotElement.setAttribute('data-camera-orbit', hotspot.cameraOrbit);
+                }
+                if (hotspot.cameraTargetPosition) {
+                    hotspotElement.setAttribute('data-camera-target-position', hotspot.cameraTargetPosition);
+                }
+                // This is optional, only if you want fieldOfView to be dynamic from JSON
+                if (hotspot.fieldOfView) {
+                    hotspotElement.setAttribute('data-field-of-view', hotspot.fieldOfView);
+                }
+                // --- END OF ADDITIONS ---
+
+                if (hotspot.image) {
+                    const img = document.createElement('img');
+                    img.src = `./projects/${hotspot.image.replace('../', '')}`;
+                    console.log(`Hotspot icon src set to: ${img.src}`);
+                    img.alt = hotspot.text || '';
+                    img.classList.add('hotspot-icon');
+                    hotspotElement.appendChild(img);
+                } else {
+                    hotspotElement.textContent = '●';
+                }
+
+                modelViewer.appendChild(hotspotElement);
+            });
         }
 
-        // --- ADD THESE LINES FOR ChangeView ACTION ---
-        if (hotspot.cameraOrbit) {
-            hotspotElement.setAttribute('data-camera-orbit', hotspot.cameraOrbit);
-        }
-        if (hotspot.cameraTargetPosition) {
-            hotspotElement.setAttribute('data-camera-target-position', hotspot.cameraTargetPosition);
-        }
-        // This is optional, only if you want fieldOfView to be dynamic from JSON
-        if (hotspot.fieldOfView) {
-            hotspotElement.setAttribute('data-field-of-view', hotspot.fieldOfView);
-        }
-        // --- END OF ADDITIONS ---
-
-        if (hotspot.image) {
-            const img = document.createElement('img');
-            img.src = `./projects/${hotspot.image.replace('../', '')}`;
-            console.log(`Hotspot icon src set to: ${img.src}`);
-            img.alt = hotspot.text || '';
-            img.classList.add('hotspot-icon');
-            hotspotElement.appendChild(img);
-        } else {
-            hotspotElement.textContent = '●';
-        }
-
-        modelViewer.appendChild(hotspotElement);
-    });
-}
-
-        // --- NEW SECTION: Dynamically Generate Material Change Buttons ---
+        // ------------------------------------------------------------------
+        // --- SECÇÃO MODIFICADA: Gerar Botões de Material (Textura ou Variante) ---
+        // ------------------------------------------------------------------
         const materialChangeContainer = document.getElementById('material-change-container');
         if (materialChangeContainer && data.materials) {
-            // Remove any old dynamically generated texture groups
+            // Remove qualquer grupo de textura antigo gerado dinamicamente
             const existingTextureGroups = materialChangeContainer.querySelectorAll('.texture-group');
             existingTextureGroups.forEach(group => group.remove());
 
             for (const groupKey in data.materials) {
                 if (data.materials.hasOwnProperty(groupKey)) {
                     const materialGroupData = data.materials[groupKey];
+                    const groupType = materialGroupData.type; // "texture" ou "variant"
 
                     const textureGroupDiv = document.createElement('div');
                     textureGroupDiv.className = 'texture-group';
                     textureGroupDiv.id = `${groupKey}-textures`; 
 
-                    materialGroupData.textures.forEach(texture => {
-                        const button = document.createElement('button');
-                        button.className = 'change-texture';
-                        button.setAttribute('data-material', materialGroupData.materialIndex);
-                        button.setAttribute('data-texture', `./${projectFolder}/${texture.textureFile}`);
-                        button.setAttribute('data-material-name', texture.name);
+                    if (groupType === 'variant') {
+                        // --- Rota para VARIANTES (ex: Candeeiro) ---
+                        // Assume que o JSON tem um array "variants"
+                        materialGroupData.variants.forEach(variant => {
+                            const button = document.createElement('button');
+                            button.className = 'change-texture';
+                            button.setAttribute('data-action-type', 'variant'); // Define o tipo de ação
+                            button.setAttribute('data-material-name', variant.name); // Nome da Variante do Blender
 
-                        const img = document.createElement('img');
-                        // Texture thumbnail paths are relative to project folder
-                        img.src = `./${projectFolder}/${texture.thumbnail}`;
-                        img.className = 'texture-preview';
-                        img.alt = texture.name;
+                            const img = document.createElement('img');
+                            img.src = `./${projectFolder}/${variant.thumbnail}`;
+                            img.className = 'texture-preview';
+                            img.alt = variant.name;
 
-                        button.appendChild(img);
-                        textureGroupDiv.appendChild(button);
-                    });
+                            button.appendChild(img);
+                            textureGroupDiv.appendChild(button);
+                        });
+
+                    } else if (groupType === 'texture') {
+                        // --- Rota para TEXTURAS (O seu código antigo, ex: Couro/Madeira) ---
+                        // Assume que o JSON tem um array "textures"
+                        materialGroupData.textures.forEach(texture => {
+                            const button = document.createElement('button');
+                            button.className = 'change-texture';
+                            button.setAttribute('data-action-type', 'texture'); // Define o tipo de ação
+                            button.setAttribute('data-material', materialGroupData.materialIndex);
+                            button.setAttribute('data-texture', `./${projectFolder}/${texture.textureFile}`);
+                            button.setAttribute('data-material-name', texture.name);
+
+                            const img = document.createElement('img');
+                            img.src = `./${projectFolder}/${texture.thumbnail}`;
+                            img.className = 'texture-preview';
+                            img.alt = texture.name;
+
+                            button.appendChild(img);
+                            textureGroupDiv.appendChild(button);
+                        });
+                    }
                     materialChangeContainer.appendChild(textureGroupDiv);
                 }
             }
         }
+        // --- FIM DA SECÇÃO MODIFICADA ---
 
         return modelViewer;
     } catch (error) {
@@ -237,7 +263,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // --- FUNÇÃO: toggleMaterialAlpha --- (No changes needed here)
+    // --- FUNÇÃO: toggleMaterialAlpha --- (O seu código original - Sem alterações)
     function toggleMaterialAlpha(hotspotData, projectData) {
         const targetMaterialName = hotspotData.targetMaterial;
         const alphaOn = hotspotData.alphaValueOn;
@@ -270,7 +296,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- BOTÃO DE ALTERNÂNCIA DE HOTSPOTS --- (Adjusted to remove dimension toggle)
+    // --- BOTÃO DE ALTERNÂNCIA DE HOTSPOTS --- (O seu código original - Sem alterações)
     const toggleButton = document.getElementById('toggle-hotspots-button');
     if (toggleButton) {
         modelViewer.classList.remove('hotspots-visible'); // Estado inicial
@@ -280,7 +306,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // --- ELEMENTOS E VARIÁVEIS PARA TROCA DE MATERIAL --- (No changes needed here)
+    // --- ELEMENTOS E VARIÁVEIS PARA TROCA DE MATERIAL --- (O seu código original - Sem alterações)
     const materialContainer = document.getElementById("material-change-container");
     const materialName = document.getElementById('material-name');
     let selectedMaterialName = '';
@@ -341,13 +367,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
 
-        // Initialize materials
+        // Initialize materials (O seu código original - Sem alterações)
         if (window.globalProjectData && window.globalProjectData.materials) {
             for (const key in window.globalProjectData.materials) {
                 const materialConfig = window.globalProjectData.materials[key];
-                if (materialConfig.textures && materialConfig.textures.length > 0) {
+                // Apenas executa se for do tipo 'texture' e tiver a info
+                if (materialConfig.type === 'texture' && materialConfig.textures && materialConfig.textures.length > 0) {
                     const materialIndex = materialConfig.materialIndex;
-                    const initialAlpha = materialConfig.textures[0].initialAlpha;
+                    const initialAlpha = materialConfig.textures[0].initialAlpha; // Assumindo que a info está na primeira textura
 
                     if (modelViewer.model && modelViewer.model.materials[materialIndex]) {
                         const material = modelViewer.model.materials[materialIndex];
@@ -381,11 +408,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (materialData) {
                     const currentMaterialGroupElement = document.getElementById(`${materialGroupKey}-textures`);
+                    // Lógica de seleção (wood vs leather) atualizada para ser mais genérica
+                    let lastSelectedMaterial;
+                    if (materialGroupKey === 'wood') {
+                        lastSelectedMaterial = lastSelectedMaterialWood;
+                    } else if (materialGroupKey === 'leather') {
+                        lastSelectedMaterial = lastSelectedMaterialLeather;
+                    } else {
+                        // Para novos grupos (como 'flowerpot'), pode precisar de uma nova variável `lastSelected...`
+                        // ou pode usar o `selectedMaterialName` global se o painel for único
+                        lastSelectedMaterial = selectedMaterialName; // Fallback
+                    }
+
                     showMaterialGroup(
                         currentMaterialGroupElement,
                         materialData.groupTitle,
                         materialData.initialName,
-                        materialGroupKey === 'wood' ? lastSelectedMaterialWood : lastSelectedMaterialLeather
+                        lastSelectedMaterial
                     );
                     console.log(`[Hotspot - ChangeMaterials] Acionada ação para o grupo: ${materialGroupKey}`);
                 } else {
@@ -417,7 +456,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             break;
 
-       
+        
             case 'ToggleDimensions':
                 console.log('[Hotspot - ToggleDimensions] Acionada ação para ligar/desligar medidas.');
                 // Chame a sua função que mostra/esconde as dimensões aqui
@@ -436,55 +475,99 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-  // ----------------- ALTRERA MATERIAIS USANDO HOTSPOT --------------------------------------------------------------------------------------------------
-  materialContainer.addEventListener('click', async (event) => {
-      const button = event.target.closest('.change-texture');
-      if (button && modelViewer.model) { // Ensure model exists before attempting material changes
-          const materialIndex = parseInt(button.getAttribute("data-material")); // Parse as integer
-          const newTextureURL = button.getAttribute("data-texture");
-          const buttonMaterialName = button.getAttribute("data-material-name");
+    // ------------------------------------------------------------------
+    // --- SECÇÃO MODIFICADA: Event Listener para "materialContainer" ---
+    // ------------------------------------------------------------------
+    // Esta função "helper" é a sua lógica de UI original, movida para aqui
+    function updateMaterialUI(clickedButton, newMaterialName) {
+        selectedMaterialName = newMaterialName;
+        
+        // Atualiza o texto do nome do material
+        if (materialName) materialName.style.opacity = 0;
+        setTimeout(() => {
+            if (materialName) materialName.textContent = selectedMaterialName;
+            if (materialName) materialName.style.opacity = 1;
+        }, 150);
 
-          // Only change if a different material is selected
-          if (selectedMaterialName !== buttonMaterialName) {
-              try {
-                  const material = modelViewer.model.materials[materialIndex];
-                  if (!material) {
-                      console.error(`Material at index ${materialIndex} not found in model.`);
-                      return;
-                  }
+        // Atualiza a 'última seleção' para grupos específicos
+        const parentGroup = clickedButton.closest('.texture-group');
+        if (parentGroup) {
+            // Nota: Tem de atualizar esta lógica se os seus IDs de grupo forem diferentes de 'wood-textures' ou 'leather-textures'
+            if (parentGroup.id === 'wood-textures') {
+                lastSelectedMaterialWood = newMaterialName;
+            } else if (parentGroup.id === 'leather-textures') {
+                lastSelectedMaterialLeather = newMaterialName;
+            }
+            // Exemplo para o seu candeeiro, se o grupo tiver id="flowerpot-textures"
+            // else if (parentGroup.id === 'flowerpot-textures') {
+            //     lastSelectedMaterialFlowerpot = newMaterialName; // (necessita de nova variável)
+            // }
+        }
 
-                  const texture = await modelViewer.createTexture(newTextureURL);
-                  material.pbrMetallicRoughness.baseColorTexture.setTexture(texture);
+        // Atualiza a classe 'selected' no botão
+        if (parentGroup) {
+            parentGroup.querySelectorAll('.change-texture').forEach(btn => btn.classList.remove('selected'));
+        }
+        clickedButton.classList.add('selected');
+    }
 
-                  selectedMaterialName = buttonMaterialName;
-                  if (materialName) materialName.style.opacity = 0;
-                  setTimeout(() => {
-                      if (materialName) materialName.textContent = selectedMaterialName;
-                      if (materialName) materialName.style.opacity = 1;
-                  }, 150);
 
-                  // Determine which last selected variable to update
-                  const parentGroup = button.closest('.texture-group');
-                  if (parentGroup) {
-                      if (parentGroup.id === 'wood-textures') {
-                          lastSelectedMaterialWood = buttonMaterialName;
-                      } else if (parentGroup.id === 'leather-textures') {
-                          lastSelectedMaterialLeather = buttonMaterialName;
-                      }
-                  }
+    materialContainer.addEventListener('click', async (event) => {
+        const button = event.target.closest('.change-texture');
+        // Sai se não for um botão ou se o modelo não estiver carregado
+        if (!button || !modelViewer.model) {
+            return;
+        }
 
-                  // Remove 'selected' from all buttons in the current group and add to clicked one
-                  if (parentGroup) {
-                      parentGroup.querySelectorAll('.change-texture').forEach(btn => btn.classList.remove('selected'));
-                  }
-                  button.classList.add('selected');
+        const buttonMaterialName = button.getAttribute("data-material-name");
 
-              } catch (error) {
-                  console.error('Error changing texture:', error);
-              }
-          }
-      }
-  });
+        // Só troca se for uma seleção diferente
+        if (selectedMaterialName !== buttonMaterialName) {
+            
+            // Verifica que tipo de ação o botão deve executar
+            const actionType = button.getAttribute('data-action-type');
+
+            // --- CAMINHO 1: MUDAR VARIANTE (O Novo Método) ---
+            if (actionType === 'variant') {
+                try {
+                    // Esta é a nova linha: define o nome da variante
+                    modelViewer.variantName = buttonMaterialName;
+                    
+                    // Atualiza a UI
+                    updateMaterialUI(button, buttonMaterialName);
+
+                } catch (error) {
+                    console.error(`Error changing variant to ${buttonMaterialName}:`, error);
+                }
+            } 
+            
+            // --- CAMINHO 2: MUDAR TEXTURA (O Seu Método Antigo) ---
+            else if (actionType === 'texture') {
+                try {
+                    // O seu código original para trocar texturas
+                    const materialIndex = parseInt(button.getAttribute("data-material"));
+                    const newTextureURL = button.getAttribute("data-texture");
+                    
+                    const material = modelViewer.model.materials[materialIndex];
+                    if (!material) {
+                        console.error(`Material at index ${materialIndex} not found in model.`);
+                        return;
+                    }
+
+                    const texture = await modelViewer.createTexture(newTextureURL);
+                    material.pbrMetallicRoughness.baseColorTexture.setTexture(texture);
+
+                    // Atualiza a UI
+                    updateMaterialUI(button, buttonMaterialName);
+
+                } catch (error) {
+                    console.error('Error changing texture:', error);
+                }
+            }
+        }
+    });
+    // --- FIM DA SECÇÃO MODIFICADA ---
+
 });
 
 
@@ -886,152 +969,3 @@ if (introVideo) {
   }, 15000); // 15s de segurança
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const modelViewer = document.querySelector('#model-viewer');
-let dimensionsVisible = false; // Começa escondido
-
-// --- Mostra/esconde elementos ---
-function setDimensionsVisibility(visible) {
-  // Linhas SVG
-  const dimLines = document.querySelectorAll('.dimensionLine');
-  dimLines.forEach(line => line.style.display = visible ? 'block' : 'none');
-
-  // Dots e labels
-  const dimElements = modelViewer.querySelectorAll('[data-action="dimension-dot"], [data-action="dimension-label"]');
-  dimElements.forEach(el => el.style.display = visible ? 'block' : 'none');
-
-  // Toggle hotspot ativo
-  const toggleHotspot = modelViewer.querySelector('[data-action="ToggleDimensions"]');
-  if (toggleHotspot) toggleHotspot.classList.toggle('active', visible);
-}
-
-// --- Desenha linha SVG entre dois hotspots ---
-function drawLine(svgLine, dot1, dot2) {
-  if (dot1 && dot2) {
-    const pos1 = dot1.canvasPosition;
-    const pos2 = dot2.canvasPosition;
-    if (pos1 && pos2) {
-      svgLine.setAttribute('x1', pos1.x);
-      svgLine.setAttribute('y1', pos1.y);
-      svgLine.setAttribute('x2', pos2.x);
-      svgLine.setAttribute('y2', pos2.y);
-    }
-  }
-}
-
-// --- Atualiza posições das linhas ---
-function renderDimensions() {
-  const lines = document.querySelectorAll('.dimensionLine');
-
-  const topDot = modelViewer.queryHotspot('dot-height-top');
-  const bottomDot = modelViewer.queryHotspot('dot-height-bottom');
-  const widthDot1 = modelViewer.queryHotspot('dot-width-1');
-  const widthDot2 = modelViewer.queryHotspot('dot-width-2');
-  const depthDot1 = modelViewer.queryHotspot('dot-depth-1');
-  const depthDot2 = modelViewer.queryHotspot('dot-depth-2');
-
-  // Espera pelos hotspots
-  if (!topDot || !bottomDot || !widthDot1 || !widthDot2 || !depthDot1 || !depthDot2) {
-    requestAnimationFrame(renderDimensions);
-    return;
-  }
-
-  drawLine(lines[0], topDot, bottomDot);   // altura
-  drawLine(lines[1], widthDot1, widthDot2); // largura
-  drawLine(lines[2], depthDot1, depthDot2); // profundidade
-}
-
-// --- Inicialização ---
-modelViewer.addEventListener('load', () => {
-  const center = modelViewer.getBoundingBoxCenter();
-  const size = modelViewer.getDimensions();
-  const x2 = size.x / 2;
-  const y2 = size.y / 2;
-  const z2 = size.z / 2;
-
-  // --- Atualiza hotspots ---
-  modelViewer.updateHotspot({ name: 'dot-height-top', position: `${center.x} ${center.y + y2} ${center.z}` });
-  modelViewer.updateHotspot({ name: 'dot-height-bottom', position: `${center.x} ${center.y - y2} ${center.z}` });
-  modelViewer.updateHotspot({ name: 'label-height', position: `${center.x + x2 * 1.2} ${center.y} ${center.z}` });
-  const labelY = modelViewer.querySelector('[data-action="dimension-label"][data-dimension="y"]');
-  if (labelY) labelY.textContent = `${(size.y * 100).toFixed(0)} cm`;
-
-  modelViewer.updateHotspot({ name: 'dot-width-1', position: `${center.x + x2} ${center.y} ${center.z}` });
-  modelViewer.updateHotspot({ name: 'dot-width-2', position: `${center.x - x2} ${center.y} ${center.z}` });
-  modelViewer.updateHotspot({ name: 'label-width', position: `${center.x} ${center.y + y2 * 1.2} ${center.z}` });
-  const labelX = modelViewer.querySelector('[data-action="dimension-label"][data-dimension="x"]');
-  if (labelX) labelX.textContent = `${(size.x * 100).toFixed(0)} cm`;
-
-  modelViewer.updateHotspot({ name: 'dot-depth-1', position: `${center.x} ${center.y} ${center.z + z2}` });
-  modelViewer.updateHotspot({ name: 'dot-depth-2', position: `${center.x} ${center.y} ${center.z - z2}` });
-  modelViewer.updateHotspot({ name: 'label-depth', position: `${center.x} ${center.y - y2 * 1.2} ${center.z}` });
-  const labelZ = modelViewer.querySelector('[data-action="dimension-label"][data-dimension="z"]');
-  if (labelZ) labelZ.textContent = `${(size.z * 100).toFixed(0)} cm`;
-
-  // --- Evento Toggle ---
-  const toggleHotspot = modelViewer.querySelector('[data-action="ToggleDimensions"]');
-  if (toggleHotspot) {
-    toggleHotspot.addEventListener('click', () => {
-      dimensionsVisible = !dimensionsVisible;
-      setDimensionsVisibility(dimensionsVisible);
-    });
-  }
-
-  // Atualiza linhas sempre que a câmera se move
-  modelViewer.addEventListener('camera-change', renderDimensions);
-  renderDimensions();
-
-  // Inicialmente escondido
-  setDimensionsVisibility(dimensionsVisible);
-});
