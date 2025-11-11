@@ -1,0 +1,92 @@
+{
+  "title": "MUDHIF CHAIR",
+  "name": "MUDHIF CHAIR",
+  "designer": "Alma de Luce",
+  "location": "Ergonomic & Luxurious Dining Chair",
+  "modelSrc": "model14.gltf",
+  "environmentImage": "model14.hdr",
+  "cameraOrbit": "45deg 85deg 2.5m",
+  "min-camera-orbit": "-720deg 50deg 1.5m",
+  "max-camera-orbit": "720deg 90deg 2.5m",
+  "min-field-of-view": "30deg",
+  "max-field-of-view": "30deg",
+  "disable-zoom": false,
+  "disable-pan": false,
+  "backgroundTopColor": "#5C4F4A",
+  "previewImage": "/IMG/preview.mov",
+  "galleryImages": [
+    {
+      "src": "1.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "2.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "3.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "4.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "5.jpg",
+      "caption": "Photography"
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "VARIANTS",
+      "position": "0.23705383931952795m 0.10982679551904237m -0.25511372729205345m",
+      "image": "../../brush.png",
+      "action": "ChangeMaterials",
+      "materialGroup": "wood",
+      "initialName": "American Wallnut"
+    },
+    {
+      "id": "VARIANTS2",
+      "position": "0.1316384663647078m 0.49516208545104473m -0.2530350980065025m", 
+      "image": "../../brush.png",
+      "action": "ChangeMaterials",
+      "materialGroup": "fabric",
+      "initialName": "Cloth"
+    }
+  ],
+  "materials": { 
+    "wood": { 
+      "type": "variant",  
+      "initialName": "American Wallnut", 
+      "variants": [
+        {
+          "name": "American Wallnut",
+          "thumbnail": "textures/thumb_american_wallnut.png"
+        },
+        {
+          "name": "Dark American Wallnut",
+          "thumbnail": "textures/thumb_dark_american_wallnut.png"
+        }
+      ]
+    },
+    
+    "fabric": {
+      "type": "variant", 
+      "initialName": "Cloth",
+      "variants": [
+        {
+          "name": "Cloth",
+          "thumbnail": "textures/thumb_cloth.png"
+        },
+        {
+          "name": "Leather Cream",
+          "thumbnail": "textures/thumb_leather_cream.png"
+        },
+        {
+          "name": "Leather Brown",
+          "thumbnail": "textures/thumb_leather_brown.png"
+        }
+      ]
+    }
+  }
+}

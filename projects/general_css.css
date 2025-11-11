@@ -1024,11 +1024,11 @@ model-viewer.visible {
 
 .texture-group {
   display: flex;
-  flex-direction: row; /* Arranges circles horizontally */
+  flex-direction: row !important; /* Arranges circles horizontally */
   gap: 15px; /* Space between individual texture circles */
   justify-content: flex-start; /* Aligns circles to the left */
   align-self: flex-start; /* Ensures it's left-aligned within the column flex container */
-  max-width: 50%;
+  max-width: none;
   flex-wrap: wrap;
 }
 
@@ -1066,6 +1066,20 @@ model-viewer.visible {
     display: block;
 }
 
+@media (max-width: 768px) {
+    #material-change-container {
+        bottom: 10%;
+        left: 15px;
+        gap: 10px;
+    }
+    #material-name {
+        font-size: 16px;
+    }
+    .change-texture {
+        width: 32px;
+        height: 32px;
+    }
+}
 
 
 /*-------------------------- dimensoes ----------------------------------------------------------------------*/
