@@ -29,36 +29,43 @@
 
 <!--------------- INTRO VIDEO ------------------------------------------------->
 <div class="intro-video" id="intro">
-    <video playsinline autoplay muted class="intro-bg" id="introVideo">
+    <video 
+        playsinline 
+        autoplay 
+        muted 
+        preload="auto"
+        webkit-playsinline
+        class="intro-bg" 
+        id="introVideo">
         <source src="./mainpage/INTRO_VIDEO.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 </div>
 
-  <!-- Vertex Shader -->
-  <script id="vs" type="x-shader/x-vertex">
-    varying vec2 vUv;
-    void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  </script>
+<!-- Vertex Shader -->
+<script id="vs" type="x-shader/x-vertex">
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+</script>
 
-  <!-- Fragment Shader -->
-  <script id="fs" type="x-shader/x-fragment">
-    uniform sampler2D map;
-    uniform vec3 fogColor;
-    uniform float fogNear;
-    uniform float fogFar;
-    varying vec2 vUv;
-    void main() {
-      float depth = gl_FragCoord.z / gl_FragCoord.w;
-      float fogFactor = smoothstep(fogNear, fogFar, depth);
-      gl_FragColor = texture2D(map, vUv);
-      gl_FragColor.w *= pow(gl_FragCoord.z, 20.0);
-      gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.w), fogFactor);
-    }
-  </script>
+<!-- Fragment Shader -->
+<script id="fs" type="x-shader/x-fragment">
+  uniform sampler2D map;
+  uniform vec3 fogColor;
+  uniform float fogNear;
+  uniform float fogFar;
+  varying vec2 vUv;
+  void main() {
+    float depth = gl_FragCoord.z / gl_FragCoord.w;
+    float fogFactor = smoothstep(fogNear, fogFar, depth);
+    gl_FragColor = texture2D(map, vUv);
+    gl_FragColor.w *= pow(gl_FragCoord.z, 20.0);
+    gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.w), fogFactor);
+  }
+</script>
 
   <!-- Bibliotecas -->
   <script src="js/three.min.js"></script>

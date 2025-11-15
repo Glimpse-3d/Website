@@ -809,66 +809,6 @@ model-viewer.visible {
   }
 }
 
-/* --- Responsive Adjustments --- */
-@media (max-width: 1024px) {
-  .gallery {
-    width: 28%; /* Wider on slightly smaller screens */
-    right: 15px;
-  }
-  .gallery-item {
-    flex: 1 1 120px;
-    max-width: 160px;
-  }
-}
-
-@media (max-width: 768px) {
-  .gallery {
-    right: 10px;
-    width: 90%; /* Much wider on tablets/larger phones */
-    max-height: 80%;
-    left: 50%;
-    transform: translateX(-50%); /* Center the gallery */
-    bottom: 10px !important; /* Ensure it stays at the bottom */
-  }
-  .gallery.closed {
-    animation: slideDown 1.0s ease-in forwards;
-    transform: translateX(-50%) translateY(100%); /* Adjust transform for closing */
-  }
-  .gallery-items {
-    justify-content: center; /* Center items on smaller screens */
-    padding: 10px;
-  }
-  .gallery-item {
-    flex: 1 1 100px; /* Smaller base for items */
-    max-width: 150px;
-  }
-  .gallery-text {
-    font-size: 1em;
-    padding: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .gallery {
-    right: 5px;
-    left: 5px;
-    width: auto; /* Let content dictate width within padding */
-    max-height: 85%;
-    bottom: 5px !important;
-    transform: none; /* Remove transform for centering if width is auto */
-  }
-  .gallery.closed {
-    transform: translateY(100%); /* Adjust transform for closing */
-  }
-  .gallery-items {
-    gap: 8px; /* Slightly less gap on very small screens */
-  }
-  .gallery-item {
-    flex: 1 1 100%; /* Stack items vertically on very small phones */
-    max-width: 90%; /* Max width relative to gallery */
-    margin: 0 auto; /* Center individual items */
-  }
-}
 
 
 

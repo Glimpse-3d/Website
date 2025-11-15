@@ -257,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { src: 'projects/model5/thumbnail.png', title: 'GF CHAIR', model: 'model5' },
     { src: 'projects/model4/thumbnail.png', title: 'CANTAREIRA', model: 'model4' },
     { src: 'projects/model13/thumbnail.png', title: 'FLOWERPOT', model: 'model13' },
+    { src: 'projects/model14/thumbnail.png', title: 'MUDHIF CHAIR', model: 'model14' },
     { src: 'projects/model3/thumbnail.png', title: 'IN PROGRESS', model: 'model3' },
     { src: 'projects/model12/thumbnail.png', title: 'IN PROGRESS', model: 'model12' },
     { src: 'projects/model8/thumbnail.png', title: 'IN PROGRESS', model: 'model8' },
