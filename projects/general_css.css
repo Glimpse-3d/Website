@@ -3,6 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&display=swap');
+
 
 /*------------------------------ LAYOUT -----------------------------------------------------------------------*/
 * {
@@ -119,41 +122,55 @@ model-viewer.visible {
 }
 
 
-
-/*------------------------------ TÍTULO ADAPTATIVO -----------------------------------------------------------------------*/
+/*------------------------------ TITULO -----------------------------------------------------------------------*/
 .title {
-    position: absolute; /* Change to absolute to allow 100% width/height */
-    top: 0;
-    left: 0;
-    white-space: nowrap;
-    width: 100%; /* Make it span the full width of its parent */
-    height: 100%; /* Make it span the full height of its parent */
-    display: flex; /* Use flexbox for easy centering */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    overflow: hidden; /* Hide any overflowing parts of the text */
-    font-size: 17vw;
-    font-family: 'Anton', sans-serif;
-    text-transform: uppercase;
-    background: linear-gradient(#f4f3f2 0%, transparent 65%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    z-index: 0;
-    transform: translateY(45%); /* Initial state for animation */
-    animation: fadeInBottom 1s ease-out forwards;
-    text-align: center; /* Ensure text is centered if it wraps */
+  --scale-factor: 2.1; 
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Anton', sans-serif;          
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: 18vw;                   
+  max-height: 40vh;                  
+  letter-spacing: -0.01em;
+  background: linear-gradient(#f4f3f260 0%, transparent 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: fadeInBottom 1s ease-out forwards;
+}
+
+/* --- AJUSTES RESPONSIVOS (MEDIA QUERIES) --- */
+
+@media (max-width: 1700px) {
+  .title {
+    --scale-factor: 2.5;
+  }
+}
+@media (max-width: 1280px) {
+  .title {
+    --scale-factor: 2.5; 
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    --scale-factor: 1.2; /* Mantém a legibilidade em telas estreitas */
+  }
 }
 
 @keyframes fadeInBottom {
-    100% {
-        opacity: 1;
-        /* Adjust transform to work with new positioning. 
-           -8% translateY might move it too much off center.
-           You might want to remove scaleY(1.8) if it distorts too much with wrapping.
-           Let's aim for slight adjustment from the center. */
-        transform: translateY(-5%) scaleY(1.8); /* Start closer to actual position, or adjust */
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(200%) scaleY(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(80%) scaleY(var(--scale-factor));
+  }
 }
 
 
@@ -171,7 +188,6 @@ model-viewer.visible {
 
 
 /*------------------------------ BOTÃO REALIDADE AUMENTADA --------------------------------------------------------*/
-/*------------------------------ BOTÃO REALIDADE AUMENTADA (No slot: #ar-trigger) --------------------------------------------------------*/
 .ar-button {
   position: fixed;
   top: 30px;
@@ -647,22 +663,23 @@ model-viewer.visible {
 
 
 /*------------------ GALERIA ----------------------------------------------------------------------------------- */
-/* --- Base Gallery Styles --- */
 .gallery {
   position: absolute;
   right: 20px;
   width: 21%;
-  max-height: 60%; /* Maximum height as per the viewport */
-  background: #f4f3f2; /* Solid light gray background */
+  max-height: 60%;
+  background: rgba(255, 255, 255, 0.25); /* Fundo translúcido, igual à ideia do menu */
+  backdrop-filter: blur(10px); /* Mesmo blur do menu */
+  -webkit-backdrop-filter: blur(10px); /* Safari */
   overflow-y: auto;
-  border-radius: 12px; /* Slightly larger border-radius for a softer feel */
+  border-radius: 25px; /* Igual ao menu (25px) */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  animation: slideUp 1.2s ease-out forwards; /* Slightly faster slide up with a smooth ease-out */
+  animation: slideUp 1.2s ease-out forwards;
   z-index: 10;
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  -ms-overflow-style: none; /* IE e Edge */
 }
 
 /* Scrollbar styles for Webkit browsers (Chrome, Safari) */
@@ -874,6 +891,49 @@ model-viewer.visible {
   z-index: 300;
 }
 
+/* ---------------- MOBILE: Modal Fullscreen ---------------- */
+@media (max-width: 768px) {
+  .modal {
+    background-color: rgba(0, 0, 0, 1);
+    padding: 0;
+    touch-action: none; /* Necessário para pinch-zoom + swipe */
+  }
+
+  .modal-container {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: hidden; /* Para permitir zoom sem overflow */
+    position: relative;
+  }
+
+  .modal-media {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform-origin: center center;
+    transition: transform 0.1s ease-out;
+    touch-action: none; /* Impede o browser de capturar o zoom */
+  }
+
+  .modal .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 32px;
+    z-index: 999;
+  }
+
+  #modal-caption {
+    font-size: 16px;
+    margin-top: 10px;
+    padding: 0 10px;
+  }
+}
 
 
 /*-------------------------- HOTSPOTS --------------------------------------------------------------------------------*/
