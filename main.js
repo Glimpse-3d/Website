@@ -1,464 +1,407 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // --- VIDEO AND STATE CONSTANTS ---
-    const intro = document.getElementById('intro');
-    const introVideo = document.getElementById('introVideo');
-    // As chaves de sessionStorage para pular o vídeo e o tempo foram removidas.
+/* --------------------------------------------------
+MENU
+-------------------------------------------------- */
 
-    // --- 1. Bloquear scroll enquanto o vídeo está ativo ---
-    document.body.style.overflow = 'hidden';
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
 
-    // --- Função para iniciar o resto do site ---
-    function startSite() {
-        document.body.style.overflow = 'auto';
-        
-        // Limpa a posição de scroll guardada após restaurar
-        sessionStorage.removeItem('scrollY');
-        
-        // REMOVA A LINHA ABAIXO:
-        // if (typeof init === 'function') init();  // Não é necessário iniciar as nuvens outra vez
-                                                
-        if (typeof setupPageControl === 'function') setupPageControl(); // Controlo de páginas
-        
-        restoreScroll();
-    }
-    
-    // --- Função unificada para aplicar fade out e iniciar o site ---
-    function fadeOutIntro() {
-        introVideo.pause(); // Garante que o vídeo para antes do fade
-        intro.style.transition = 'opacity 1s ease';
-        intro.style.opacity = '0';
-        
-        // Usa transitionend para timing preciso, com um fallback
-        intro.addEventListener('transitionend', function handler() {
-            intro.style.display = 'none';
-            startSite();
-            intro.removeEventListener('transitionend', handler);
-        });
+menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    navLinks.classList.toggle('active');
+});
 
-        // Fallback para transição
-        setTimeout(() => {
-            if (intro.style.display !== 'none') {
-                intro.style.display = 'none';
-                startSite();
-            }
-        }, 1100); 
-    }
-
-    // O check "Se já viu o vídeo, salta direto" FOI REMOVIDO AQUI.
-
-    // --- Tocar vídeo (início forçado em toda a carga) ---
-    if (introVideo) {
-        // Não há tempo guardado, o vídeo sempre começa do zero
-        introVideo.currentTime = 0;
-        
-        // Use Promise-based play() para lidar com restrições de autoplay
-        introVideo.play().catch(error => {
-            // Se o autoplay falhar, o vídeo congela e espera pelo clique do utilizador
-            console.warn('Autoplay falhou (política do browser). À espera do clique para iniciar o vídeo.', error);
-        });
-
-        // --- Quando o vídeo termina ---
-        introVideo.addEventListener('ended', () => {
-            // A chave HAS_SEEN_VIDEO_KEY foi removida
-            fadeOutIntro();
-        });
-
-        // --- Pular vídeo / Iniciar vídeo ao clicar ---
-        intro.addEventListener('click', () => {
-            if (!introVideo.paused && !introVideo.ended && introVideo.currentTime > 0.1) {
-                // Caso A: O vídeo está a correr -> O utilizador clica para SALTAR.
-                fadeOutIntro();
-            } else {
-                // Caso B: O vídeo está pausado (por autoplay) -> O utilizador clica para INICIAR.
-                introVideo.play().catch(e => console.error("Início manual falhou:", e));
-            }
-        });
-    }
-
-
-    // --- Guardar apenas a posição de scroll (tempo de vídeo removido) ---
-    window.addEventListener('pagehide', () => {
-        sessionStorage.setItem('scrollY', window.scrollY);
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        menuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
     });
+});
 
-    // --- Pausar vídeo se mudar de aba ---
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden && introVideo && !introVideo.paused) { 
-            introVideo.pause();
+/* --------------------------------------------------
+SCROLL INDICATOR
+-------------------------------------------------- */
+
+const scrollIndicator = document.getElementById('scrollIndicator');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 120) {
+        scrollIndicator.classList.add('hidden');
+    } else {
+        scrollIndicator.classList.remove('hidden');
+    }
+});
+
+/* --------------------------------------------------
+CHANGE HERO MODEL
+-------------------------------------------------- */
+
+const models = [
+'projects/model14/model14.gltf',
+'projects/model9/model9.gltf',
+'projects/model5/model5.gltf',
+'projects/model13/model13.gltf'
+];
+
+let currentModelIndex = 0;
+
+function changeModel() {
+
+currentModelIndex = (currentModelIndex + 1) % models.length;
+
+const mv = document.querySelector('model-viewer');
+const btn = document.getElementById('change-model-btn');
+
+mv.src = models[currentModelIndex];
+
+btn.style.transform = 'rotate(360deg)';
+btn.style.transition = 'transform 0.4s ease';
+
+setTimeout(() => {
+btn.style.transform = '';
+btn.style.transition = '';
+}, 400);
+
+}
+
+/* --------------------------------------------------
+PORTFOLIO DATA
+-------------------------------------------------- */
+
+const projectImages = [
+
+{
+src:'projects/model14/thumbnail.png',
+title:'Mudhif Chair',
+client:'Alma de Luce',
+model:'model14',
+category:'product'
+},
+
+{
+src:'projects/model9/thumbnail.png',
+title:'Krysset Chair',
+client:'Fredrik A. Kayser',
+model:'model9',
+category:'product'
+},
+
+{
+src:'projects/model5/thumbnail.png',
+title:'GF Chair',
+client:'Gonçalo Fernandes',
+model:'model5',
+category:'product'
+},
+
+{
+src:'projects/model13/thumbnail.png',
+title:'Flowerpot',
+client:'Verner Panton',
+model:'model13',
+category:'product'
+},
+
+{
+src:'projects/model4/thumbnail.png',
+title:'Cantareira',
+client:'Eduardo Souto Moura',
+model:'model4',
+category:'architecture'
+},
+
+{
+src:'projects/model3/thumbnail.png',
+title:'IN PROGRESS',
+client:'',
+model:'model3',
+category:'architecture'
+},
+
+{
+src:'projects/model12/thumbnail.png',
+title:'IN PROGRESS',
+client:'',
+model:'model12',
+category:'architecture'
+},
+
+{
+src:'projects/model8/thumbnail.png',
+title:'IN PROGRESS',
+client:'',
+model:'model8',
+category:'architecture'
+}
+
+];
+
+/* --------------------------------------------------
+PORTFOLIO RENDER
+-------------------------------------------------- */
+
+const track = document.getElementById('portfolio-track');
+const currentSlide = document.getElementById('current-slide');
+const totalSlides = document.getElementById('total-slides');
+
+function renderProjects(filter="all"){
+
+track.innerHTML="";
+
+const filtered = projectImages.filter(p =>
+filter==="all" || p.category===filter
+);
+
+filtered.forEach(item=>{
+
+const a=document.createElement('a');
+
+a.className='portfolio-item';
+
+a.href=item.title==="IN PROGRESS"
+? "#"
+: `projects/general_html.html?model=${item.model}`;
+
+a.innerHTML=`
+
+<div class="portfolio-image">
+
+<img src="${item.src}" alt="${item.title}" class="portfolio-thumb">
+
+<video class="portfolio-video"
+loop
+muted
+playsinline
+preload="none">
+
+<source src="projects/${item.model}/360.webm" type="video/webm">
+<source src="projects/${item.model}/360.mp4" type="video/mp4">
+
+</video>
+
+</div>
+
+<div class="portfolio-info">
+
+<h4>${item.title}</h4>
+<span>${item.client}</span>
+
+</div>
+
+`;
+
+track.appendChild(a);
+
+});
+
+initVideoHover();
+
+if(totalSlides) totalSlides.textContent = filtered.length;
+
+}
+
+renderProjects();
+
+/* --------------------------------------------------
+FILTER BUTTONS
+-------------------------------------------------- */
+
+document.querySelectorAll(".filter-btn").forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+document.querySelectorAll(".filter-btn")
+.forEach(b=>b.classList.remove("active"));
+
+btn.classList.add("active");
+
+renderProjects(btn.dataset.filter);
+
+});
+
+});
+
+/* --------------------------------------------------
+VIDEO HOVER
+-------------------------------------------------- */
+
+function initVideoHover(){
+
+document.querySelectorAll('.portfolio-item').forEach(card=>{
+
+const video = card.querySelector('.portfolio-video');
+
+card.addEventListener('mouseenter',()=>{
+
+video.currentTime = 0;
+video.play();
+
+card.classList.add("playing");
+
+});
+
+card.addEventListener('mouseleave',()=>{
+
+/* remove zoom primeiro */
+card.classList.remove("playing");
+
+/* espera o reset do scale */
+setTimeout(()=>{
+
+video.pause();
+video.currentTime = 0;
+
+},150);
+
+});
+
+});
+
+}
+
+initVideoHover();
+
+/* --------------------------------------------------
+WOW EFFECT – VIDEO ON CENTER
+-------------------------------------------------- */
+
+const cards = document.querySelectorAll(".portfolio-item");
+
+track.addEventListener("scroll", () => {
+
+    const screenCenter = window.innerWidth / 2;
+
+    cards.forEach(card => {
+
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+
+        const video = card.querySelector("video");
+        const img = card.querySelector("img");
+
+        if (Math.abs(screenCenter - cardCenter) < 120) {
+
+            card.classList.add("active");
+
+            if (video) {
+                video.play();
+            }
+
+        } else {
+
+            card.classList.remove("active");
+
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+
         }
+
     });
 
-    // --- Restaurar scroll ---
-    function restoreScroll() {
-        const scrollY = sessionStorage.getItem('scrollY');
-        if (scrollY) {
-            requestAnimationFrame(() => window.scrollTo(0, parseFloat(scrollY)));
-        }
-    }
-
-    // --- Inicia nuvens imediatamente ---
-    if (typeof init === 'function') init();
-});
-
-// ---------------------------
-//       CLOUD SYSTEM
-// ---------------------------
-
-let mouseX = 0;
-const windowHalfX = window.innerWidth / 2;
-const clouds = { background: null, foreground: null };
-
-function init() {
-    clouds.background = initCloudLayer('three-background', 0, 0.015);
-    clouds.foreground = initCloudLayer('three-foreground', -500, 0.03);
-
-    window.addEventListener('resize', () => {
-        ['background', 'foreground'].forEach(layer => {
-            const cam = clouds[layer].camera;
-            const ren = clouds[layer].renderer;
-            cam.aspect = window.innerWidth / window.innerHeight;
-            cam.updateProjectionMatrix();
-            ren.setSize(window.innerWidth, window.innerHeight);
-        });
-    });
-
-    animateLoop();
-}
-
-function initCloudLayer(containerId, zOffset, speed) {
-    const container = document.getElementById(containerId);
-    const camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 3000);
-    camera.position.z = 1;
-    camera.position.y = 190;
-
-    const scene = new THREE.Scene();
-    const fog = new THREE.Fog(0xf4f3f2, -100, 3000);
-    const texture = THREE.ImageUtils.loadTexture('./mainpage/cloud10.png');
-
-    const material = new THREE.ShaderMaterial({
-        uniforms: {
-            "map": { type: "t", value: texture },
-            "fogColor": { type: "c", value: fog.color },
-            "fogNear": { type: "f", value: fog.near },
-            "fogFar": { type: "f", value: fog.far }
-        },
-        vertexShader: document.getElementById('vs').textContent,
-        fragmentShader: document.getElementById('fs').textContent,
-        depthWrite: false,
-        depthTest: false,
-        transparent: true
-    });
-
-    const geometry = new THREE.Geometry();
-    const plane = new THREE.Mesh(new THREE.PlaneGeometry(64, 64));
-
-    for (let i = 0; i < 4000; i++) {
-        plane.position.x = Math.random() * 2000 - 1000;
-        plane.position.y = -Math.random() * Math.random() * 200 - 15;
-        plane.position.z = i;
-        plane.rotation.z = Math.random() * Math.PI;
-        plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
-        THREE.GeometryUtils.merge(geometry, plane);
-    }
-
-    const cloudMeshes = [];
-    const numBlocks = 50;
-    const blockDepth = 1000;
-
-    for (let i = 0; i < numBlocks; i++) {
-        const mesh = new THREE.Mesh(geometry.clone(), material);
-        mesh.position.z = zOffset - Math.random() * (blockDepth * numBlocks);
-        scene.add(mesh);
-        cloudMeshes.push(mesh);
-    }
-
-    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
-    container.appendChild(renderer.domElement);
-
-    return { scene, camera, renderer, meshes: cloudMeshes, speed, blockDepth };
-}
-
-function animateLoop() {
-    requestAnimationFrame(animateLoop);
-
-    ['background', 'foreground'].forEach(layer => {
-        const cloud = clouds[layer];
-        if (!cloud) return;
-
-        cloud.meshes.forEach(mesh => {
-            mesh.position.z += cloud.speed * 5;
-            if (mesh.position.z > cloud.camera.position.z + cloud.blockDepth / 2) {
-                mesh.position.z -= cloud.blockDepth * cloud.meshes.length;
-            }
-        });
-
-        cloud.renderer.render(cloud.scene, cloud.camera);
-    });
-}
-
-
-
-// PÁGINAS ----------------------------------------------------------------------------------------------------------------------
-function setupPageControl() {
-    const pages = {
-        home: document.getElementById("home-page"),
-        services: document.getElementById("services-page"),
-        projects: document.getElementById("projects-page"),
-        contacts: document.getElementById("contacts-page")
-    };
-
-    const buttons = {
-        home: document.getElementById("btn-logo"),
-        services: document.getElementById("btn-services"),
-        projects: document.getElementById("btn-projects"),
-        contacts: document.getElementById("btn-contacts")
-    };
-
-    function showPage(pageName) {
-        // Mostra a página correta
-        Object.values(pages).forEach(page => page.classList.remove("show-page"));
-        pages[pageName].classList.add("show-page");
-
-        // Atualiza botão ativo
-        Object.values(buttons).forEach(btn => btn.classList.remove("active"));
-        if (buttons[pageName]) buttons[pageName].classList.add("active");
-    }
-
-    // Adiciona event listeners
-    Object.entries(buttons).forEach(([pageName, btn]) => {
-        if (!btn) return;
-        btn.addEventListener("click", e => {
-            e.preventDefault();
-            // Se já está ativo, não faz nada
-            if (btn.classList.contains("active")) return;
-            showPage(pageName);
-        });
-    });
-}
-
-
-
-
-
-// PÁGINA PROJECTOS --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// ----------------- PÁGINA PROJECTOS ----------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
-  const projectsPage = document.querySelector('.projects-page');
-  const btnProjects = document.getElementById('btn-projects');
-  const galleryItemsContainer = document.querySelector('.gallery-items');
-
-  if (!projectsPage || !btnProjects || !galleryItemsContainer) return;
-
-  // Lista de projetos (imagem + nome + modelo)
-  const projectImages = [
-    { src: 'projects/model9/thumbnail.png', title: 'KRYSSET CHAIR', model: 'model9' },
-    { src: 'projects/model5/thumbnail.png', title: 'GF CHAIR', model: 'model5' },
-    { src: 'projects/model4/thumbnail.png', title: 'CANTAREIRA', model: 'model4' },
-    { src: 'projects/model13/thumbnail.png', title: 'FLOWERPOT', model: 'model13' },
-    { src: 'projects/model14/thumbnail.png', title: 'MUDHIF CHAIR', model: 'model14' },
-    { src: 'projects/model3/thumbnail.png', title: 'IN PROGRESS', model: 'model3' },
-    { src: 'projects/model12/thumbnail.png', title: 'IN PROGRESS', model: 'model12' },
-    { src: 'projects/model8/thumbnail.png', title: 'IN PROGRESS', model: 'model8' },
-  ];
-
-  // Limpar e criar a galeria dinamicamente
-  galleryItemsContainer.innerHTML = '';
-  projectImages.forEach((item) => {
-    const div = document.createElement('div');
-    div.className = 'gallery-item';
-
-    const img = document.createElement('img');
-    img.src = item.src;
-    img.alt = item.title;
-
-    // 🔹 Impede que a imagem seja arrastada pelo browser
-    img.addEventListener('dragstart', (e) => e.preventDefault());
-    
-    const span = document.createElement('span');
-    span.textContent = item.title;
-
-    div.appendChild(img);
-    div.appendChild(span);
-    galleryItemsContainer.appendChild(div);
-
-    // Clique abre o modelo correspondente (exceto IN PROGRESS)
-    div.addEventListener('click', () => {
-      if (item.title === "IN PROGRESS") return;
-      window.location.href = `projects/general_html.html?model=${item.model}`;
-    });
-  });
-
-  // Mostrar Projects (só se não estiver ativo)
-  btnProjects.addEventListener('click', () => {
-    if (projectsPage.classList.contains('active')) return;
-
-    projectsPage.classList.add('active');
-
-    // Reinicia animação dos cards
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    galleryItems.forEach((item, i) => {
-      item.style.animation = 'none'; 
-      item.offsetHeight; 
-      item.style.animation = `slideUp 1s ease forwards ${0.3 + i * 0.3}s`;
-    });
-  });
-
-  // Fecha se clicar fora
-  document.addEventListener('click', (e) => {
-    if (projectsPage.classList.contains('active') &&
-        !projectsPage.contains(e.target) &&
-        e.target !== btnProjects) {
-      projectsPage.classList.remove('active');
-    }
-  });
-
-  // --------------------- Scroll com Click & Drag ---------------------
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-
-  const startDrag = (xPos) => {
-    isDown = true;
-    startX = xPos - galleryItemsContainer.offsetLeft;
-    scrollLeft = galleryItemsContainer.scrollLeft;
-  };
-
-  const stopDrag = () => { isDown = false; };
-
-  const moveDrag = (xPos) => {
-    if (!isDown) return;
-    const walk = (xPos - startX) * 2;
-    galleryItemsContainer.scrollLeft = scrollLeft - walk;
-  };
-
-  // Desktop
-  galleryItemsContainer.addEventListener("mousedown", (e) => startDrag(e.pageX));
-  galleryItemsContainer.addEventListener("mouseup", stopDrag);
-  galleryItemsContainer.addEventListener("mouseleave", stopDrag);
-  galleryItemsContainer.addEventListener("mousemove", (e) => moveDrag(e.pageX));
-
-  // Mobile
-  galleryItemsContainer.addEventListener("touchstart", (e) => startDrag(e.touches[0].pageX));
-  galleryItemsContainer.addEventListener("touchend", stopDrag);
-  galleryItemsContainer.addEventListener("touchmove", (e) => moveDrag(e.touches[0].pageX));
 });
 
 
+/* --------------------------------------------------
+SLIDE COUNTER
+-------------------------------------------------- */
 
+let isScrolling;
 
-// PÁGINA SERVIÇOS --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
-  const servicesPage = document.querySelector('.services-page');
-  const btnServices = document.getElementById('btn-services');
-  const serviceItems = document.querySelectorAll('.service-item');
+track.addEventListener('scroll', () => {
 
-  if (!servicesPage || !btnServices || serviceItems.length === 0) return;
+    window.clearTimeout(isScrolling);
 
-  btnServices.addEventListener('click', () => {
-    // Se já está ativa, não faz nada
-    if (servicesPage.classList.contains('active')) return;
+    isScrolling = setTimeout(() => {
 
-    servicesPage.classList.add('active');
+        const firstItem = track.querySelector('.portfolio-item');
+        if (!firstItem) return;
 
-    // Para cada card, toca o vídeo após a animação da sombra
-    serviceItems.forEach((card, index) => {
-      const video = card.querySelector('video');
-      if (!video) return;
+        const itemWidth = firstItem.offsetWidth + 16;
 
-      // Atraso: shadowGlow começa 2s depois e dura 3s, então play após 5s
-      // Pode ajustar conforme o teu CSS
-      const delay = index === 0 ? 2000 : 5500; // card1: 5s, card2: 5.5s
+        const currentIndex =
+            Math.round(track.scrollLeft / itemWidth) + 1;
 
-      setTimeout(() => {
-        video.play().catch(err => console.log("Erro ao tocar vídeo:", err));
-      }, delay);
-    });
-  });
+        if (currentSlide)
+            currentSlide.textContent =
+                Math.min(currentIndex, projectImages.length);
 
-  // Se clicar fora da services-page, fecha
-  document.addEventListener('click', (e) => {
-    if (servicesPage.classList.contains('active') &&
-        !servicesPage.contains(e.target) &&
-        e.target !== btnServices) {
-      servicesPage.classList.remove('active');
+    }, 100);
 
-      // Pausar todos os vídeos quando fechar
-      serviceItems.forEach(card => {
-        const video = card.querySelector('video');
-        if (video) video.pause();
-      });
-    }
-  });
+});
+
+/* --------------------------------------------------
+REVEAL ANIMATION
+-------------------------------------------------- */
+
+function reveal(){
+
+document.querySelectorAll('.reveal').forEach(el=>{
+
+if(el.getBoundingClientRect().top <
+window.innerHeight - 80){
+
+el.classList.add('active');
+
+}
+
+});
+
+}
+
+window.addEventListener('scroll', reveal);
+document.addEventListener('DOMContentLoaded', reveal);
+
+/* --------------------------------------------------
+FAQ
+-------------------------------------------------- */
+
+document.querySelectorAll('.faq-question').forEach(btn => {
+
+btn.addEventListener('click', () => {
+
+const item = btn.parentElement;
+
+const isOpen = item.classList.contains('open');
+
+document.querySelectorAll('.faq-item')
+.forEach(i => i.classList.remove('open'));
+
+if (!isOpen) item.classList.add('open');
+
+});
+
+});
+
+/* --------------------------------------------------
+KEY SHORTCUT
+-------------------------------------------------- */
+
+document.addEventListener('keydown', (e) => {
+
+if (e.key === 't' || e.key === 'T') {
+
+window.location.href = 'thumbs/modelviewer.html';
+
+}
+
 });
 
 
-
-// PÁGINA CONTACTOS --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
-  const contactsPage = document.querySelector('.contact-page');
-  const btnContacts = document.getElementById('btn-contacts');
-  const contactForm = document.getElementById('contact-form');
-  const inputs = document.querySelectorAll('.contact-form .input-container, .contact-form .send-button');
-  const contactTitle = document.querySelector('.contact-intro h2');
-  const socialMedia = document.querySelector('.social-media-container');
-
-  if (!contactsPage || !btnContacts || !contactForm || !contactTitle || !socialMedia) return;
-
-  // Função para reiniciar animação
-  function restartAnimation(el, animation) {
-    el.style.animation = 'none';
-    el.offsetHeight; // força reflow
-    el.style.animation = animation;
-  }
-
-  // Clique no botão de contacts
-  btnContacts.addEventListener('click', () => {
-    if (contactsPage.classList.contains('active')) return;
-
-    contactsPage.classList.add('active');
-
-    restartAnimation(contactTitle, `slideUpFade 1s ease-out forwards 0.5s`);
-    restartAnimation(contactForm, `slideUp 1s ease forwards 0s`);
-
-    inputs.forEach((item, i) => {
-      restartAnimation(item, `fadeInLeft 0.8s ease forwards ${i * 0.3}s`);
+/* --------------------------------------------------
+ABRIR DESCRIÇÕES BENEFICIOS TLM
+-------------------------------------------------- */
+document.querySelectorAll('.benefit-card').forEach(card => {
+    card.querySelector('.benefit-toggle').addEventListener('click', () => {
+        card.classList.toggle('open');
     });
-
-    socialMedia.classList.add('show');
-    restartAnimation(socialMedia, `fadeInUp 0.8s ease forwards 1s`);
-  });
-
-  // Fecha se clicar fora do contactsPage e fora das redes sociais
-  document.addEventListener('click', (e) => {
-    if (
-      contactsPage.classList.contains('active') &&
-      !contactsPage.contains(e.target) &&
-      e.target !== btnContacts &&
-      !socialMedia.contains(e.target)
-    ) {
-      contactsPage.classList.remove('active');
-      restartAnimation(socialMedia, `fadeOutDown 0.5s ease forwards`);
-      socialMedia.classList.remove('show');
-    }
-  });
-
-  // ----------------- ENVIO DO FORMULÁRIO -----------------
-  contactForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // evita reload da página
-
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
-
-    // Monta o mailto
-    const subject = encodeURIComponent(`${name}`);
-    const body = encodeURIComponent(`${message}`);
-    const mailtoLink = `mailto:info@glimpse3d.com?subject=${subject}&body=${body}`;
-
-    // Abre o cliente de email do utilizador
-    window.open(mailtoLink, '_blank');
-  });
 });
 
+/* --------------------------------------------------
+ABRIR PASSOS HOW IT WORKS TLM
+-------------------------------------------------- */
+document.querySelectorAll('.step-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+        btn.closest('.step').classList.toggle('open');
+    });
+});

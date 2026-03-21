@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Product Viewer</title>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+  /* BODY */
+  body {
+    margin: 0;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  /* MODEL-VIEWER */
+  model-viewer {
+    width: 80vw;
+    max-width: 800px;
+    height: 80vh;
+    background-color: #ffffff; /* fundo branco */
+  }
+</style>
+</head>
+<body>
+
+<!-- MODEL -->
+<model-viewer 
+  src="/model14.gltf"             <!-- substitua pelo caminho do seu GLTF -->
+  alt="3D Product"
+  auto-rotate
+  rotation-per-second="30deg"
+  camera-controls
+  exposure="1"
+  shadow-intensity="0.5">
+</model-viewer>
+
+</body>
+</html>

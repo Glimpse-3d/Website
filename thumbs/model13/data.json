@@ -1,0 +1,125 @@
+{
+  "title": "FLOWERPOT",
+  "name": "FLOWERPOT",
+  "designer": "Verner Panton",
+  "location": "1968",
+  "modelSrc": "model13.gltf",
+  "environmentImage": "model13.hdr",
+  "cameraOrbit": "50deg 90deg 1m",
+  "min-camera-orbit": "-720deg 50deg 1m",
+  "max-camera-orbit": "720deg 90deg 1m",
+  "min-field-of-view": "30deg",
+  "max-field-of-view": "30deg",
+  "disable-zoom": true,
+  "disable-pan": true,
+  "backgroundTopColor": "#375930FF",
+  "previewImage": "/IMG/preview.mov",
+  "galleryImages": [
+    {
+      "src": "1.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "2.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "3.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "4.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "5.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "6.jpg",
+      "caption": "Photography"
+    },
+        {
+      "src": "7.jpg",
+      "caption": "Photography"
+    },
+        {
+      "src": "8.jpg",
+      "caption": "Photography"
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "VARIANTS",
+      "position": "0.0020454741339857407m 0.029548399818209697m 0.040872285550720755m",
+      "image": "../../brush.png",
+      "action": "ChangeMaterials",
+      "materialGroup": "flowerpot",
+      "initialName": "Signal Green"
+    }
+  ],
+  "materials": {
+    "flowerpot": {
+      "type": "variant",
+      "initialName": "Signal Green",
+      "variants": [
+        {
+          "name": "Signal Green",
+          "thumbnail": "textures/thumb_signal_green.png"
+        },
+        {
+          "name": "Dark Plum",
+          "thumbnail": "textures/thumb_dark_plum.png"
+        },
+        {
+          "name": "Brass Plated",
+          "thumbnail": "textures/thumb_brass.png"
+        },
+        {
+          "name": "Chrome Plated",
+          "thumbnail": "textures/thumb_chrome.png"
+        },
+        {
+          "name": "Cobalt Blue",
+          "thumbnail": "textures/thumb_cobalt_blue.png"
+        },
+        {
+          "name": "Grey Beige",
+          "thumbnail": "textures/thumb_grey_beige.png"
+        },
+        {
+          "name": "Matt Black",
+          "thumbnail": "textures/thumb_matt_black.png"
+        },
+        {
+          "name": "Matt Light Grey",
+          "thumbnail": "textures/thumb_matt_light_grey.png"
+        },
+        {
+          "name": "Matt White",
+          "thumbnail": "textures/thumb_matt_white.png"
+        },
+        {
+          "name": "Mustard",
+          "thumbnail": "textures/thumb_mustard.png"
+        },
+        {
+          "name": "Stone Blue",
+          "thumbnail": "textures/thumb_stone_blue.png"
+        },
+        {
+          "name": "Swim Blue",
+          "thumbnail": "textures/thumb_swim_blue.png"
+        },
+        {
+          "name": "Tangy Pink",
+          "thumbnail": "textures/thumb_tangy_pink.png"
+        },
+        {
+          "name": "Vermilion Red",
+          "thumbnail": "textures/thumb_vermilion_red.png"
+        }
+      ]
+    }
+  }
+}

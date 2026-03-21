@@ -1,0 +1,38 @@
+{
+  "title": "GF CHAIR",
+  "name": "GF CHAIR",
+  "designer": "CONÇALO FERNANDES",
+  "location": "VISEU | PORTUGAL",
+  "modelSrc": "model5.gltf",
+  "environmentImage": "model5.hdr",
+  "cameraOrbit": "-50deg 90deg 2.3m",
+  "min-camera-orbit": "-720deg 70deg 2.3m",
+  "max-camera-orbit": "720deg 90deg 2.3m",
+  "min-field-of-view": "30deg",
+  "max-field-of-view": "30deg",
+  "disable-zoom": true,
+  "disable-pan": true,
+  "backgroundTopColor": "#a76f2f",
+  "galleryImages": [
+    {
+      "src": "1.jpg",
+      "caption": "Technical Drawings"
+    },
+    {
+      "src": "2.jpg",
+      "caption": "Render"
+    },
+    {
+      "src": "3.png",
+      "caption": "Render"
+    },
+    {
+      "src": "4.jpg",
+      "caption": "Augmented Reality Experience"
+    },
+    {
+      "src": "5.jpeg",
+      "caption": "Photography"
+    }
+  ]
+}

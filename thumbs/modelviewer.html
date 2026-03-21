@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Viewer</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #FAFAFA;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    body {
+      background: linear-gradient(
+          to top,
+          rgba(0,0,0,0.12),
+          rgba(0,0,0,0)
+      );
+    }
+
+    /* Container quadrado — screenshot e vídeo ficam sempre iguais */
+    #viewer-wrap {
+      width: min(100vw, 100vh);
+      height: min(100vw, 100vh);
+      position: relative;
+      background: transparent;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      --poster-color: transparent;
+    }
+
+    #controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .ctrl-btn {
+      background:  #FAFAFA;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: monospace;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: background 0.2s, border-color 0.2s;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .ctrl-btn:hover { background: #f5f5f5; }
+    .ctrl-btn:disabled { opacity: 0.4; cursor: default; }
+    #rec-btn.recording { border-color: #e00; background: #fff5f5; }
+    .rec-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #ccc;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    #rec-btn.recording .rec-dot { background: #e00; animation: blink 1s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .snap-icon { font-size: 13px; line-height: 1; }
+  </style>
+</head>
+<body>
+
+  <div id="viewer-wrap">
+    <!-- model-viewer inserido aqui pelo JS -->
+  </div>
+
+  <div id="controls">
+    <button class="ctrl-btn" id="snap-btn">
+      <span class="snap-icon">📷</span>
+      <span>screenshot</span>
+    </button>
+    <button class="ctrl-btn" id="rec-btn">
+      <span class="rec-dot"></span>
+      <span id="rec-label">gravar 360°</span>
+    </button>
+  </div>
+
+  <script>
+
+    // ── MUDA AQUI O MODELO ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    
+    const MODEL = 13;
+
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    const ROTATION_DEG_PER_SEC = 12;
+    const LOOP_DURATION_MS = Math.round((360 / ROTATION_DEG_PER_SEC) * 1000);
+
+    const mv = document.createElement('model-viewer');
+    mv.setAttribute('src',                 `model${MODEL}/model${MODEL}.gltf`);
+    mv.setAttribute('environment-image',   `model${MODEL}/model${MODEL}.hdr`);
+    mv.setAttribute('camera-orbit',        '0deg 80deg 200%');
+    mv.setAttribute('field-of-view', '10deg');
+    mv.setAttribute('auto-rotate',         '');
+    mv.setAttribute('auto-rotate-delay',   '0');
+    mv.setAttribute('rotation-per-second', `${ROTATION_DEG_PER_SEC}deg`);
+    mv.setAttribute('shadow-intensity',    '1.5');
+    mv.setAttribute('shadow-softness',     '1');
+    mv.setAttribute('exposure',            '1');
+    mv.setAttribute('interaction-prompt',  'none');
+    document.getElementById('viewer-wrap').appendChild(mv);
+
+    // ── Screenshot ──
+    const snapBtn = document.getElementById('snap-btn');
+    snapBtn.addEventListener('click', async () => {
+      mv.resetTurntableRotation(0);
+      mv.jumpCameraToGoal();
+      await new Promise(r => setTimeout(r, 80));
+      const blob = await mv.toBlob({ idealAspect: false });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `thumbnail.png`;
+      a.click();
+    });
+
+    // ── Record ──
+    const btn      = document.getElementById('rec-btn');
+    const recLabel = document.getElementById('rec-label');
+    let recording = false;
+
+    async function doDownload(chunks, mimeType) {
+      const blob = new Blob(chunks, { type: mimeType });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `360.webm`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      // Screenshot logo após — mesma pose inicial, mesma proporção
+      await new Promise(r => setTimeout(r, 400));
+      mv.resetTurntableRotation(0);
+      mv.jumpCameraToGoal();
+      await new Promise(r => setTimeout(r, 80));
+      const imgBlob = await mv.toBlob({ idealAspect: false });
+      const b = document.createElement('a');
+      b.href = URL.createObjectURL(imgBlob);
+      b.download = `thumbnail.png`;
+      document.body.appendChild(b);
+      b.click();
+      document.body.removeChild(b);
+
+      btn.classList.remove('recording');
+      recLabel.textContent = 'gravar 360°';
+      snapBtn.disabled = false;
+      document.body.style.cursor = '';
+      recording = false;
+    }
+
+    btn.addEventListener('click', async () => {
+      if (recording) return;
+
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getDisplayMedia({
+          video: { frameRate: 60 },
+          audio: false
+        });
+      } catch (e) { return; }
+
+      stream.getVideoTracks()[0].addEventListener('ended', () => {
+        if (recording) {
+          clearTimeout(recordTimer);
+          finishRecording();
+        }
+      });
+
+      recording = true;
+      btn.classList.add('recording');
+      document.body.style.cursor = 'none';
+      snapBtn.disabled = true;
+
+      const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9')
+        ? 'video/webm;codecs=vp9' : 'video/webm';
+
+      const chunks = [];
+      const mediaRecorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 8000000 });
+      mediaRecorder.ondataavailable = e => { if (e.data && e.data.size > 0) chunks.push(e.data); };
+      mediaRecorder.onstop = () => doDownload(chunks, mimeType);
+
+      function finishRecording() {
+        stream.getTracks().forEach(t => t.stop());
+        mediaRecorder.requestData();
+        mediaRecorder.stop();
+      }
+
+      mv.resetTurntableRotation(0);
+      mv.jumpCameraToGoal();
+      await new Promise(r => setTimeout(r, 80));
+
+      mediaRecorder.start(200);
+
+      const totalSec = LOOP_DURATION_MS / 1000;
+      let elapsed = 0;
+      recLabel.textContent = `${totalSec}s`;
+
+      let recordTimer;
+      const countdown = setInterval(() => {
+        elapsed++;
+        const left = totalSec - elapsed;
+        recLabel.textContent = left > 0 ? `${left}s` : 'a guardar…';
+        if (elapsed >= totalSec) {
+          clearInterval(countdown);
+          recordTimer = setTimeout(finishRecording, 100);
+        }
+      }, 1000);
+    });
+
+    // ── Keybind T — abrir index.html ──
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 't' || e.key === 'T') {
+            window.location.href = '../index.html';
+        }
+    });
+
+  </script>
+</body>
+</html>

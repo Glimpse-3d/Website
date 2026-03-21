@@ -14,23 +14,23 @@
   box-sizing: border-box;
   user-select: none;
 }
+
 body {
   margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   width: 100%;
-  background: #f4f3f2; /* Fundo inicial */
+  height: 100vh;     
+  height: 100dvh;      
+  background: #fafafa;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  overflow: hidden; /* Impede rolagem */
-
-  /* Hide scrollbar */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  overflow: hidden; /* Garante que não há scroll acidental */
+  position: fixed;  /* Trava o corpo no sítio no iOS */
+  inset: 0;         /* Garante que ocupa tudo */
 }
 
 
@@ -56,9 +56,10 @@ model-viewer {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;    /* 100% da largura da janela */
-  height: 100vh;   /* 100% da altura da janela */
-  object-fit: contain; /* Garante que o modelo se ajusta ao tamanho da tela sem distorção */
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh; 
+  object-fit: contain;
   contain: layout style;
   z-index: 1;
 }
@@ -70,7 +71,8 @@ model-viewer {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #F4F3F2;
+  height: 100dvh;
+  background: #fafafa;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -136,7 +138,7 @@ model-viewer.visible {
   font-size: 18vw;                   
   max-height: 40vh;                  
   letter-spacing: -0.01em;
-  background: linear-gradient(#f4f3f260 0%, transparent 85%);
+  background: linear-gradient(#fafafa60 0%, transparent 85%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -636,8 +638,8 @@ model-viewer.visible {
 .bottom-left h1 {
   margin: 0;
   font-size: 50px;
-  font-family: "Anton", sans-serif;
-  font-weight: 900;
+  font-family: 'DM Serif Display', serif;
+  font-weight: 600; 
   color: rgb(0, 0, 0);
   opacity: 0;
   animation: fadeIn 1s ease-out forwards;
@@ -646,7 +648,7 @@ model-viewer.visible {
 .designer {
   margin: 0;
   font-size: 20px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-weight: 100;
   color: rgba(0, 0, 0, 0.5);
 }
@@ -654,7 +656,7 @@ model-viewer.visible {
 .location {
   margin: 0;
   font-size: 18px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-weight: 100;
   color: rgba(0, 0, 0, 0.5);
 }
@@ -1003,7 +1005,7 @@ model-viewer.visible {
 #material-name {
     font-size: 20px;
     margin-top: 10px;
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Manrope', sans-serif;
     color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s ease-in-out;
     display: flex;

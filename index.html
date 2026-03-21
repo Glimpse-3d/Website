@@ -1,205 +1,325 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
 <head>
-  <meta charset="utf-8">
-  <title>GLIMPSE</title>
-  
-  <!-- Favicons -->
-  <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
-  <link rel="shortcut icon" href="/favicon/favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="Glimpse">
-  <link rel="manifest" href="/favicon/site.webmanifest">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Glimpse</title>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSWH7G619E"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KSWH7G619E');
-  </script>
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-
-
-<!--------------- INTRO VIDEO ------------------------------------------------->
-<div class="intro-video" id="intro">
-    <video 
-        playsinline 
-        autoplay 
-        muted 
-        preload="auto"
-        webkit-playsinline
-        class="intro-bg" 
-        id="introVideo">
-        <source src="./mainpage/INTRO_VIDEO.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-</div>
-
-<!-- Vertex Shader -->
-<script id="vs" type="x-shader/x-vertex">
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-</script>
-
-<!-- Fragment Shader -->
-<script id="fs" type="x-shader/x-fragment">
-  uniform sampler2D map;
-  uniform vec3 fogColor;
-  uniform float fogNear;
-  uniform float fogFar;
-  varying vec2 vUv;
-  void main() {
-    float depth = gl_FragCoord.z / gl_FragCoord.w;
-    float fogFactor = smoothstep(fogNear, fogFar, depth);
-    gl_FragColor = texture2D(map, vUv);
-    gl_FragColor.w *= pow(gl_FragCoord.z, 20.0);
-    gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.w), fogFactor);
-  }
-</script>
-
-  <!-- Bibliotecas -->
-  <script src="js/three.min.js"></script>
-  <script src="js/Detector.js"></script>
-
-  <!-- Nuvens de fundo -->
-  <div id="three-background"></div>
-
-  <!-- Overlay HTML -->
-  <div id="ui-overlay">
-
-    <!-- LOGO --------------------------------------->
-    <img id="btn-logo" src="./mainpage/LOGO.png" alt="Logo">
-
-    <!-- MENU TOPO ---------------------------------->
-    <nav class="top-menu">
-      <ul>
-        <li><a href="#services" id="btn-services">Services</a></li>
-        <li><a href="#projects" id="btn-projects">Projects</a></li>
-        <li><a href="#contacts" id="btn-contacts">Contacts</a></li>
-      </ul>
-    </nav>
-
-    <!-- PAGINAS ------------------------------------->
-    <div id="home-page" class="page show-page">
-      <div class="home-container">
-        <h1 class="home-title">GLIMPSE</h1>
-        <p class="home-subtitle">TURN IDEAS INTO EXPERIENCES</p>
-      </div>
-    </div>
-
-
-
-  <!-- PÁGINA SERVIÇOS -->
-<div id="services-page" class="page services-page">
-  <div class="services-container">
-
-    <div class="services-intro">
-      <h2>BRING YOUR PROJECTS TO LIFE</h2>
-    </div>
-
-    <div class="service-item">
-      <video src="./mainpage/SERVICES/video1.mov" muted loop playsinline></video>
-    </div>
-
-    <div class="service-text">
-      <h2>
-        <span class="line">We model your project in detail</span>
-        <span class="line">Customize it to your liking, with total freedom.</span>
-        <span class="line">Test it in your space, without apps, with Augmented Reality</span>
-        <span class="line">Go further... present anywhere, with impact</span>
-        <span class="line">Immerse yourself and explore the project with Virtual Reality</span>
-      </h2>
-    </div>
-
-    <div class="service-item">
-      <video src="./mainpage/SERVICES/video2.mov" muted loop playsinline></video>
-    </div>
-
+  <nav>
+  <a href="#" class="logo"><img src="./mainpage/LOGO.png" alt="Glimpse"></a>
+  <button class="menu-toggle" aria-label="Toggle menu">
+  <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links">
+  <a href="#how-it-works">How it works</a>
+  <a href="#portfolio">Projects</a>
+  <a href="#contact">Get Started</a>
   </div>
-</div>
+  </nav>
 
-
-
-<!-- PAGINA PROJECTOS -->
-  <div id="projects-page" class="page projects-page">
-    <div class="projects-container">
-      <div class="gallery-wrapper">
-        <div class="gallery-items">
-          <!-- imagens aqui -->
-        </div>
-      </div>
-    </div>
+  <section class="hero">
+  <div class="demo-container">
+  <model-viewer 
+  src="projects/model14/model14.gltf" 
+  alt="Interactive 3D furniture demo"
+  camera-orbit="40deg 80deg 2.2m"
+  camera-controls auto-rotate ar 
+  ar-modes="webxr scene-viewer quick-look" 
+  shadow-intensity="1" exposure="1" loading="eager" reveal="auto"
+  environment-image="neutral"
+  interaction-prompt-style="wiggle"
+  ></model-viewer>
+  <div class="model-corner-buttons">
+  <button class="corner-btn" id="change-model-btn" title="Change model" onclick="changeModel()">
+  <span class="material-symbols-outlined">sync</span>
+  </button>
+  <button class="corner-btn" onclick="document.querySelector('model-viewer').activateAR()" title="View in AR">AR</button>
+  </div>
   </div>
 
+  <div class="model-actions"></div>
 
+  <div class="hero-content">
+  <h1>Your product.<br>Their space.<br>No app.</h1>
+  <p class="hero-subtitle">Because static product pages are no longer enough</p>
+  <p class="hero-tagline">Turn your products into interactive experiences</p>
+  <div class="cta-group">
+  <a href="#contact" class="btn btn-primary">Get Your First AR Model Free</a>
+  <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+  </div>
+  </div>
+  </section>
 
-  <!-- PAGINA CONTACTOS -->
-  <div id="contacts-page" class="page contact-page">
-    <div class="contact-container">
+  <div class="scroll-indicator" id="scrollIndicator">
+  <span class="scroll-label">Scroll Down</span>
+  </div>
 
-      <!-- Frase/Título à frente do formulário -->
-      <div class="contact-intro">
-        <h2>LET'S BUILD THE FUTURE TOGETHER</h2>
-      </div>
+  <section class="benefits reveal">
+    <div class="benefits-inner">
+        <span class="section-tag">Market Reality</span>
+        <h2 class="benefits-title">Augmented Reality is no longer optional</h2>
+    </div>
 
-      <!-- Formulário -->
-      <form id="contact-form" class="contact-form">
-        <div class="form-fields">
-          <div class="input-container">
-            <input type="text" id="name" name="name" placeholder="Name" required>
-          </div>
-          
-          <div class="input-container">
-            <input type="email" id="email" name="email" placeholder="Email" required>
-          </div>
+    <div class="benefits-grid">
 
-          <div class="input-container">
-            <textarea id="message" name="message" placeholder="Message" required></textarea>
-          </div>
+        <!-- CARD 1 -->
+        <div class="benefit-card">
+            <div class="benefit-header">
+                <span class="material-symbols-outlined benefit-icon">schedule</span>
+                <h3>AR Adoption Timeline</h3>
+                <button class="benefit-toggle" aria-label="Expandir">
+                    <span class="benefit-arrow"></span>
+                </button>
+            </div>
+            <ul class="benefit-points">
+                <li><strong>2020:</strong> AR became stable on consumer devices</li>
+                <li><strong>2022:</strong> Architecture & real estate started AR previews</li>
+                <li><strong>2023:</strong> AR became affordable for small companies</li>
+            </ul>
+            <p class="benefit-closing">The technology is not new but it's standard now.</p>
         </div>
 
-        <button type="submit" class="send-button">Send</button>
-      </form>
-      
+        <!-- CARD 2 -->
+        <div class="benefit-card">
+            <div class="benefit-header">
+                <span class="material-symbols-outlined benefit-icon">trending_up</span>
+                <h3>Proven Results</h3>
+                <button class="benefit-toggle" aria-label="Expandir">
+                    <span class="benefit-arrow"></span>
+                </button>
+            </div>
+            <ul class="benefit-points">
+                <li><strong>+94%</strong> higher conversion with AR</li>
+                <li><strong>61%</strong> of shoppers prefer AR-enabled stores</li>
+                <li><strong>40%</strong> willing to pay more after experiencing AR</li>
+            </ul>
+            <p class="benefit-closing">Results are measurable, can you afford to wait?</p>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="benefit-card">
+            <div class="benefit-header">
+                <span class="material-symbols-outlined benefit-icon">rocket_launch</span>
+                <h3>Gain a Competitive Edge</h3>
+                <button class="benefit-toggle" aria-label="Expandir">
+                    <span class="benefit-arrow"></span>
+                </button>
+            </div>
+            <ul class="benefit-points">
+                <li>Differentiate your brand instantly</li>
+                <li>Reduce errors and returns with AR previews</li>
+                <li>Speed up client decisions and approvals</li>
+            </ul>
+            <p class="benefit-closing">Those who adopt AR are leaving competitors behind.</p>
+        </div>
+
     </div>
-  </div>
-  </div>
-  
-  <!-- Nuvens de frente -->
-  <div id="three-foreground"></div>
 
-<!-- Super Overlay para Redes Sociais -->
-<div id="super-overlay">
-  <div class="social-media-container">
-    <a href="#" class="neu-button in-progress">
-      <img src="./mainpage/SOCIAL MEDIA/WHATSAPP_B.png" alt="Whatsapp">
-    </a>
-    <a href="#" class="neu-button in-progress">
-      <img src="./mainpage/SOCIAL MEDIA/PINTEREST_B.png" alt="Facebook">
-    </a>
-    <a href="#" class="neu-button in-progress">
-      <img src="./mainpage/SOCIAL MEDIA/Instagram_B.png" alt="Instagram">
-    </a>
-    <a href="#" class="neu-button in-progress">
-      <img src="./mainpage/SOCIAL MEDIA/TIKTOK_B.png" alt="Tiktok">
-    </a>
-    <a href="#" class="neu-button in-progress">
-      <img src="./mainpage/SOCIAL MEDIA/LINKEDIN_B.png" alt="LinkedIn">
-    </a>
-  </div>
-</div>
+    <p class="benefits-footer-line">
+        The question is no longer <strong>if it works</strong>…<br>
+        <span>How long can you afford to stay behind?</span>
+    </p>
+</section>
 
-  <!-- JS -->
+<section class="how-it-works" id="how-it-works">
+    <h2 class="section-title reveal">How It Works</h2>
+    <div class="demo-video-container reveal">
+        <video class="demo-video" autoplay muted loop playsinline>
+            <source src="./mainpage/howitworks.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="steps-grid">
+        <div class="step reveal">
+            <div class="step-header">
+                <div class="step-num">1</div>
+                <h3>We Build Your 3D Model</h3>
+                <button class="step-toggle" aria-label="Expandir">
+                    <span class="step-arrow"></span>
+                </button>
+            </div>
+            <p class="step-desc">Send us your existing files and we turn it into an interactive Augmented Reality experience.</p>
+        </div>
+        <div class="step reveal">
+            <div class="step-header">
+                <div class="step-num">2</div>
+                <h3>You Share It</h3>
+                <button class="step-toggle" aria-label="Expandir">
+                    <span class="step-arrow"></span>
+                </button>
+            </div>
+            <p class="step-desc">We deliver a single link that you can add to your website, emails, or product pages easily.</p>
+        </div>
+        <div class="step reveal">
+            <div class="step-header">
+                <div class="step-num">3</div>
+                <h3>They See It</h3>
+                <button class="step-toggle" aria-label="Expandir">
+                    <span class="step-arrow"></span>
+                </button>
+            </div>
+            <p class="step-desc">Your client places your product in their space in under 10 seconds. No apps, no downloads.</p>
+        </div>
+    </div>
+</section>
+
+  <section class="timeline-section">
+  <div class="timeline-header">
+  <span class="section-tag">Strategic Positioning</span>
+  <h2>Every decade redefines product presentation</h2>
+  </div>
+  <div class="timeline-track">
+  <div class="tl-step">
+  <div class="tl-bubble">
+  <span class="material-symbols-outlined tl-icon">photo_camera</span>
+  </div>
+
+  <div class="tl-year">2010</div>
+
+  <div class="tl-content">
+  <div class="tl-title">Photography</div>
+  <div class="tl-desc">
+  Professional photography became essential for every brand.
+  </div>
+  </div>
+  </div>
+  <div class="tl-step">
+  <div class="tl-bubble">
+  <span class="material-symbols-outlined tl-icon">groups</span>
+  </div>
+
+  <div class="tl-year">2015</div>
+
+  <div class="tl-content">
+  <div class="tl-title">Social Media</div>
+  <div class="tl-desc">
+  Social media presence became mandatory for market survival.
+  </div>
+  </div>
+  </div>
+  <div class="tl-step">
+  <div class="tl-bubble">
+  <span class="material-symbols-outlined tl-icon">shopping_cart</span>
+  </div>
+  <div class="tl-year">2020</div>
+  <div class="tl-content">
+  <div class="tl-title">E-Commerce</div>
+  <div class="tl-desc">
+  E-commerce became the core infrastructure of retail.
+  </div>
+  </div>
+  </div>
+  <div class="tl-step">
+  <div class="tl-bubble">
+  <span class="material-symbols-outlined tl-icon">view_in_ar</span>
+  </div>
+  <div class="tl-year">2025</div>
+  <div class="tl-content">
+  <div class="tl-title">AR Visualization</div>
+  <div class="tl-desc">
+  Interactive product visualization becomes the new standard.
+  </div>
+  </div>
+  </div>
+  </div>
+  </section>
+
+  <section class="portfolio-preview reveal" id="portfolio">
+
+  <div class="portfolio-header">
+  <h2>Projects</h2>
+  <p class="portfolio-tagline">
+  A glimpse into how products become immersive experiences.
+  </p>
+  </div>
+
+  <!-- FILTER -->
+  <div class="portfolio-filter">
+  <button class="filter-btn active" data-filter="all">ALL</button>
+  <button class="filter-btn" data-filter="product">PRODUCT DESIGN</button>
+  <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
+  </div>
+
+  <div class="portfolio-scroll-wrapper">
+  <div class="portfolio-track" id="portfolio-track"></div>
+  </div>
+
+  </section>
+
+  <section class="cta-footer" id="contact">
+  <div class="reveal">
+  <div class="cta-text">
+  <h2>Turn your products<br>into experiences</h2>
+  <p>Your first AR model is free, if it boosts engagement, we scale with you.<br>Don't get left behind, step into AR today!</p>
+  <a href="/cdn-cgi/l/email-protection#acc5c2cac3eccbc0c5c1dcdfc99fc882cfc3c193dfd9cec6c9cfd891eadec9c9899e9cedfe899e9ce1c3c8c9c0899e9cfec9ddd9c9dfd8" class="btn btn-primary">Get My Free AR Model</a>
+  </div>
+
+  <div class="cta-social">
+  <p class="faq-title">Frequently Asked Questions</p>
+  <div class="faq-item">
+  <button class="faq-question">
+  <span>Is the first AR model really free?</span>
+  <span class="faq-arrow"></span>
+  </button>
+  <div class="faq-answer">
+  <p>Yes. We build your first AR-ready model at no cost. If it drives value, we discuss scaling.</p>
+  </div>
+  </div>
+  <div class="faq-item">
+  <button class="faq-question">
+  <span>What do you need from us?</span>
+  <span class="faq-arrow"></span>
+  </button>
+  <div class="faq-answer">
+  <p>Product dimensions, reference images, or 3D files if available. We handle the rest.</p>
+  </div>
+  </div>
+  <div class="faq-item">
+  <button class="faq-question">
+  <span>How long does it take?</span>
+  <span class="faq-arrow"></span>
+  </button>
+  <div class="faq-answer">
+  <p>Most first models are delivered within 7–10 days.</p>
+  </div>
+  </div>
+  <div class="faq-item">
+  <button class="faq-question">
+  <span>Does it work on all smartphones?</span>
+  <span class="faq-arrow"></span>
+  </button>
+  <div class="faq-answer">
+  <p>Yes. Our AR experiences run directly in modern mobile browsers, no app required.</p>
+  </div>
+  </div>
+  </div>
+  </div>
+  </section>
+
+  <footer class="site-footer">
+  <div class="footer-left">
+  <a href="mailto:info@glimpse3d.com">info@glimpse3d.com</a>
+  <span>Lisbon, Portugal</span>
+  </div>
+  <div class="footer-center">
+  © 2026 Glimpse. All rights reserved.
+  </div>
+  <div class="footer-right">
+  <a href="#" class="social-btn" aria-disabled="true"><img src="./mainpage/SOCIAL MEDIA/Instagram_B.png" alt="Instagram"></a>
+  <a href="#" class="social-btn" aria-disabled="true"><img src="./mainpage/SOCIAL MEDIA/LINKEDIN_B.png" alt="LinkedIn"></a>
+  <a href="#" class="social-btn" aria-disabled="true"><img src="./mainpage/SOCIAL MEDIA/TIKTOK_B.png" alt="Tiktok"></a>
+  <a href="#" class="social-btn" aria-disabled="true"><img src="./mainpage/SOCIAL MEDIA/WHATSAPP_B.png" alt="Whatsapp"></a>
+  <a href="#" class="social-btn" aria-disabled="true"><img src="./mainpage/SOCIAL MEDIA/PINTEREST_B.png" alt="Pinterest"></a>
+  </div>
+  </footer>
+
   <script src="main.js"></script>
 </body>
 </html>
