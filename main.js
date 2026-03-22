@@ -39,7 +39,7 @@ LOADER INITIAL MODEL
 const mv = document.querySelector('model-viewer');
 const bar = document.getElementById('loader-bar');
 const percent = document.getElementById('loader-percent');
-const loader = mv.querySelector('.model-loader');
+const loader = document.getElementById('model-loader');
 
 mv.addEventListener('progress', (e) => {
   const p = Math.round(e.detail.totalProgress * 100);
@@ -48,7 +48,8 @@ mv.addEventListener('progress', (e) => {
 });
 
 mv.addEventListener('load', () => {
-  loader.classList.add('hidden');
+  loader.style.opacity = '0';
+  setTimeout(() => loader.style.display = 'none', 400);
 });
 
 

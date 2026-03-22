@@ -26,28 +26,36 @@
 
 <section class="hero">
   <div class="demo-container">
-    <model-viewer 
-        src="projects/model14/model14.gltf" 
-        alt="Interactive 3D furniture demo"
-        camera-orbit="40deg 80deg 2.2m"
-        camera-controls auto-rotate ar 
-        ar-modes="webxr scene-viewer quick-look" 
-        shadow-intensity="1" exposure="1" loading="eager" reveal="auto"
-        environment-image="neutral"
-        interaction-prompt-style="wiggle"
-        >
-        <!-- Loader -->
-        <div class="model-loader" slot="progress-bar">
-            <div class="loader-bar-track">
-            <div class="loader-bar-fill" id="loader-bar"></div>
-            </div>
-            <span class="loader-percent" id="loader-percent">0%</span>
-        </div>
+<div class="demo-container">
+  <model-viewer 
+    src="projects/model14/model14.gltf" 
+    alt="Interactive 3D furniture demo"
+    camera-orbit="40deg 80deg 2.2m"
+    camera-controls auto-rotate ar 
+    ar-modes="webxr scene-viewer quick-look" 
+    shadow-intensity="1" exposure="1" loading="eager" reveal="auto"
+    environment-image="neutral"
+    interaction-prompt-style="wiggle"
+  >
+    <button slot="ar-button" class="corner-btn" title="View in AR">
+      <span class="material-symbols-outlined">view_in_ar</span>
+    </button>
+  </model-viewer>
 
-        <button slot="ar-button" class="corner-btn" title="View in AR">
-            <span class="material-symbols-outlined">view_in_ar</span>
-        </button>
-    </model-viewer>
+  <!-- Loader fora do model-viewer, sobreposto via CSS -->
+  <div class="model-loader" id="model-loader">
+    <div class="loader-bar-track">
+      <div class="loader-bar-fill" id="loader-bar"></div>
+    </div>
+    <span class="loader-percent" id="loader-percent">0%</span>
+  </div>
+
+  <div class="model-corner-buttons">
+    <button class="corner-btn" id="change-model-btn" title="Change model" onclick="changeModel()">
+      <span class="material-symbols-outlined">sync</span>
+    </button>
+  </div>
+</div>
 
     <div class="model-corner-buttons">
       <button class="corner-btn" id="change-model-btn" title="Change model" onclick="changeModel()">

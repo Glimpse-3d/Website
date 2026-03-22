@@ -661,6 +661,38 @@ model-viewer.visible {
   color: rgba(0, 0, 0, 0.5);
 }
 
+/* --- MOBILE: Descrição centrada, por cima da galeria --- */
+@media (max-width: 768px) {
+  .bottom-left-container {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    text-align: center;
+  }
+
+  @keyframes slideUpDesc {
+    0%  { bottom: -100%; }
+    100%{ bottom: 160px; } /* por cima da galeria */
+  }
+
+  @keyframes slideDownDesc {
+    0%  { bottom: 160px; }
+    100%{ bottom: -100%; }
+  }
+
+  .bottom-left h1 {
+    font-size: 34px;
+  }
+
+  .designer {
+    font-size: 15px;
+  }
+
+  .location {
+    font-size: 14px;
+  }
+}
+
 
 
 
@@ -682,6 +714,60 @@ model-viewer.visible {
   z-index: 10;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE e Edge */
+}
+
+/* --- MOBILE: Galeria horizontal, altura fixa, scroll para a direita --- */
+@media (max-width: 768px) {
+  .gallery {
+    bottom: 70px;
+    top: auto;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    height: 90px;              /* altura fixa */
+    max-height: 90px;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: 16px;
+    animation: slideUpGalleryIn 1.2s ease-out forwards;
+  }
+
+  @keyframes slideUpGalleryIn {
+    0%  { bottom: -150px; opacity: 0; }
+    100%{ bottom: 70px;   opacity: 1; }
+  }
+
+  .gallery.closed {
+    animation: slideDownGalleryOut 1.0s ease-in forwards !important;
+  }
+
+  @keyframes slideDownGalleryOut {
+    0%  { bottom: 70px;   opacity: 1; }
+    100%{ bottom: -150px; opacity: 0; }
+  }
+
+  .gallery-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;         /* linha única horizontal */
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+    gap: 8px;
+    width: max-content;
+    min-width: 100%;
+    height: 100%;
+  }
+
+  .gallery-item {
+    flex: 0 0 70px;            /* largura fixa por item */
+    width: 70px;
+    height: 70px;
+    max-height: 70px;
+    border-radius: 10px;
+  }
 }
 
 /* Scrollbar styles for Webkit browsers (Chrome, Safari) */
@@ -1070,16 +1156,26 @@ model-viewer.visible {
 
 @media (max-width: 768px) {
     #material-change-container {
-        bottom: 10%;
+        /* Canto superior esquerdo, por baixo do logo (back-button: top:20px + 70px altura) */
+        top: 100px;
+        bottom: auto;
         left: 15px;
-        gap: 10px;
+        gap: 6px;
     }
     #material-name {
-        font-size: 16px;
+        font-size: 13px;
+        margin-top: 4px;
     }
     .change-texture {
-        width: 32px;
-        height: 32px;
+        width: 26px;
+        height: 26px;
+    }
+    .texture-preview {
+        width: 20px;
+        height: 20px;
+    }
+    .texture-group {
+        gap: 8px;
     }
 }
 

@@ -195,10 +195,18 @@ background-color: transparent;
 touch-action: none;
 }
 
+/* AR button — dentro do model-viewer */
 model-viewer [slot="ar-button"] {
   position: absolute;
   bottom: 0.75rem;
   right: 0.75rem;
+}
+
+/* Mobile: sobe o AR para não colidir com o botão de trocar */
+@media (max-width: 767px) {
+  model-viewer [slot="ar-button"] {
+    bottom: 3.5rem; /* altura do botão (40px) + gap (0.5rem) + margem (0.75rem) */
+  }
 }
 
 .model-loader {
@@ -214,6 +222,7 @@ model-viewer [slot="ar-button"] {
   opacity: 1;
   transition: opacity 0.4s ease;
   pointer-events: none;
+  z-index: 5;
 }
 
 .model-loader.hidden {
