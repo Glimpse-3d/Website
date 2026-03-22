@@ -31,6 +31,27 @@ window.addEventListener('scroll', () => {
     }
 });
 
+
+/* --------------------------------------------------
+LOADER INITIAL MODEL
+-------------------------------------------------- */
+
+const mv = document.querySelector('model-viewer');
+const bar = document.getElementById('loader-bar');
+const percent = document.getElementById('loader-percent');
+const loader = mv.querySelector('.model-loader');
+
+mv.addEventListener('progress', (e) => {
+  const p = Math.round(e.detail.totalProgress * 100);
+  bar.style.width = p + '%';
+  percent.textContent = p + '%';
+});
+
+mv.addEventListener('load', () => {
+  loader.classList.add('hidden');
+});
+
+
 /* --------------------------------------------------
 CHANGE HERO MODEL
 -------------------------------------------------- */

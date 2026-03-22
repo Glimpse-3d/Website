@@ -195,6 +195,55 @@ background-color: transparent;
 touch-action: none;
 }
 
+model-viewer [slot="ar-button"] {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+}
+
+.model-loader {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.model-loader.hidden {
+  opacity: 0;
+}
+
+.loader-bar-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.2s ease;
+}
+
+.loader-percent {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
 model-viewer::part(default-progress-bar) { display: none; }
 
 .model-corner-buttons {
