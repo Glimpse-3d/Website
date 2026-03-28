@@ -371,7 +371,9 @@ el.classList.add('active');
 
 }
 
-window.addEventListener('scroll', reveal);
+window.addEventListener('scroll', () => {
+    requestAnimationFrame(reveal);
+});
 document.addEventListener('DOMContentLoaded', reveal);
 
 /* --------------------------------------------------

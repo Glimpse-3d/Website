@@ -1664,17 +1664,19 @@ align-items: center;
 }
 
 .social-btn {
-width: 30px;
-height: 30px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-transition: transform 0.3s ease, box-shadow 0.3s ease;
-position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  color: #000; /* ← ADICIONA ISTO — controla a cor dos SVGs */
+  text-decoration: none; /* ← ADICIONA ISTO — remove sublinhado */
 }
 
-.social-btn img { width: 10px; height: 10px; }
+.social-btn img { width: 10px; height: 10px; } /* ← APAGA ESTA LINHA, já não tens imagens */
 
 .social-btn:hover {
 transform: translateY(-4px);
