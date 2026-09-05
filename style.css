@@ -302,15 +302,15 @@ font-family: 'DM Serif Display', serif;
 font-size: clamp(2.5rem, 7vw, 6rem);
 font-weight: 600;
 line-height: 1.1;
-margin-bottom: 1.5rem;
+margin-bottom: 5rem;
 color: var(--accent);
 }
 
 .hero-subtitle {
 font-size: clamp(0.9rem, 3.5vw, 1.3rem);
 color: var(--accent);
-margin-bottom: 0.4rem;
-font-weight: 600;
+margin-bottom:5rem;
+font-weight: 800;
 }
 
 .hero-tagline {
@@ -748,35 +748,9 @@ text-align: center;
 transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.step:hover {
-transform: translateY(-6px);
-box-shadow: 0 8px 25px rgba(0, 194, 255, 0.25);
-border-color: #00c2ff;
-}
-
-/* HEADER DO STEP — número + título + seta */
-.step-header {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-}
-
-.step-num {
-width: 32px;
-height: 32px;
-min-width: 32px;
-background: var(--accent);
-color: white;
-display: flex;
-align-items: center;
-justify-content: center;
-border-radius: 50%;
-font-weight: 800;
-font-size: 1rem;
-}
-
 .step h3 {
-font-size: 1.2rem;
+font-family: 'DM Serif Display', serif;
+font-size: clamp(2rem, 3vw, 2rem);
 margin: 0;
 flex: 1;
 text-align: left;
@@ -1672,11 +1646,11 @@ align-items: center;
   justify-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
-  color: #000; /* ← ADICIONA ISTO — controla a cor dos SVGs */
-  text-decoration: none; /* ← ADICIONA ISTO — remove sublinhado */
+  color: #000; 
+  text-decoration: none; 
 }
 
-.social-btn img { width: 10px; height: 10px; } /* ← APAGA ESTA LINHA, já não tens imagens */
+.social-btn img { width: 10px; height: 10px; }
 
 .social-btn:hover {
 transform: translateY(-4px);
