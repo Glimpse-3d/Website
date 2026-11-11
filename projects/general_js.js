@@ -263,6 +263,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // --- DIMENSÕES: prepara as medidas (o hotspot "ToggleDimensions" liga/desliga) ---
+    window.glimpseDimensions = initDimensions(modelViewer);
+
     // --- FUNÇÃO: toggleMaterialAlpha --- (O seu código original - Sem alterações)
     function toggleMaterialAlpha(hotspotData, projectData) {
         const targetMaterialName = hotspotData.targetMaterial;
@@ -302,7 +305,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         modelViewer.classList.remove('hotspots-visible'); // Estado inicial
         toggleButton.addEventListener('click', () => {
             modelViewer.classList.toggle('hotspots-visible');
-            // No longer calling toggleDimensionsVisibility here
+            // Ao esconder os hotspots (seta): desliga as medidas e volta à câmara inicial
+            if (!modelViewer.classList.contains('hotspots-visible')) {
+                window.glimpseDimensions?.setVisible(false, { keepCamera: true });
+                resetCameraToInitial(modelViewer);
+            }
         });
     }
 
@@ -459,10 +466,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
             case 'ToggleDimensions':
                 console.log('[Hotspot - ToggleDimensions] Acionada ação para ligar/desligar medidas.');
-                // Chame a sua função que mostra/esconde as dimensões aqui
-                // Exemplo:
-                // dimensionsVisible = !dimensionsVisible;
-                // setVisibility(dimensionsVisible);
+                window.glimpseDimensions?.toggle();
                 break;
 
             default:
@@ -968,4 +972,187 @@ if (introVideo) {
     }
   }, 15000); // 15s de segurança
 
+}
+
+// ----------------- DIMENSÕES AUTOMÁTICAS (model-viewer) --------------------------------------------------------------------------------------------------
+// Calcula as medidas a partir do próprio modelo, por isso funciona em todos os projectos sem configuração extra.
+// Opcional no data.json:
+//   "dimensionsScale": 1                        (multiplicador, caso o modelo não esteja exportado à escala real em metros)
+//   "dimensionsCamera": { "theta": 45, "phi": 65 }   (vista usada ao ligar as medidas, em graus)
+
+// Cantos da caixa envolvente (multiplicadores da meia-dimensão)
+const DIM_CORNERS = {
+  A: [ 1, -1,  1], B: [ 1, -1, -1], C: [ 1,  1, -1],
+  D: [-1,  1, -1], E: [-1, -1, -1], F: [-1, -1,  1]
+};
+
+// Cada aresta: liga 2 cantos, mostra a medida de um eixo, e a etiqueta fica fora do modelo
+const DIM_EDGES = [
+  { from: 'A', to: 'B', axis: 'z', label: [ 1.2, -1.1,  0  ], normal: '1 0 0',  linked: true  },
+  { from: 'B', to: 'C', axis: 'y', label: [ 1.2,  0,   -1.2], normal: '1 0 0',  linked: true  },
+  { from: 'C', to: 'D', axis: 'x', label: [ 0,    1.1, -1.1], normal: '0 1 0',  linked: false },
+  { from: 'D', to: 'E', axis: 'y', label: [-1.2,  0,   -1.2], normal: '-1 0 0', linked: true  },
+  { from: 'E', to: 'F', axis: 'z', label: [-1.2, -1.1,  0  ], normal: '-1 0 0', linked: true  }
+];
+
+function initDimensions(modelViewer) {
+  let wantVisible = false; // estado pedido pelo utilizador (hotspot)
+  let arActive = false;    // em sessão AR esconde-se sempre
+  let svg = null;
+  let lines = [];
+  let savedOrbit = null;   // câmara antes de ligar as medidas, para voltar a ela ao desligar
+
+  const TWO_PI = Math.PI * 2;
+  const toRad = (deg) => deg * Math.PI / 180;
+
+  const fmt = (meters) => {
+    const k = (globalProjectData && Number(globalProjectData.dimensionsScale)) || 1;
+    return `${Math.round(meters * k * 100)} cm`;
+  };
+
+  function build() {
+    modelViewer.querySelectorAll('[data-dim-generated]').forEach(el => el.remove());
+
+    const c = modelViewer.getBoundingBoxCenter();
+    const s = modelViewer.getDimensions();
+    const half = { x: s.x / 2, y: s.y / 2, z: s.z / 2 };
+    const at = ([mx, my, mz]) =>
+      `${(c.x + half.x * mx).toFixed(5)} ${(c.y + half.y * my).toFixed(5)} ${(c.z + half.z * mz).toFixed(5)}`;
+
+    // SVG das linhas
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'dimensionLineContainer');
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.setAttribute('data-dim-generated', '');
+    lines = DIM_EDGES.map(() => {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('class', 'dimensionLine');
+      svg.appendChild(line);
+      return line;
+    });
+    modelViewer.appendChild(svg);
+
+    // Pontos (invisíveis, servem de âncora às linhas)
+    Object.entries(DIM_CORNERS).forEach(([key, mult]) => {
+      const dot = document.createElement('button');
+      dot.className = 'dim-dot';
+      dot.slot = `hotspot-dim-dot-${key}`;
+      dot.setAttribute('data-position', at(mult));
+      dot.setAttribute('data-dim-generated', '');
+      modelViewer.appendChild(dot);
+    });
+
+    // Etiquetas com a medida
+    DIM_EDGES.forEach((edge, i) => {
+      const label = document.createElement('button');
+      label.className = 'dim';
+      label.slot = `hotspot-dim-label-${i}`;
+      label.setAttribute('data-position', at(edge.label));
+      label.setAttribute('data-normal', edge.normal);
+      label.setAttribute('data-dim-generated', '');
+      label.textContent = fmt(s[edge.axis]);
+      modelViewer.appendChild(label);
+    });
+
+    applyVisibility();
+  }
+
+  function render() {
+    if (!svg || !wantVisible || arActive) return;
+    DIM_EDGES.forEach((edge, i) => {
+      const a = modelViewer.queryHotspot(`hotspot-dim-dot-${edge.from}`);
+      const b = modelViewer.queryHotspot(`hotspot-dim-dot-${edge.to}`);
+      const label = modelViewer.queryHotspot(`hotspot-dim-label-${i}`);
+      const line = lines[i];
+      if (!a || !b || !line) return;
+
+      line.setAttribute('x1', a.canvasPosition.x);
+      line.setAttribute('y1', a.canvasPosition.y);
+      line.setAttribute('x2', b.canvasPosition.x);
+      line.setAttribute('y2', b.canvasPosition.y);
+
+      // a linha acompanha a etiqueta (esconde-se quando esta fica nas costas do modelo)
+      const hide = edge.linked && label && !label.facingCamera;
+      line.classList.toggle('dim-hidden', !!hide);
+    });
+  }
+
+  function applyVisibility() {
+    const show = wantVisible && !arActive;
+    modelViewer.querySelectorAll('[data-dim-generated]').forEach(el => el.classList.toggle('dim-hidden', !show));
+    if (show) requestAnimationFrame(() => requestAnimationFrame(render));
+  }
+
+  // Vai para a vista de 45º (pelo lado mais próximo, +45º ou -45º) onde as 3 medidas ficam visíveis
+  function goToDimensionView() {
+    const cfg = (globalProjectData && globalProjectData.dimensionsCamera) || {};
+    const thetaDeg = cfg.theta !== undefined ? cfg.theta : 45;
+    const phiDeg = cfg.phi !== undefined ? cfg.phi : 65;
+
+    const cur = modelViewer.getCameraOrbit();
+    savedOrbit = { theta: cur.theta, phi: cur.phi, radius: cur.radius };
+
+    // ângulo equivalente mais próximo do atual, para não dar voltas desnecessárias
+    const nearest = (from, to) => {
+      const d = ((((to - from + Math.PI) % TWO_PI) + TWO_PI) % TWO_PI) - Math.PI;
+      return from + d;
+    };
+    const a = nearest(cur.theta, toRad(thetaDeg));
+    const b = nearest(cur.theta, -toRad(thetaDeg));
+    const theta = Math.abs(a - cur.theta) <= Math.abs(b - cur.theta) ? a : b;
+
+    modelViewer.cameraOrbit = `${theta.toFixed(4)}rad ${toRad(phiDeg).toFixed(4)}rad ${cur.radius.toFixed(4)}m`;
+  }
+
+  function restoreView() {
+    if (!savedOrbit) return;
+    modelViewer.cameraOrbit =
+      `${savedOrbit.theta.toFixed(4)}rad ${savedOrbit.phi.toFixed(4)}rad ${savedOrbit.radius.toFixed(4)}m`;
+    savedOrbit = null;
+  }
+
+  function setVisible(v, opts = {}) {
+    v = !!v;
+    if (v === wantVisible) return wantVisible;
+    wantVisible = v;
+
+    modelViewer.querySelectorAll('[data-action="ToggleDimensions"]')
+      .forEach(btn => btn.classList.toggle('active', v));
+    applyVisibility();
+
+    try {
+      if (v) goToDimensionView();
+      else if (opts.keepCamera) savedOrbit = null;
+      else restoreView();
+    } catch (err) {
+      console.warn('[Dimensões] Não foi possível mover a câmara:', err);
+    }
+    return wantVisible;
+  }
+
+  modelViewer.addEventListener('camera-change', render);
+  modelViewer.addEventListener('ar-status', (e) => {
+    arActive = e.detail.status === 'session-started';
+    applyVisibility();
+  });
+
+  // Quando os hotspots são escondidos (seta "Find out more"), as medidas desligam-se também
+  new MutationObserver(() => {
+    if (wantVisible && !modelViewer.classList.contains('hotspots-visible')) setVisible(false);
+  }).observe(modelViewer, { attributes: true, attributeFilter: ['class'] });
+
+  modelViewer.addEventListener('load', build);
+  if (modelViewer.loaded) build(); // caso o modelo já tenha carregado
+
+  return { setVisible, toggle: () => setVisible(!wantVisible), isVisible: () => wantVisible };
+}
+
+// ----------------- CÂMARA INICIAL --------------------------------------------------------------------------------------------------
+// Volta à câmara definida no data.json (orbit, alvo e campo de visão), incluindo depois de ChangeView ou das medidas
+function resetCameraToInitial(modelViewer) {
+  const orbit = (globalProjectData && globalProjectData.cameraOrbit) || 'auto auto auto';
+  modelViewer.cameraOrbit = orbit;
+  modelViewer.cameraTarget = 'auto auto auto';
+  modelViewer.fieldOfView = 'auto';
 }

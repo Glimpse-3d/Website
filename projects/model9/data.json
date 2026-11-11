@@ -42,6 +42,12 @@
   ],
   "hotspots": [
     {
+    "id": "DIMENSIONS",
+    "position": "0.3m 0.01m 0.3m",
+    "image": "../../ruler.png",
+    "action": "ToggleDimensions"
+    },
+    {
       "id": "LEATHER",
       "position": "-0.004249849203865105m 0.456632574067078m -0.14829320018056277m",
       "image": "../../brush.png",

@@ -34,5 +34,13 @@
       "src": "5.jpeg",
       "caption": "Photography"
     }
+  ],
+  "hotspots": [
+    {
+    "id": "DIMENSIONS",
+    "position": "-0.30m 0.1m 0.25m",
+    "image": "../../ruler.png",
+    "action": "ToggleDimensions"
+    }
   ]
 }

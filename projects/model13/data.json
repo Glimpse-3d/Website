@@ -56,6 +56,12 @@
       "action": "ChangeMaterials",
       "materialGroup": "flowerpot",
       "initialName": "Signal Green"
+    },
+    {
+    "id": "DIMENSIONS",
+    "position": "0.0m 0.1m 0.00m",
+    "image": "../../ruler.png",
+    "action": "ToggleDimensions"
     }
   ],
   "materials": {

@@ -38,6 +38,12 @@
   ],
   "hotspots": [
     {
+    "id": "DIMENSIONS",
+    "position": "0.20m 0.1m 0.25m",
+    "image": "../../ruler.png",
+    "action": "ToggleDimensions"
+    },
+    {
       "id": "VARIANTS",
       "position": "0.23705383931952795m 0.10982679551904237m -0.25511372729205345m",
       "image": "../../brush.png",
