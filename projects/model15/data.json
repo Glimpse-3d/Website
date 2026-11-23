@@ -1,0 +1,90 @@
+{
+  "title": "DALE CHAIR",
+  "name": "DALE CHAIR",
+  "designer": "Laskasas",
+  "location": "Elegant Contemporary Dining Chair",
+  "modelSrc": "model15.gltf",
+  "environmentImage": "model15.hdr",
+  "cameraOrbit": "-65deg 85deg 2.5m",
+  "min-camera-orbit": "-720deg 50deg 1.5m",
+  "max-camera-orbit": "720deg 90deg 2.5m",
+  "min-field-of-view": "30deg",
+  "max-field-of-view": "30deg",
+  "disable-zoom": false,
+  "disable-pan": false,
+  "backgroundTopColor": "#2C3531",
+  "previewImage": "/IMG/preview.mov",
+  "galleryImages": [
+    {
+      "src": "1.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "2.jpg",
+      "caption": "Photography"
+    },
+    {
+      "src": "3.jpg",
+      "caption": "Photography"
+    }
+  ],
+  "hotspots": [
+    {
+    "id": "DIMENSIONS",
+    "position": "-0.22m 0.45m 0.25m",
+    "image": "../../ruler.png",
+    "action": "ToggleDimensions"
+    },
+    {
+      "id": "VARIANTS",
+      "position": "-0.23705383931952795m 0.05m -0.25511372729205345m",
+      "image": "../../brush.png",
+      "action": "ChangeMaterials",
+      "materialGroup": "metal",
+      "initialName": "Polished Gold Stainless Steel"
+    },
+    {
+      "id": "VARIANTS2",
+      "position": "0.2m 0.65m -0.1m", 
+      "image": "../../brush.png",
+      "action": "ChangeMaterials",
+      "materialGroup": "fabric",
+      "initialName": "White lined fabric"
+    }
+  ],
+  "materials": { 
+    "metal": { 
+      "type": "variant",  
+      "initialName": "Polished Gold Stainless Steel", 
+      "variants": [
+        {
+          "name": "Polished Gold Stainless Steel",
+          "thumbnail": "textures/thumb_inox_polido_dourado.png"
+        },
+        {
+          "name": "Matte Gold Stainless Steel",
+          "thumbnail": "textures/thumb_inox_escovado_dourado_mate.png"
+        },
+        {
+          "name": "Polished Stainless Steel",
+          "thumbnail": "textures/thumb_inox_polido.png"
+        }
+      ]
+    },
+    
+    "fabric": {
+      "type": "variant", 
+      "initialName": "White lined fabric",
+      "variants": [
+        {
+          "name": "White lined fabric",
+          "thumbnail": "textures/thumb_white_lined_fabric.jpg"
+        },
+        {
+          "name": "Tapue lined fabric",
+          "thumbnail": "textures/thumb_tapue_lined_fabric.jpg"
+        }
+      ]
+    }
+  }
+}

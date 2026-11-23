@@ -91,6 +91,22 @@ PORTFOLIO DATA
 
 const projectImages = [
 
+/*{
+src:'projects/model16/thumbnail.png',
+title:'Carlo Armchair',
+client:'Munna',
+model:'model16',
+category:'product'
+},*/
+
+{
+src:'projects/model15/thumbnail.png',
+title:'Dale Chair',
+client:'Laskasas',
+model:'model15',
+category:'product'
+},
+
 {
 src:'projects/model14/thumbnail.png',
 title:'Mudhif Chair',
