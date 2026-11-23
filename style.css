@@ -1750,13 +1750,11 @@ height: 28px;
 }
 
 .footer-bottom {
-width: 100%;
 text-align: center;
 font-size: 0.72rem;
 color: var(--text-dim);
 font-weight: 500;
-padding-top: 0.75rem;
-border-top: 1px solid var(--border);
+order: 3; /* no telemóvel fica por baixo dos ícones */
 }
 
 @media (min-width: 768px) {
@@ -1764,13 +1762,19 @@ border-top: 1px solid var(--border);
 padding: 1.25rem 10rem;
 }
 .footer-top {
-flex-direction: row;
-justify-content: space-between;
+display: grid;
+grid-template-columns: 1fr auto 1fr;
 align-items: center;
 }
 .footer-left {
 align-items: flex-start;
 text-align: left;
+}
+.footer-right {
+justify-self: end;
+}
+.footer-bottom {
+order: 0;
 }
 .footer-right .social-btn img {
 width: 32px;
