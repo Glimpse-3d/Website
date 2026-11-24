@@ -91,13 +91,13 @@ PORTFOLIO DATA
 
 const projectImages = [
 
-/*{
+{
 src:'projects/model16/thumbnail.png',
 title:'Carlo Armchair',
 client:'Munna',
 model:'model16',
 category:'product'
-},*/
+},
 
 {
 src:'projects/model15/thumbnail.png',
@@ -205,16 +205,6 @@ a.innerHTML=`
 
 <img src="${item.src}" alt="${item.title}" class="portfolio-thumb">
 
-<video class="portfolio-video"
-loop
-muted
-playsinline
-preload="none">
-
-<source src="projects/${item.model}/360.webm" type="video/webm">
-<source src="projects/${item.model}/360.mp4" type="video/mp4">
-
-</video>
 
 </div>
 
@@ -230,8 +220,6 @@ preload="none">
 track.appendChild(a);
 
 });
-
-initVideoHover();
 
 if(totalSlides) totalSlides.textContent = filtered.length;
 
@@ -255,87 +243,6 @@ btn.classList.add("active");
 renderProjects(btn.dataset.filter);
 
 });
-
-});
-
-/* --------------------------------------------------
-VIDEO HOVER
--------------------------------------------------- */
-
-function initVideoHover(){
-
-document.querySelectorAll('.portfolio-item').forEach(card=>{
-
-const video = card.querySelector('.portfolio-video');
-
-card.addEventListener('mouseenter',()=>{
-
-video.currentTime = 0;
-video.play();
-
-card.classList.add("playing");
-
-});
-
-card.addEventListener('mouseleave',()=>{
-
-/* remove zoom primeiro */
-card.classList.remove("playing");
-
-/* espera o reset do scale */
-setTimeout(()=>{
-
-video.pause();
-video.currentTime = 0;
-
-},150);
-
-});
-
-});
-
-}
-
-initVideoHover();
-
-/* --------------------------------------------------
-WOW EFFECT – VIDEO ON CENTER
--------------------------------------------------- */
-
-const cards = document.querySelectorAll(".portfolio-item");
-
-track.addEventListener("scroll", () => {
-
-    const screenCenter = window.innerWidth / 2;
-
-    cards.forEach(card => {
-
-        const rect = card.getBoundingClientRect();
-        const cardCenter = rect.left + rect.width / 2;
-
-        const video = card.querySelector("video");
-        const img = card.querySelector("img");
-
-        if (Math.abs(screenCenter - cardCenter) < 120) {
-
-            card.classList.add("active");
-
-            if (video) {
-                video.play();
-            }
-
-        } else {
-
-            card.classList.remove("active");
-
-            if (video) {
-                video.pause();
-                video.currentTime = 0;
-            }
-
-        }
-
-    });
 
 });
 
